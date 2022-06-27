@@ -18,7 +18,7 @@ namespace PrimitierMultiplayerMod
 			base.OnSceneWasLoaded(buildIndex, sceneName);
 
 			PMFLog.Message("Hello Primitier!");
-
+			PMFLog.Message("Mod version " + Assembly.GetName().Version);
 			
 		}
 		public override void OnRealyLateStart()
