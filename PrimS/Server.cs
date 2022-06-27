@@ -29,10 +29,26 @@ public class Server
 
 		Listener.ConnectionRequestEvent += ConnectionRequestEvent;
 		Listener.PeerConnectedEvent += PeerConnectedEvent;
+		Listener.PeerDisconnectedEvent += PeerDisconnectedEvent;
 
 		ConfigLoader.OnConfigReload += OnConfigReload;
 		OnConfigReload(ConfigLoader.Config);		
 	}
+
+	private void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
+	{
+		var player = PlayerManager.GetPlayerByIpAddress(peer.EndPoint);
+
+		if (player == null)
+		{
+			_log.Info($"{peer.EndPoint} left the game");
+			return;
+		}
+		_log.Info($"{player.Username} left the game");
+
+		PlayerManager.DeletePlayer(player.Id);
+	}
+
 
 	private void PeerConnectedEvent(NetPeer peer)
 	{
@@ -47,6 +63,8 @@ public class Server
 		}
 
 		writer.PutPacket(new SuccessfullyConnectedPacket(player.Id, player.Username, player.Position));
+
+		_log.Info($"{player.Username} joined the game");
 
 		peer.Send(writer, DeliveryMethod.ReliableUnordered);
 	}
@@ -71,7 +89,7 @@ public class Server
 			return;
 		}
 
-		PlayerManager.CreateNewPlayer(connectionRequestPacket.Username, request.RemoteEndPoint.Address);
+		PlayerManager.CreateNewPlayer(connectionRequestPacket.Username, request.RemoteEndPoint);
 
 		request.Accept();
 		

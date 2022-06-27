@@ -8,6 +8,8 @@ namespace PrimS.shared
 {
 	public abstract class Packet
 	{
+		public abstract PacketId PacketId { get; }
+
 		public Packet(NetDataReader reader){}
 		public Packet() { }
 

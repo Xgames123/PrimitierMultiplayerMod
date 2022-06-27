@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace PrimS;
-public class StdInComunication
+public class StdInComunication : IDisposable
 {
 	private Stream _stdin;
 
@@ -53,6 +53,8 @@ public class StdInComunication
 		return null;
 	}
 
-
-
+	public void Dispose()
+	{
+		_stdin?.Dispose();
+	}
 }

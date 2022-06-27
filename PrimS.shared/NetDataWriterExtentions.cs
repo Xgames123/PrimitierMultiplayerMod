@@ -11,6 +11,7 @@ namespace PrimS.shared
 	{
 		public static void PutPacket<T>(this NetDataWriter writer, T packet) where T : Packet
 		{
+			writer.Put((byte)packet.PacketId);
 			packet.PutOnWriter(ref writer);
 		}
 

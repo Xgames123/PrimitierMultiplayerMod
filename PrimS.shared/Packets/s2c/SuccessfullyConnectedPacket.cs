@@ -8,6 +8,8 @@ namespace PrimS.shared.Packets.s2c
 {
 	public class SuccessfullyConnectedPacket : Packet
 	{
+		public override PacketId PacketId => shared.PacketId.SuccessfullyConnected;
+
 		public int Id;
 		public string Username;
 		public Vector3 Position;

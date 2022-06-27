@@ -7,6 +7,8 @@ namespace PrimS.shared.Packets.c2s
 {
 	public class ConnectionRequestPacket : Packet
 	{
+		public override PacketId PacketId => PacketId.ConnectionRequest;
+
 		public string Username;
 
 		public string PrimitierVersion;
