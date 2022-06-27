@@ -9,6 +9,7 @@ using log4net;
 using log4net.Core;
 using PrimS.shared.Packets;
 using PrimS.shared.Packets.c2s;
+using PrimS.shared.Packets.s2c;
 using PrimS.shared;
 
 namespace PrimS;
@@ -35,7 +36,19 @@ public class Server
 
 	private void PeerConnectedEvent(NetPeer peer)
 	{
+		var player = PlayerManager.GetPlayerByIpAddress(peer.EndPoint);
 
+		var writer = new NetDataWriter();
+		if (player == null)
+		{
+			ErrorGenerator.Generate(ref writer, shared.ErrorCode.Unknown);
+			peer.Disconnect(writer);
+			return;
+		}
+
+		writer.PutPacket(new SuccessfullyConnectedPacket(player.Id, player.Username, player.Position));
+
+		peer.Send(writer, DeliveryMethod.ReliableUnordered);
 	}
 
 	private void ConnectionRequestEvent(ConnectionRequest request)
@@ -58,7 +71,7 @@ public class Server
 			return;
 		}
 
-		PlayerManager.CreateNewPlayer(connectionRequestPacket.Username, request.);
+		PlayerManager.CreateNewPlayer(connectionRequestPacket.Username, request.RemoteEndPoint.Address);
 
 		request.Accept();
 		

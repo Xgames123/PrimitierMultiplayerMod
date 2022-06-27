@@ -10,6 +10,7 @@ namespace PrimS.shared
 
 		public static Dictionary<ErrorCode, string> ErrorMessages = new Dictionary<ErrorCode, string>()
 		{
+			{ErrorCode.Unknown, "Unknown error"},
 			{ErrorCode.ServerFull, "The server is full"},
 			{ErrorCode.UnsupportedModVersion, "The version of Primitier multilayer mod was not supported by the server"},
 

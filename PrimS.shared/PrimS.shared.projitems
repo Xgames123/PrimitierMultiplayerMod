@@ -9,13 +9,12 @@
     <Import_RootNamespace>PrimS.shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Packets\s2c\" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ErrorCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ErrorGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NetDataReaderExtentions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetDataWriterExtentions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packet.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Packets\c2s\ConnectionRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Packets\c2s\ConnectionRequestPacket.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\SuccessfullyConnectedPacket.cs" />
   </ItemGroup>
 </Project>
