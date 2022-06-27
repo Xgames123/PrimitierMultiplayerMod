@@ -9,6 +9,7 @@ using log4net;
 using log4net.Core;
 using PrimS.shared.Packets;
 using PrimS.shared.Packets.c2s;
+using PrimS.shared;
 
 namespace PrimS;
 public class Server
@@ -43,12 +44,8 @@ public class Server
 
 		if (NetManager.ConnectedPeersCount >= ConfigLoader.Config.maxPlayers)
 		{
-			var writer = new NetDataWriter();
-
-			writer.Put((byte)shared.ErrorCode.ServerFull);
-			writer.Put("The server is full");
-
-			request.Reject(writer);
+			request.Reject(ErrorGenerator.Generate(shared.ErrorCode.ServerFull));
+			return;
 		}
 
 
@@ -56,12 +53,8 @@ public class Server
 		var isSupported = SupportedVersions.SupportedModVersions.Contains(Version.Parse(connectionRequestPacket.MultiplayerModVersion));
 		if (!isSupported)
 		{
-			var writer = new NetDataWriter();
-			
-			writer.Put((byte)shared.ErrorCode.UnsupportedModVersion);
-			writer.Put("The version of Primitier multilayer mod was not supported by the server");
 
-			request.Reject(writer);
+			request.Reject(ErrorGenerator.Generate(shared.ErrorCode.UnsupportedModVersion));
 			return;
 		}
 
