@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimitierMultiplayerMod", "PrimitierMultiplayerMod\PrimitierMultiplayerMod.csproj", "{641884AC-5B59-43C3-A166-FDE4BAD6E574}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimitierMultiplayerMod", "PrimitierMultiplayerMod\PrimitierMultiplayerMod.csproj", "{641884AC-5B59-43C3-A166-FDE4BAD6E574}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimS", "PrimS\PrimS.csproj", "{CB87E300-D425-48F9-9553-A4D2E449F9A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimS", "PrimS\PrimS.csproj", "{CB87E300-D425-48F9-9553-A4D2E449F9A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimSConfig", "PrimSConfig\PrimSConfig.csproj", "{DA090264-0BD3-4AFE-9176-4EAC23B1F705}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimSConfig", "PrimSConfig\PrimSConfig.csproj", "{DA090264-0BD3-4AFE-9176-4EAC23B1F705}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PrimS.shared", "PrimS.shared\PrimS.shared.shproj", "{4D1FE002-BDF1-444B-80C8-F9A1063AC330}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiteNetLib", "LiteNetLib\LiteNetLib\LiteNetLib.csproj", "{AC04F262-117A-47B7-8DBA-013D2C37690E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibSample", "LiteNetLib\LibSample\LibSample.csproj", "{25EC1895-7575-45D7-A2F9-F243BD01EF6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +33,14 @@ Global
 		{DA090264-0BD3-4AFE-9176-4EAC23B1F705}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA090264-0BD3-4AFE-9176-4EAC23B1F705}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA090264-0BD3-4AFE-9176-4EAC23B1F705}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC04F262-117A-47B7-8DBA-013D2C37690E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC04F262-117A-47B7-8DBA-013D2C37690E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC04F262-117A-47B7-8DBA-013D2C37690E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC04F262-117A-47B7-8DBA-013D2C37690E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25EC1895-7575-45D7-A2F9-F243BD01EF6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25EC1895-7575-45D7-A2F9-F243BD01EF6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25EC1895-7575-45D7-A2F9-F243BD01EF6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25EC1895-7575-45D7-A2F9-F243BD01EF6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

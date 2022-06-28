@@ -6,6 +6,7 @@ using UnhollowerBaseLib;
 using UnhollowerRuntimeLib;
 using MelonLoader;
 using System.Net;
+using LiteNetLib;
 
 namespace PrimitierMultiplayerMod
 {
@@ -13,22 +14,30 @@ namespace PrimitierMultiplayerMod
 	public class Mod : PrimitierMod
     {
 
-		public Client Client = new Client();
+		public Client Client;
 
+		private static NetManager client;
 
 		public override void OnSceneWasLoaded(int buildIndex, string sceneName)
 		{
 			base.OnSceneWasLoaded(buildIndex, sceneName);
 
-			var connectSettings = MelonPreferences.GetCategory("ConnectSettings");
+			PlayerInfo.Load();
 
-			var address = connectSettings.GetEntry<IPAddress>("ServerIp").Value;
-			var port = connectSettings.GetEntry<int>("ServerPort").Value;
+			var connectSettings = MelonPreferences.CreateCategory("ConnectSettings");
 
-			Client.Connect(new IPEndPoint(address, port));
+			var address = connectSettings.CreateEntry("ServerIp", "localhost").Value;
+			var port = connectSettings.CreateEntry<int>("ServerPort", 9586).Value;
+
+			Client = new Client();
+			Client.Connect(address, port);
+			PMFLog.Message("Connecting to server");
+
 
 
 		}
+
+
 		public override void OnRealyLateStart()
 		{
 			base.OnRealyLateStart();
@@ -60,11 +69,6 @@ namespace PrimitierMultiplayerMod
 			Client.Update();
 		}
 		
-		private void OnExit()
-		{
-
-		}
-
 
 	}
 }

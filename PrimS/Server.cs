@@ -22,22 +22,60 @@ public class Server
 
 	private ILog _log = LogManager.GetLogger(nameof(Server));
 
+	private NetPacketProcessor _packetProcessor;
+	private NetDataWriter _writer;
+
 	public Server()
 	{
 		Listener = new EventBasedNetListener();
-		NetManager = new NetManager(Listener);
+		NetManager = new NetManager(Listener)
+		{
+			AutoRecycle = true
+		};
 
 		Listener.ConnectionRequestEvent += ConnectionRequestEvent;
-		Listener.PeerConnectedEvent += PeerConnectedEvent;
 		Listener.PeerDisconnectedEvent += PeerDisconnectedEvent;
+		Listener.NetworkErrorEvent += NetworkErrorEvent;
+		Listener.NetworkReceiveEvent += NetworkReceiveEvent;
+
+		_writer = new NetDataWriter();
+		_packetProcessor = new NetPacketProcessor();
+		_packetProcessor.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetVector3());
+		_packetProcessor.SubscribeReusable<JoinRequestPacket, NetPeer>(OnJoinRequest);
+
 
 		ConfigLoader.OnConfigReload += OnConfigReload;
 		OnConfigReload(ConfigLoader.Config);		
 	}
 
+	private void NetworkReceiveEvent(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
+	{
+		_packetProcessor.ReadAllPackets(reader);
+	}
+
+	private void OnConfigReload(ConfigFile? config)
+	{
+		if (config == null)
+		{
+			_log.Error("Config was null. Ignoring... reload");
+			return;
+		}
+		Stop();
+
+		NetManager.Start(config.ListenIp, "", config.ListenPort);
+		_log.Info($"Started server on {config.ListenIp}:{NetManager.LocalPort}");
+		
+
+	}
+
+	private void NetworkErrorEvent(System.Net.IPEndPoint endPoint, System.Net.Sockets.SocketError socketError)
+	{
+		_log.Error("Got network error: " + socketError);
+	}
+
 	private void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
 	{
-		var player = PlayerManager.GetPlayerByIpAddress(peer.EndPoint);
+		var player = PlayerManager.GetPlayerById(peer.Id);
 
 		if (player == null)
 		{
@@ -50,66 +88,26 @@ public class Server
 	}
 
 
-	private void PeerConnectedEvent(NetPeer peer)
-	{
-		var player = PlayerManager.GetPlayerByIpAddress(peer.EndPoint);
-
-		var writer = new NetDataWriter();
-		if (player == null)
-		{
-			ErrorGenerator.Generate(ref writer, shared.ErrorCode.Unknown);
-			peer.Disconnect(writer);
-			return;
-		}
-
-		writer.PutPacket(new SuccessfullyConnectedPacket(player.Id, player.Username, player.Position));
-
-		_log.Info($"{player.Username} joined the game");
-
-		peer.Send(writer, DeliveryMethod.ReliableUnordered);
-	}
 
 	private void ConnectionRequestEvent(ConnectionRequest request)
 	{
-		var connectionRequestPacket = new ConnectionRequestPacket(request.Data);
+		_log.Info(request.RemoteEndPoint+" has requested a connection");
+		
 
 		if (NetManager.ConnectedPeersCount >= ConfigLoader.Config.maxPlayers)
 		{
-			request.Reject(ErrorGenerator.Generate(shared.ErrorCode.ServerFull));
+			_writer.Reset();
+			ErrorGenerator.Generate(ref _writer, ref _packetProcessor, shared.ErrorCode.ServerFull);
+			request.Reject(_writer);
 			return;
 		}
 
-
-
-		var isSupported = SupportedVersions.SupportedModVersions.Contains(Version.Parse(connectionRequestPacket.MultiplayerModVersion));
-		if (!isSupported)
-		{
-
-			request.Reject(ErrorGenerator.Generate(shared.ErrorCode.UnsupportedModVersion));
-			return;
-		}
-
-		PlayerManager.CreateNewPlayer(connectionRequestPacket.Username, request.RemoteEndPoint);
+		//TODO check for unsupported versions
 
 		request.Accept();
 		
 	}
 
-	private void OnConfigReload(ConfigFile? config)
-	{
-		if (config == null)
-		{
-			_log.Error("Config was null. Stopping server");
-			Stop();
-			return;
-		}
-		
-		if (!NetManager.IsRunning)
-		{
-			NetManager.Start(config.ListenPort);
-		}
-		
-	}
 
 	public void Update()
 	{
@@ -120,14 +118,26 @@ public class Server
 
 	}
 
-
 	public void Stop()
 	{
+		if (!NetManager.IsRunning)
+		{
+			return;
+		}
+
+		_log.Info("Stopping server");
 		NetManager.Stop();
 
 	}
 
-	
+	private void OnJoinRequest(JoinRequestPacket packet, NetPeer peer)
+	{
+		PlayerManager.CreateNewPlayer(packet.Username, peer.Id);
+		_log.Info($"{packet.Username} joined the game");
+	}
+
+
+
 
 
 

@@ -11,11 +11,9 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ErrorCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ErrorGenerator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NetDataReaderExtentions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NetDataWriterExtentions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Packet.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PacketId.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Packets\c2s\ConnectionRequestPacket.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\SuccessfullyConnectedPacket.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SerializingExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Packets\c2s\JoinRequestPacket.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Packets\ErrorPacket.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\JoinAcceptPacket.cs" />
   </ItemGroup>
 </Project>

@@ -13,6 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="PrimS.service">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

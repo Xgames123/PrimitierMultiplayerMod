@@ -16,9 +16,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="LiteNetLib" Version="0.9.5.2" />
 	  <PackageReference Include="XGames105.PMF" Version="0.4.1" />
 	  <PackageReference Include="XGames105.PMF.Msbuild" Version="0.4.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\LiteNetLib\LiteNetLib\LiteNetLib.csproj" />
 	</ItemGroup>
 
 	<Import Project="..\PrimS.shared\PrimS.shared.projitems" Label="Shared" />

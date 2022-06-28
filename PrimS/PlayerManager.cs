@@ -10,27 +10,11 @@ public static class PlayerManager
 {
 	public static Dictionary<int, PrimitierPlayer> Players = new Dictionary<int, PrimitierPlayer>();
 
-	public static Dictionary<IPEndPoint, int> IPToIdDict = new Dictionary<IPEndPoint, int>();
 
-	public static int GenerateNewId()
-	{
-		while (true)
-		{
-			var value = Random.Shared.Next(int.MinValue, int.MaxValue);
-			if (!Players.ContainsKey(value))
-				return value;
-
-		}
-		
-	}
 
 	public static PrimitierPlayer? GetPlayerById(int id)
 	{
 		return Players.GetValueOrDefault(id);
-	}
-	public static PrimitierPlayer? GetPlayerByIpAddress(IPEndPoint endpoint)
-	{
-		return GetPlayerById(IPToIdDict.GetValueOrDefault(endpoint));
 	}
 
 	public static void DeletePlayer(int id)
@@ -40,17 +24,13 @@ public static class PlayerManager
 			return;
 
 		Players.Remove(player.Id);
-		IPToIdDict.Remove(player.Endpoint);
 	}
 
-	public static PrimitierPlayer CreateNewPlayer(string username, IPEndPoint endpoint)
+	public static PrimitierPlayer CreateNewPlayer(string username, int id)
 	{
-		var id = GenerateNewId();
-		var player = new PrimitierPlayer(username, id, endpoint);
+		var player = new PrimitierPlayer(username, id);
 
 		Players.Add(id, player);
-		IPToIdDict.Add(endpoint, id);
-
 		return player;
 	}
 	

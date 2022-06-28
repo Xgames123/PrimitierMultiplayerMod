@@ -1,4 +1,5 @@
 ﻿using PrimS;
+[assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config")]
 
 ConfigLoader.Load();
 
@@ -21,3 +22,4 @@ while (!cts.Token.IsCancellationRequested)
 
 server.Stop();
 comunication.Dispose();
+

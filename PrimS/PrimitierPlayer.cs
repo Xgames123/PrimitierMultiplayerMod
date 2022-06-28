@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 namespace PrimS;
 public class PrimitierPlayer
 {
-	public PrimitierPlayer(string username, int id, IPEndPoint endPoint)
+	public PrimitierPlayer(string username, int id)
 	{
 		Username = username;
 		Id = id;
-		Endpoint = endPoint;
 	}
 
-	public IPEndPoint Endpoint;
 	public string Username;
 	public int Id;
 
-	public Vector3 Position = Vector3.Zero;
+	public Vector3 HeadPosition = Vector3.Zero;
+	public Vector3 LHandPosition = Vector3.Zero;
+	public Vector3 RHandPosition = Vector3.Zero;
 }

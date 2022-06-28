@@ -20,38 +20,38 @@ namespace PrimitierMultiplayerMod
 		public EventBasedNetListener Listener;
 		public NetManager NetManager;
 
+		public NetPeer Server { get; private set; } = null;
+
+		private NetPacketProcessor _packetProcessor;
+		private NetDataWriter _writer;
+
 		public Client()
 		{
+			_writer = new NetDataWriter();
 			Listener = new EventBasedNetListener();
-			NetManager = new NetManager(Listener);
+			NetManager = new NetManager(Listener)
+			{
+				AutoRecycle = true,
+			};
 
 			Listener.NetworkReceiveEvent += NetworkReceiveEvent;
+			Listener.NetworkErrorEvent += NetworkErrorEvent;
+			Listener.PeerDisconnectedEvent += DisconnectedEvent;
+			Listener.PeerConnectedEvent += ConnectedEvent;
 
+		}
+
+		public void Connect(string address, int port)
+		{
+			_packetProcessor = new NetPacketProcessor();
+			_packetProcessor.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetVector3());
+			_packetProcessor.SubscribeReusable<JoinAcceptPacket>(OnJoinAcceptPacket);
+
+			PMFLog.Message("Starting client");
 			NetManager.Start();
-		}
 
-		private void NetworkReceiveEvent(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
-		{
-			var packetId = (PacketId)reader.GetByte();
-
-			switch (packetId)
-			{
-				case PacketId.SuccessfullyConnected:
-					PMFLog.Message("Successfully connected to server");
-					break;
-
-			}
-
-
-		}
-
-		public void Connect(IPEndPoint endPoint)
-		{
-			var writer = new NetDataWriter();
-			var packet = new ConnectionRequestPacket(PlayerInfo.Username, Application.version, Assembly.GetExecutingAssembly().GetName().Version.ToString());
-			writer.PutPacket(packet);
-
-			NetManager.Connect(endPoint, writer);
+			PMFLog.Message($"Connecting to {address}:{port}...");
+			NetManager.Connect(address, port, "");
 		}
 
 		public void Update()
@@ -64,6 +64,45 @@ namespace PrimitierMultiplayerMod
 			NetManager.Stop();
 
 		}
+
+		private void SendPacket<T>(T packet, DeliveryMethod deliveryMethod) where T : class, new()
+		{
+			_writer.Reset();
+			_packetProcessor.Write<T>(packet);
+			Server.Send(_writer, deliveryMethod);
+		}
+
+
+		private void ConnectedEvent(NetPeer peer)
+		{
+			Server = peer;
+			PMFLog.Message("Connected to the server");
+
+			SendPacket(new JoinRequestPacket() { Username = PlayerInfo.Username }, DeliveryMethod.ReliableOrdered);
+		}
+
+		private void DisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
+		{
+			Server = null;
+			PMFLog.Message("Disconnected from the server Reason:" + disconnectInfo.Reason);
+		}
+
+		private void NetworkErrorEvent(IPEndPoint endPoint, System.Net.Sockets.SocketError socketError)
+		{
+			PMFLog.Error("Got network error: "+socketError);
+		}
+
+		private void NetworkReceiveEvent(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
+		{
+			_packetProcessor.ReadAllPackets(reader);
+		}
+
+		private void OnJoinAcceptPacket(JoinAcceptPacket packet)
+		{
+			PMFLog.Message("Successfully joined the game");
+		}
+
+
 
 	}
 }

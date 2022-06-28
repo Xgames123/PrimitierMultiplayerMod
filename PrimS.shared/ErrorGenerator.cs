@@ -1,4 +1,5 @@
 ﻿using LiteNetLib.Utils;
+using PrimS.shared.Packets;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,18 +18,15 @@ namespace PrimS.shared
 		};
 
 
-
-		public static NetDataWriter Generate(ErrorCode code)
+		public static void Generate(ref NetDataWriter writer, ref NetPacketProcessor processor, ErrorCode code, string message)
 		{
-			var writer = new NetDataWriter();
-			Generate(ref writer, code);
-			return writer;
+			processor.Write(writer, new ErrorPacket() { ErrorCode = code, Message = message });
 		}
 
-		public static void Generate(ref NetDataWriter writer, ErrorCode code)
+
+		public static void Generate(ref NetDataWriter writer, ref NetPacketProcessor processor, ErrorCode code)
 		{
-			writer.Put((byte)code);
-			writer.Put(ErrorMessages[code]);
+			processor.Write(writer, new ErrorPacket() { ErrorCode = code, Message = ErrorMessages[code]});
 		}
 	}
 }
