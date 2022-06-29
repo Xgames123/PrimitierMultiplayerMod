@@ -16,7 +16,8 @@ namespace PrimitierMultiplayerMod
 
 		public Client Client;
 
-		private static NetManager client;
+		public string ServerAddress;
+		public int ServerPort;
 
 		public override void OnSceneWasLoaded(int buildIndex, string sceneName)
 		{
@@ -26,14 +27,16 @@ namespace PrimitierMultiplayerMod
 
 			var connectSettings = MelonPreferences.CreateCategory("ConnectSettings");
 
-			var address = connectSettings.CreateEntry("ServerIp", "localhost").Value;
-			var port = connectSettings.CreateEntry<int>("ServerPort", 9586).Value;
+			ServerAddress = connectSettings.CreateEntry("ServerIp", "localhost").Value;
+			ServerPort = connectSettings.CreateEntry<int>("ServerPort", 9586).Value;
 
-			Client = new Client();
-			Client.Connect(address, port);
+			Connect();
 			PMFLog.Message("Connecting to server");
-
-
+		}
+		private void Connect()
+		{
+			Client = new Client();
+			Client.Connect(ServerAddress, ServerPort);
 
 		}
 
@@ -61,6 +64,16 @@ namespace PrimitierMultiplayerMod
 		public override void OnUpdate()
 		{
 			base.OnUpdate();
+
+			if (Input.GetKeyUp(KeyCode.Return))
+			{
+				Client.Stop();
+				Connect();
+				PMFLog.Message("Reconnecting to server...");
+
+			}
+
+
 		}
 
 		public override void OnFixedUpdate()

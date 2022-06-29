@@ -3,23 +3,41 @@
 
 ConfigLoader.Load();
 
-var comunication = new StdInComunication();
+//var comunication = new StdInComunication();
+
+bool stoppingServer = false;
+bool IsServerRunning = true;
 
 var server = new Server();
 
-var cts = new CancellationTokenSource();
+
 Console.CancelKeyPress += (object? sender, ConsoleCancelEventArgs e) =>
 {
-	cts.Cancel();
+	stoppingServer = true;
+	server.Stop();
+	while(IsServerRunning != false)
+	{
+		Thread.Sleep(200);
+	}
+
+	e.Cancel = true;
+	
+	
 };
 
 
-while (!cts.Token.IsCancellationRequested)
+
+while (true)
 {
 	server.Update();
-	comunication.Update();
+	//comunication.Update();
+	if (stoppingServer)
+	{
+		break;
+	}
+		
 }
+IsServerRunning = false;
 
-server.Stop();
-comunication.Dispose();
+//comunication.Dispose();
 

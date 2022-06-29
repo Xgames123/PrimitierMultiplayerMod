@@ -7,7 +7,7 @@ namespace PrimS.shared.Packets.c2s
 {
 	public class JoinRequestPacket
 	{
-		public string Username;
+		public string Username {get; set;}
 
 	}
 }

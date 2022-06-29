@@ -1,7 +1,0 @@
-﻿[Unit]
-Description=Socket for Primitier multilayer server
-
-
-[Socket]
-ListenFIFO=/tmp/prims.stdin
-Service=PrimS.service

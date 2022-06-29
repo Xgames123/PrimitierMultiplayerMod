@@ -11,6 +11,7 @@ using PrimS.shared.Packets;
 using PrimS.shared.Packets.c2s;
 using PrimS.shared.Packets.s2c;
 using PrimS.shared;
+using System.Numerics;
 
 namespace PrimS;
 public class Server
@@ -30,6 +31,7 @@ public class Server
 		Listener = new EventBasedNetListener();
 		NetManager = new NetManager(Listener)
 		{
+			IPv6Enabled = IPv6Mode.Disabled,
 			AutoRecycle = true
 		};
 
@@ -40,7 +42,7 @@ public class Server
 
 		_writer = new NetDataWriter();
 		_packetProcessor = new NetPacketProcessor();
-		_packetProcessor.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetVector3());
+		_packetProcessor.RegisterNestedType<Vector3>((writer, value) => writer.Put(value), reader => reader.GetVector3());
 		_packetProcessor.SubscribeReusable<JoinRequestPacket, NetPeer>(OnJoinRequest);
 
 
@@ -50,14 +52,14 @@ public class Server
 
 	private void NetworkReceiveEvent(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
 	{
-		_packetProcessor.ReadAllPackets(reader);
+		_packetProcessor.ReadAllPackets(reader, peer);
 	}
 
 	private void OnConfigReload(ConfigFile? config)
 	{
 		if (config == null)
 		{
-			_log.Error("Config was null. Ignoring... reload");
+			_log.Error("Config was null. Ignoring...");
 			return;
 		}
 		Stop();
@@ -67,6 +69,14 @@ public class Server
 		
 
 	}
+
+	private void SendPacket<T>(NetPeer peer, T packet, DeliveryMethod deliveryMethod) where T : class, new()
+	{
+		_writer.Reset();
+		_packetProcessor.Write<T>(_writer, packet);
+		peer.Send(_writer, deliveryMethod);
+	}
+
 
 	private void NetworkErrorEvent(System.Net.IPEndPoint endPoint, System.Net.Sockets.SocketError socketError)
 	{
@@ -120,13 +130,10 @@ public class Server
 
 	public void Stop()
 	{
-		if (!NetManager.IsRunning)
-		{
-			return;
-		}
+		
 
 		_log.Info("Stopping server");
-		NetManager.Stop();
+		NetManager.Stop(true);
 
 	}
 
@@ -134,6 +141,8 @@ public class Server
 	{
 		PlayerManager.CreateNewPlayer(packet.Username, peer.Id);
 		_log.Info($"{packet.Username} joined the game");
+
+		SendPacket(peer, new JoinAcceptPacket() { Id = peer.Id, Username = packet.Username, Position = Vector3.Zero }, DeliveryMethod.ReliableOrdered);
 	}
 
 

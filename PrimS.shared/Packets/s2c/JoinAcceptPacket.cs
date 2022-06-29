@@ -8,9 +8,9 @@ namespace PrimS.shared.Packets.s2c
 {
 	public class JoinAcceptPacket 
 	{
-		public int Id;
-		public string Username;
-		public Vector3 Position;
+		public int Id { get; set; }
+		public string Username { get; set; }
+		public Vector3 Position { get; set; }
 
 	}
 }

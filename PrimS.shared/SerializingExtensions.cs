@@ -18,13 +18,7 @@ namespace PrimS.shared
 
 		public static Vector3 GetVector3(this NetDataReader reader)
 		{
-			var vector = new Vector3();
-
-			vector.X =reader.GetFloat();
-			vector.Y = reader.GetFloat();
-			vector.Z = reader.GetFloat();
-
-			return vector;
+			return new Vector3(reader.GetFloat(), reader.GetFloat(), reader.GetFloat());
 		}
 	}
 }

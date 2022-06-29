@@ -68,7 +68,7 @@ namespace PrimitierMultiplayerMod
 		private void SendPacket<T>(T packet, DeliveryMethod deliveryMethod) where T : class, new()
 		{
 			_writer.Reset();
-			_packetProcessor.Write<T>(packet);
+			_packetProcessor.Write<T>(_writer, packet);
 			Server.Send(_writer, deliveryMethod);
 		}
 
