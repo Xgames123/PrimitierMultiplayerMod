@@ -28,7 +28,7 @@ namespace PrimitierMultiplayerMod
 			var connectSettings = MelonPreferences.CreateCategory("ConnectSettings");
 
 			ServerAddress = connectSettings.CreateEntry("ServerIp", "localhost").Value;
-			ServerPort = connectSettings.CreateEntry<int>("ServerPort", 9586).Value;
+			ServerPort = connectSettings.CreateEntry<int>("ServerPort", 9543).Value;
 
 			Connect();
 			PMFLog.Message("Connecting to server");

@@ -15,7 +15,7 @@ public class ConfigFile
 	public string WorldFilePath { get; set; } = "World.primsworld";
 
 	public string ListenIp { get; set; } = "localhost";
-	public int ListenPort = 9586;
+	public int ListenPort = 9543;
 }
 
 
