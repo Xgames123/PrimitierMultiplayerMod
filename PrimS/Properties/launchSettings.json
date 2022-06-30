@@ -2,6 +2,9 @@
   "profiles": {
     "PrimS": {
       "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
     }
   }
 }
