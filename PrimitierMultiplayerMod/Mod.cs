@@ -8,6 +8,7 @@ using MelonLoader;
 using System.Net;
 using LiteNetLib;
 
+using PrimitierModdingFramework.SubstanceModding;
 namespace PrimitierMultiplayerMod
 {
 
@@ -22,6 +23,11 @@ namespace PrimitierMultiplayerMod
 		public override void OnSceneWasLoaded(int buildIndex, string sceneName)
 		{
 			base.OnSceneWasLoaded(buildIndex, sceneName);
+
+			//var param = CustomSubstanceSystem.CreateCustomSubstance(Substance.Ice);
+			//param.physicMaterial = SubstanceManager.
+
+			HierarchyXmlDumper.DumpSceneToFile();
 
 			PlayerInfo.Load();
 
@@ -50,7 +56,7 @@ namespace PrimitierMultiplayerMod
 		public override void OnApplicationStart()
 		{
 			base.OnApplicationStart();
-			PMFSystem.EnableSystem<PMFHelper>();
+			//PMFSystem.EnableSystem<PMFHelper>();
 
 			
 		}
