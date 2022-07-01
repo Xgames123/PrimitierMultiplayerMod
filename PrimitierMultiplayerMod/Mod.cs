@@ -24,11 +24,6 @@ namespace PrimitierMultiplayerMod
 		{
 			base.OnSceneWasLoaded(buildIndex, sceneName);
 
-			//var param = CustomSubstanceSystem.CreateCustomSubstance(Substance.Ice);
-			//param.physicMaterial = SubstanceManager.
-
-			HierarchyXmlDumper.DumpSceneToFile();
-
 			PlayerInfo.Load();
 
 			var connectSettings = MelonPreferences.CreateCategory("ConnectSettings");
