@@ -12,5 +12,6 @@ namespace PrimS.shared.Packets.s2c
 		public string Username { get; set; }
 		public Vector3 Position { get; set; }
 
+		public int WorldSeed { get; set; }
 	}
 }

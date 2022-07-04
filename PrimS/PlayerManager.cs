@@ -27,7 +27,7 @@ namespace PrimS
 			StorePlayer(new StoredPlayer()
 			{
 				StaticId = player.StaticId,
-				Position = player.HeadPosition,
+				Position = player.Position,
 				Hp = player.Hp,
 			});
 
@@ -55,7 +55,7 @@ namespace PrimS
 			var storedPlayer = GetStoredPlayer(staticId);
 			if (storedPlayer != null)
 			{
-				player.HeadPosition = storedPlayer.Position;
+				player.Position = storedPlayer.Position;
 				player.Hp = storedPlayer.Hp;
 				player.StaticId = staticId;
 			}

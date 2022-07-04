@@ -22,7 +22,7 @@ namespace PrimS
 
 	public class WorldSettings
 	{
-		public string Seed { get; set; }
+		public int Seed { get; set; }
 
 		public Dictionary<string, StoredPlayer> Players { get; set; }
 

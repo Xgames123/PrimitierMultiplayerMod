@@ -15,7 +15,7 @@ namespace PrimitierMultiplayerMod
 	public class Mod : PrimitierMod
     {
 
-		public Client Client;
+		public static Client Client;
 
 		public string ServerAddress;
 		public int ServerPort;
@@ -25,6 +25,7 @@ namespace PrimitierMultiplayerMod
 			base.OnSceneWasLoaded(buildIndex, sceneName);
 
 			PlayerInfo.Load();
+			UpdatePacketSender.Setup();
 
 			var connectSettings = MelonPreferences.CreateCategory("ConnectSettings");
 
@@ -33,14 +34,14 @@ namespace PrimitierMultiplayerMod
 
 			Connect();
 			PMFLog.Message("Connecting to server");
+
+			
 		}
 		private void Connect()
 		{
 			Client = new Client();
 			Client.Connect(ServerAddress, ServerPort);
 
-			TerrainGenerator.worldSeed = 1;
-			
 		}
 
 
@@ -56,7 +57,7 @@ namespace PrimitierMultiplayerMod
 			
 			PMFSystem.EnableSystem<PMFHelper>();
 
-			
+			ClassInjector.RegisterTypeInIl2Cpp<UpdatePacketSender>();
 		}
 		public override void OnApplicationQuit()
 		{

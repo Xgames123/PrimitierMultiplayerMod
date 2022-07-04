@@ -20,6 +20,10 @@ namespace PrimitierMultiplayerMod
 		public EventBasedNetListener Listener;
 		public NetManager NetManager;
 
+		public bool IsConnected { get { return NetManager.ConnectedPeersCount >= 1; } }
+
+		public bool IsInGame { get; private set; }
+
 		public NetPeer Server { get; private set; } = null;
 
 		private NetPacketProcessor _packetProcessor;
@@ -65,7 +69,7 @@ namespace PrimitierMultiplayerMod
 
 		}
 
-		private void SendPacket<T>(T packet, DeliveryMethod deliveryMethod) where T : class, new()
+		public void SendPacket<T>(T packet, DeliveryMethod deliveryMethod) where T : class, new()
 		{
 			_writer.Reset();
 			_packetProcessor.Write<T>(_writer, packet);
@@ -83,6 +87,7 @@ namespace PrimitierMultiplayerMod
 
 		private void DisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
 		{
+			IsInGame = false;
 			Server = null;
 			PMFLog.Message("Disconnected from the server Reason:" + disconnectInfo.Reason);
 		}
@@ -100,6 +105,8 @@ namespace PrimitierMultiplayerMod
 		private void OnJoinAcceptPacket(JoinAcceptPacket packet)
 		{
 			PMFLog.Message("Successfully joined the game");
+			IsInGame = true;
+			TerrainGenerator.worldSeed = packet.WorldSeed;
 		}
 
 

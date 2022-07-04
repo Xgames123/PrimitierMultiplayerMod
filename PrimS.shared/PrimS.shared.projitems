@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ErrorCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ErrorGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Packets\c2s\PlayerUpdatePacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SerializingExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\c2s\JoinRequestPacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\ErrorPacket.cs" />

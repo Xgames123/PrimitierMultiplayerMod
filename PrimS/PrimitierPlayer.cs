@@ -22,6 +22,7 @@ namespace PrimS
 
 		public float Hp;
 
+		public Vector3 Position = Vector3.Zero;
 		public Vector3 HeadPosition = Vector3.Zero;
 		public Vector3 LHandPosition = Vector3.Zero;
 		public Vector3 RHandPosition = Vector3.Zero;
