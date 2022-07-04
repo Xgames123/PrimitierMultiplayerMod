@@ -10,11 +10,14 @@ public static class Program
 	{
 		ConfigLoader.Load();
 
+		World.LoadFromDirectory(ConfigLoader.Config.WorldDirectory);
+
 		//var comunication = new StdInComunication();
 
 		bool stoppingServer = false;
 		bool IsServerRunning = true;
 
+		
 		var server = new Server();
 
 

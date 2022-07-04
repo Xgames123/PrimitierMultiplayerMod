@@ -13,7 +13,7 @@ namespace PrimS
 	{
 		public int MaxPlayers { get; set; } = 10;
 
-		public string WorldFile { get; set; } = "world.dat";
+		public string WorldDirectory { get; set; } = "World";
 
 		public string ListenIp { get; set; } = "localhost";
 		public int ListenPort { get; set; } = 9543;
