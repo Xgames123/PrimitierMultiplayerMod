@@ -51,7 +51,8 @@ namespace PrimitierMultiplayerMod
 		public override void OnApplicationStart()
 		{
 			base.OnApplicationStart();
-			//PMFSystem.EnableSystem<PMFHelper>();
+			
+			PMFSystem.EnableSystem<PMFHelper>();
 
 			
 		}
