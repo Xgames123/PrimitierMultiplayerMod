@@ -5,11 +5,22 @@ WORKDIR /app
 COPY PrimS/. ./PrimS
 COPY PrimS.shared/. ./PrimS.shared
 
+#PrimS.shared
+WORKDIR /app/.Prims.shared
+
+# Restore as distinct layers
+RUN dotnet restore
+
+#PrimS
+WORKDIR /app/PrimS
+
 # Restore as distinct layers
 RUN dotnet restore
 # Build and publish a release
-WORKDIR /app/PrimS
 RUN dotnet publish -c Release -o out
+
+
+
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/runtime:5.0
