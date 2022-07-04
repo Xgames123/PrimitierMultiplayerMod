@@ -6,7 +6,7 @@ COPY PrimS/. ./PrimS
 COPY PrimS.shared/. ./PrimS.shared
 
 #PrimS.shared
-WORKDIR /app/.Prims.shared
+WORKDIR /app/Prims.shared
 
 # Restore as distinct layers
 RUN dotnet restore
