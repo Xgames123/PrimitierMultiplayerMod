@@ -3,5 +3,5 @@
 	"ListenIp": "localhost",
 
 	"MaxPlayers": 10,
-	"WorldDirectoryPath": "World"
+	"WorldDirectory": "World"
 }

@@ -42,6 +42,19 @@ namespace PrimS
 		public static void LoadFromDirectory(string dir)
 		{
 			WorldDirectory = dir;
+
+			if (!Directory.Exists(dir))
+			{
+				s_log.Info($"Creating Empty world");
+				CreateEmptyWorld();
+			}
+
+
+			ReloadWorldSettings();
+		}
+
+		public static void CreateEmptyWorld()
+		{
 			try
 			{
 				Directory.CreateDirectory(WorldDirectory);
@@ -51,8 +64,25 @@ namespace PrimS
 				s_log.Fatal($"Could not create world directory at location '{WorldDirectory}'", e);
 			}
 
-			ReloadWorldSettings();
+			var random = new Random();
+			Settings = new WorldSettings()
+			{
+				Seed = random.Next(int.MinValue, int.MaxValue),
+				Players = new Dictionary<string, StoredPlayer>()
+			};
+
+			WriteWorldSettings();
+
+			try
+			{
+				Directory.CreateDirectory(Path.Combine(WorldDirectory, ChunkDirectoryPath));
+			}
+			catch (Exception e)
+			{
+				s_log.Fatal($"Could not create {ChunkDirectoryPath} directory at location '{WorldDirectory}'", e);
+			}
 		}
+
 
 		public static void WriteWorldSettings()
 		{
@@ -87,6 +117,7 @@ namespace PrimS
 			else
 			{
 				s_log.Fatal($"No {WorldSettingsPath} file exist in world {WorldDirectory}");
+				
 			}
 
 		}
