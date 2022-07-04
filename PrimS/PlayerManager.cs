@@ -24,14 +24,43 @@ namespace PrimS
 			if (player == null)
 				return;
 
-			Players.Remove(player.Id);
+			StorePlayer(new StoredPlayer()
+			{
+				StaticId = player.StaticId,
+				Position = player.HeadPosition,
+				Hp = player.Hp,
+			});
+
+			Players.Remove(id);
 		}
 
-		public static PrimitierPlayer CreateNewPlayer(string username, int id)
-		{
-			var player = new PrimitierPlayer(username, id);
 
-			Players.Add(id, player);
+		public static void StorePlayer(StoredPlayer player)
+		{	
+			World.Settings.Players.Add(player.StaticId, player);
+			World.WriteWorldSettings();
+		}
+
+		
+		public static StoredPlayer? GetStoredPlayer(string staticId)
+		{
+			return World.Settings.Players.GetValueOrDefault(staticId);
+		}
+
+
+		public static PrimitierPlayer CreateNewPlayer(string username, int runtimeId, string staticId)
+		{
+			var player = new PrimitierPlayer(username, runtimeId);
+
+			var storedPlayer = GetStoredPlayer(staticId);
+			if (storedPlayer != null)
+			{
+				player.HeadPosition = storedPlayer.Position;
+				player.Hp = storedPlayer.Hp;
+				player.StaticId = staticId;
+			}
+
+			Players.Add(runtimeId, player);
 			return player;
 		}
 

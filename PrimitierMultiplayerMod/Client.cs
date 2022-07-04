@@ -78,7 +78,7 @@ namespace PrimitierMultiplayerMod
 			Server = peer;
 			PMFLog.Message("Connected to the server");
 
-			SendPacket(new JoinRequestPacket() { Username = PlayerInfo.Username }, DeliveryMethod.ReliableOrdered);
+			SendPacket(new JoinRequestPacket() { Username = PlayerInfo.Username, StaticPlayerId = PlayerInfo.StaticId }, DeliveryMethod.ReliableOrdered);
 		}
 
 		private void DisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)

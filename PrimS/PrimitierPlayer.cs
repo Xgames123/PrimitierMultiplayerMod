@@ -13,11 +13,14 @@ namespace PrimS
 		public PrimitierPlayer(string username, int id)
 		{
 			Username = username;
-			Id = id;
+			RuntimeId = id;
 		}
 
 		public string Username;
-		public int Id;
+		public int RuntimeId;
+		public string StaticId;
+
+		public float Hp;
 
 		public Vector3 HeadPosition = Vector3.Zero;
 		public Vector3 LHandPosition = Vector3.Zero;

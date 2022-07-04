@@ -7,8 +7,8 @@ using UnhollowerRuntimeLib;
 using MelonLoader;
 using System.Net;
 using LiteNetLib;
-
 using PrimitierModdingFramework.SubstanceModding;
+
 namespace PrimitierMultiplayerMod
 {
 
@@ -39,6 +39,8 @@ namespace PrimitierMultiplayerMod
 			Client = new Client();
 			Client.Connect(ServerAddress, ServerPort);
 
+			TerrainGenerator.worldSeed = 1;
+			
 		}
 
 

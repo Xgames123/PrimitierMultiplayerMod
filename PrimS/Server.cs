@@ -95,7 +95,9 @@ namespace PrimS
 			}
 			_log.Info($"{player.Username} left the game");
 
-			PlayerManager.DeletePlayer(player.Id);
+			var storedPlayer = PlayerManager.GetStoredPlayer(player.StaticId);
+
+			PlayerManager.DeletePlayer(player.RuntimeId);
 		}
 
 
@@ -140,10 +142,16 @@ namespace PrimS
 
 		private void OnJoinRequest(JoinRequestPacket packet, NetPeer peer)
 		{
-			PlayerManager.CreateNewPlayer(packet.Username, peer.Id);
+			var runtimePlayer = PlayerManager.CreateNewPlayer(packet.Username, peer.Id, packet.StaticPlayerId);
+
+			
+			runtimePlayer.StaticId = packet.StaticPlayerId;
+
+			runtimePlayer.RHandPosition = Vector3.Zero;
+			runtimePlayer.LHandPosition = Vector3.Zero;
 			_log.Info($"{packet.Username} joined the game");
 
-			SendPacket(peer, new JoinAcceptPacket() { Id = peer.Id, Username = packet.Username, Position = Vector3.Zero }, DeliveryMethod.ReliableOrdered);
+			SendPacket(peer, new JoinAcceptPacket() { Id = peer.Id, Username = packet.Username, Position = runtimePlayer.HeadPosition }, DeliveryMethod.ReliableOrdered);
 		}
 
 
