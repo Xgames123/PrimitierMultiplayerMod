@@ -45,7 +45,7 @@ namespace PrimS
 			_packetProcessor = new NetPacketProcessor();
 			_packetProcessor.RegisterNestedType<Vector3>((writer, value) => writer.Put(value), reader => reader.GetVector3());
 			_packetProcessor.SubscribeReusable<JoinRequestPacket, NetPeer>(OnJoinRequest);
-
+			_packetProcessor.SubscribeReusable<PlayerUpdatePacket, NetPeer>(OnPlayerUpdate);
 
 			ConfigLoader.OnConfigReload += OnConfigReload;
 			OnConfigReload(ConfigLoader.Config);
@@ -154,7 +154,21 @@ namespace PrimS
 			SendPacket(peer, new JoinAcceptPacket() { Id = peer.Id, Username = packet.Username, Position = runtimePlayer.HeadPosition, WorldSeed = World.Settings.Seed }, DeliveryMethod.ReliableOrdered);
 		}
 
+		private void OnPlayerUpdate(PlayerUpdatePacket packet, NetPeer peer)
+		{
+			var player = PlayerManager.GetPlayerById(peer.Id);
+			if (player == null)
+			{
+				_log.Error("Got update form non registered player");
+				return;
+			}
+				
 
+			player.Position = packet.Position;
+			player.HeadPosition = packet.HeadPosition;
+			player.RHandPosition = packet.RHandPosition;
+			player.LHandPosition = packet.LHandPosition;
+		}
 
 
 

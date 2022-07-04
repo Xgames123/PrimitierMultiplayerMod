@@ -6,6 +6,7 @@ namespace PrimS.shared
 {
 	public enum ErrorCode
 	{
+		ProtocolError,
 		Unknown,
 		ServerFull,
 		UnsupportedModVersion,
