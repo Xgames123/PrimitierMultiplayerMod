@@ -1,6 +1,16 @@
-FROM mcr.microsoft.com/dotnet/runtime:6.0-bullseye-slim-arm32v7
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
-COPY ./PrimS/bin/publish/net6.0 .
 
-EXPOSE 9543/udp
-ENTRYPOINT ["dotnet" "PrimS.dll"]
+# Copy everything
+COPY Prims/ ./
+# Restore as distinct layers
+RUN dotnet restore
+# Build and publish a release
+RUN dotnet publish -c Release -o out
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/runtime:6.0
+WORKDIR /app
+COPY --from=build-env /app/out .
+ENTRYPOINT ["dotnet", "PrimS.dll"]
+
