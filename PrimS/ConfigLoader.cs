@@ -11,9 +11,9 @@ namespace PrimS
 {
 	public class ConfigFile
 	{
-		public int maxPlayers { get; set; } = 10;
+		public int MaxPlayers { get; set; } = 10;
 
-		public string WorldFilePath { get; set; } = "World.primsworld";
+		public string WorldDirectoryPath { get; set; } = "World";
 
 		public string ListenIp { get; set; } = "localhost";
 		public int ListenPort = 9543;

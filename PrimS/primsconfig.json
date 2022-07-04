@@ -1,3 +1,7 @@
 {
-	
+	"ListenPort": 9543,
+	"ListenIp": "localhost",
+
+	"MaxPlayers": 10,
+	"WorldDirectoryPath": "World"
 }

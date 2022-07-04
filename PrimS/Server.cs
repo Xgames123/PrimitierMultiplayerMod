@@ -105,7 +105,7 @@ namespace PrimS
 			_log.Info(request.RemoteEndPoint + " has requested a connection");
 
 
-			if (NetManager.ConnectedPeersCount >= ConfigLoader.Config.maxPlayers)
+			if (NetManager.ConnectedPeersCount >= ConfigLoader.Config.MaxPlayers)
 			{
 				_writer.Reset();
 				ErrorGenerator.Generate(ref _writer, ref _packetProcessor, shared.ErrorCode.ServerFull);
