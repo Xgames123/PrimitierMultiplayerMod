@@ -26,6 +26,6 @@ RUN dotnet publish -c Release -o out
 FROM mcr.microsoft.com/dotnet/runtime:5.0
 WORKDIR /app
 COPY --from=build-env /app/PrimS/out .
-EXPOSE udp/9543
+EXPOSE 9543/udp
 ENTRYPOINT ["dotnet", "PrimS.dll"]
 
