@@ -1,15 +1,16 @@
 # PrimitierMultiplayerMod
 
-## Instalation on linux
-1) Download PrimS.tar
-2) run tar -xf PrimS.tar
-3) run sudo chmod +x PrimSInstall.sh
-4) run ./PrimSInstall.sh
-5) sudo systemctl daemon-reload
-6) sudo systemctl enable PrimS.socket
-7) sudo systemctl enable PrimS.service
-8) sudo systemctl start PrimS.socket
-9) sudo systemctl start PrimS.service
+## Mod installation
+1) Install [Primitier mod manager](https://github.com/Xgames123/PrimitierModManager)
+2) Download the mod from the latest release.
+3) Drag it into primitier mod manager and click the arrow to select it
+4) Launch Primitier
+
+## Server installation with docker
+1) Download the docker image from the latest release.
+2) On your server install docker
+3) Run ```sudo docker load -i {path to the .tar file}```
+4) Run ```sudo docker run --rm -d --network host prims -p 9543:9543/udp```
 
 ## primsconfig
 PrimSConfig is a tool to configure prims while it is running
