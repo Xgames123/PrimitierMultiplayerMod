@@ -13,7 +13,7 @@ namespace PrimitierMultiplayerMod
 	{
 		public Chat(System.IntPtr ptr) : base(ptr) { }
 
-		public TMP_Text Text;
+		public TextMeshPro Text;
 
 		
 
@@ -27,16 +27,17 @@ namespace PrimitierMultiplayerMod
 
 			GameObject textGo = new GameObject("Text");
 			textGo.transform.parent = chatGo.transform;
-			textGo.AddComponent<TMP_Text>();
+			textGo.transform.localPosition = new Vector3(0, 0, 0);
+			textGo.transform.localScale = new Vector3(1, 1, 1);
+			chatComp.Text = textGo.AddComponent<TextMeshPro>();
+			chatComp.Text.fontSize = 0.5f;
+			chatComp.Text.color = Color.gray;
 
-
-			chatComp.Text = textGo.GetComponent<TMP_Text>();
 			return chatComp;
 		}
 
 		private void Start()
 		{
-			Text.text = "";
 		}
 
 
@@ -47,7 +48,7 @@ namespace PrimitierMultiplayerMod
 			if (IsSpecialMessage)
 			{
 				PMFLog.Message($"CHAT "+ fullMessage, ConsoleColor.Yellow);
-				WriteColoredTextMessage(fullMessage, Color.yellow);
+				WriteTextMessage($"<color=#FFFF00>{fullMessage}</color>");
 			}
 			else
 			{
@@ -66,26 +67,26 @@ namespace PrimitierMultiplayerMod
 		}
 
 
-		private void WriteColoredTextMessage(string message, Color32 color)
-		{
-			WriteTextMessage(message);
+		//private void WriteColoredTextMessage(string message, Color32 color)
+		//{
+		//	WriteTextMessage(message);
 
-			var line = Text.textInfo.lineInfo[Text.textInfo.lineCount - 1];
-			for (int i = 0; i < line.characterCount; i++)
-			{
-				var charIndex = line.firstCharacterIndex + i;
-				var meshIndex = Text.textInfo.characterInfo[charIndex].materialReferenceIndex;
-				var vertexIndex = Text.textInfo.characterInfo[charIndex].vertexIndex;
+		//	var line = Text.textInfo.lineInfo[Text.textInfo.lineCount - 1];
+		//	for (int i = 0; i < line.characterCount; i++)
+		//	{
+		//		var charIndex = line.firstCharacterIndex + i;
+		//		var meshIndex = Text.textInfo.characterInfo[charIndex].materialReferenceIndex;
+		//		var vertexIndex = Text.textInfo.characterInfo[charIndex].vertexIndex;
 
-				Color32[] vertexColors = Text.textInfo.meshInfo[meshIndex].colors32;
-				vertexColors[vertexIndex + 0] = color;
-				vertexColors[vertexIndex + 1] = color;
-				vertexColors[vertexIndex + 2] = color;
-				vertexColors[vertexIndex + 3] = color;
-			}
+		//		Color32[] vertexColors = Text.textInfo.meshInfo[meshIndex].colors32;
+		//		vertexColors[vertexIndex + 0] = color;
+		//		vertexColors[vertexIndex + 1] = color;
+		//		vertexColors[vertexIndex + 2] = color;
+		//		vertexColors[vertexIndex + 3] = color;
+		//	}
 
-			Text.UpdateVertexData(TMP_VertexDataUpdateFlags.All);
-		}
+		//	Text.UpdateVertexData(TMP_VertexDataUpdateFlags.All);
+		//}
 
 
 	}
