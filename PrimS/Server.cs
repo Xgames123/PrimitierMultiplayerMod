@@ -158,8 +158,8 @@ namespace PrimS
 			runtimePlayer.LHandPosition = Vector3.Zero;
 			_log.Info($"{packet.Username} joined the game");
 
-			SendPacket(peer, new JoinAcceptPacket() { Username = packet.Username, Position = runtimePlayer.Position, WorldSeed = World.Settings.Seed }, DeliveryMethod.ReliableOrdered);
-			SendPacketToAll(new PlayerJoinedPacket() { Position = runtimePlayer.Position, Username = packet.Username }, DeliveryMethod.ReliableOrdered);
+			SendPacket(peer, new JoinAcceptPacket() { Id = peer.Id, Username = packet.Username, Position = runtimePlayer.Position, WorldSeed = World.Settings.Seed }, DeliveryMethod.ReliableOrdered);
+			SendPacketToAll(new PlayerJoinedPacket() { Id = peer.Id ,Position = runtimePlayer.Position, Username = packet.Username }, DeliveryMethod.ReliableOrdered);
 		}
 
 		private void OnPlayerUpdate(PlayerUpdatePacket packet, NetPeer peer)

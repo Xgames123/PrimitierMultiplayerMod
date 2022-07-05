@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace PrimitierMultiplayerMod
 {
@@ -15,23 +16,38 @@ namespace PrimitierMultiplayerMod
 
 		public TextMeshPro Text;
 
-		
-
+		private List<string> Lines = new List<string>();
 
 		public static Chat Setup()
 		{
 			GameObject chatGo = new GameObject("Chat");
 			chatGo.transform.parent = null;
+			chatGo.transform.localScale = new Vector3(1f, 1f, 1f);
 			chatGo.transform.position = new Vector3(0, 1, 0);
+			var canvas = chatGo.AddComponent<Canvas>();
+			canvas.renderMode = RenderMode.WorldSpace;
+			
+
 			var chatComp = chatGo.AddComponent<Chat>();
+
+
+			GameObject backgroundGo = new GameObject("Background");
+			backgroundGo.transform.parent = chatGo.transform;
+			backgroundGo.transform.localPosition = Vector3.zero;
+			backgroundGo.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+			var image = backgroundGo.AddComponent<Image>();
+			image.color = new Color(0, 0, 0, 0.3f);
+
+
 
 			GameObject textGo = new GameObject("Text");
 			textGo.transform.parent = chatGo.transform;
-			textGo.transform.localPosition = new Vector3(0, 0, 0);
-			textGo.transform.localScale = new Vector3(1, 1, 1);
+			textGo.transform.localPosition = Vector3.zero;
+			textGo.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
 			chatComp.Text = textGo.AddComponent<TextMeshPro>();
-			chatComp.Text.fontSize = 0.5f;
-			chatComp.Text.color = Color.gray;
+			chatComp.Text.color = Color.white;
+			chatComp.Text.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 100);
+			chatComp.Text.material.renderQueue = 2900;
 
 			return chatComp;
 		}
@@ -41,6 +57,7 @@ namespace PrimitierMultiplayerMod
 		}
 
 
+
 		public void AddMessage(string sender, string message, bool IsSpecialMessage = false)
 		{
 			var fullMessage = $"[{sender}] {message}";
@@ -48,45 +65,44 @@ namespace PrimitierMultiplayerMod
 			if (IsSpecialMessage)
 			{
 				PMFLog.Message($"CHAT "+ fullMessage, ConsoleColor.Yellow);
-				WriteTextMessage($"<color=#FFFF00>{fullMessage}</color>");
+				AddLine($"<color=#FFFF00>{fullMessage}</color>");
 			}
 			else
 			{
 				PMFLog.Message($"CHAT "+fullMessage);
-				WriteTextMessage(fullMessage);
+				AddLine(fullMessage);
+			}
+			UpdateText();
+
+
+		}
+
+		private void AddLine(string line)
+		{
+			Lines.Add(line);
+			Text.text+=line+"\n";
+			UpdateText();
+		}
+
+		private void UpdateText()
+		{
+
+			if (Text.textInfo.lineCount > 23)
+			{
+				var removeLines = Text.textInfo.lineCount - 23;
+				Lines.RemoveRange(0, removeLines);
+
+				Text.text = "";
+				foreach (var line in Lines)
+				{
+					Text.text += line + "\n";
+				}
+
 			}
 
-			
-
 
 		}
 
-		private void WriteTextMessage(string message)
-		{
-			Text.text += message + "\n";
-		}
-
-
-		//private void WriteColoredTextMessage(string message, Color32 color)
-		//{
-		//	WriteTextMessage(message);
-
-		//	var line = Text.textInfo.lineInfo[Text.textInfo.lineCount - 1];
-		//	for (int i = 0; i < line.characterCount; i++)
-		//	{
-		//		var charIndex = line.firstCharacterIndex + i;
-		//		var meshIndex = Text.textInfo.characterInfo[charIndex].materialReferenceIndex;
-		//		var vertexIndex = Text.textInfo.characterInfo[charIndex].vertexIndex;
-
-		//		Color32[] vertexColors = Text.textInfo.meshInfo[meshIndex].colors32;
-		//		vertexColors[vertexIndex + 0] = color;
-		//		vertexColors[vertexIndex + 1] = color;
-		//		vertexColors[vertexIndex + 2] = color;
-		//		vertexColors[vertexIndex + 3] = color;
-		//	}
-
-		//	Text.UpdateVertexData(TMP_VertexDataUpdateFlags.All);
-		//}
 
 
 	}

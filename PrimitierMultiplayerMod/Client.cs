@@ -26,7 +26,7 @@ namespace PrimitierMultiplayerMod
 
 		public NetPeer Server { get; private set; } = null;
 
-		public NetPeer Peer { get { return NetManager.FirstPeer; } }
+		public int LocalId { get; private set; } = -1;
 
 		private NetPacketProcessor _packetProcessor;
 		private NetDataWriter _writer;
@@ -55,6 +55,7 @@ namespace PrimitierMultiplayerMod
 			_packetProcessor = new NetPacketProcessor();
 			_packetProcessor.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetVector3());
 			_packetProcessor.SubscribeReusable<JoinAcceptPacket>(OnJoinAcceptPacket);
+			_packetProcessor.SubscribeReusable<PlayerJoinedPacket>(OnPlayerJoinedPacket);
 
 			PMFLog.Message("Starting client");
 			NetManager.Start();
@@ -109,12 +110,19 @@ namespace PrimitierMultiplayerMod
 
 		private void OnJoinAcceptPacket(JoinAcceptPacket packet)
 		{
-
+			LocalId = packet.Id;
 			PMFLog.Message("Successfully joined the game");
 			IsInGame = true;
 			TerrainGenerator.worldSeed = packet.WorldSeed;
 		}
 
+		private void OnPlayerJoinedPacket(PlayerJoinedPacket packet)
+		{
+			Mod.Chat.AddMessage("SERVER", $"{packet.Username} Joined the game");
+
+			//TODO create player
+
+		}
 
 
 	}

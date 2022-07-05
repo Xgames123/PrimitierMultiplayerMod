@@ -50,12 +50,7 @@ namespace PrimitierMultiplayerMod
 		{
 			base.OnRealyLateStart();
 
-			Chat.AddMessage("SERVER", "hi hi hi i'm server", true);
-			Chat.AddMessage("Person", "hi i'm person");
-			Chat.AddMessage("Person 2", "hi i'm person 2");
-			Chat.AddMessage("SERVER", "hi hi hi i'm server again", true);
-			Chat.AddMessage("Person", "hi i'm person again");
-
+			RemotePlayer.Create(-1);
 		}
 
 		public override void OnApplicationStart()
@@ -66,6 +61,8 @@ namespace PrimitierMultiplayerMod
 
 			ClassInjector.RegisterTypeInIl2Cpp<UpdatePacketSender>();
 			ClassInjector.RegisterTypeInIl2Cpp<Chat>();
+			ClassInjector.RegisterTypeInIl2Cpp<NameTag>();
+			ClassInjector.RegisterTypeInIl2Cpp<RemotePlayer>();
 		}
 		public override void OnApplicationQuit()
 		{
