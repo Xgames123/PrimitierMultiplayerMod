@@ -16,6 +16,7 @@ namespace PrimitierMultiplayerMod
     {
 
 		public static Client Client;
+		public static Chat Chat;
 
 		public string ServerAddress;
 		public int ServerPort;
@@ -35,7 +36,7 @@ namespace PrimitierMultiplayerMod
 			Connect();
 			PMFLog.Message("Connecting to server");
 
-			
+			Chat = Chat.Setup();
 		}
 		private void Connect()
 		{
@@ -48,7 +49,13 @@ namespace PrimitierMultiplayerMod
 		public override void OnRealyLateStart()
 		{
 			base.OnRealyLateStart();
-			
+
+			Chat.AddMessage("SERVER", "hi hi hi i'm server", true);
+			Chat.AddMessage("Person", "hi i'm person");
+			Chat.AddMessage("Person 2", "hi i'm person 2");
+			Chat.AddMessage("SERVER", "hi hi hi i'm server again", true);
+			Chat.AddMessage("Person", "hi i'm person again");
+
 		}
 
 		public override void OnApplicationStart()
@@ -58,6 +65,7 @@ namespace PrimitierMultiplayerMod
 			PMFSystem.EnableSystem<PMFHelper>();
 
 			ClassInjector.RegisterTypeInIl2Cpp<UpdatePacketSender>();
+			ClassInjector.RegisterTypeInIl2Cpp<Chat>();
 		}
 		public override void OnApplicationQuit()
 		{

@@ -71,8 +71,17 @@ namespace PrimS
 
 		}
 
+		private void SendPacketToAll<T>(T packet, DeliveryMethod deliveryMethod) where T : class, new()
+		{
+			_writer.Reset();
+			_packetProcessor.Write<T>(_writer, packet);
+			NetManager.SendToAll(_writer, deliveryMethod);
+		}
+
+
 		private void SendPacket<T>(NetPeer peer, T packet, DeliveryMethod deliveryMethod) where T : class, new()
 		{
+			
 			_writer.Reset();
 			_packetProcessor.Write<T>(_writer, packet);
 			peer.Send(_writer, deliveryMethod);
@@ -94,8 +103,6 @@ namespace PrimS
 				return;
 			}
 			_log.Info($"{player.Username} left the game");
-
-			var storedPlayer = PlayerManager.GetStoredPlayer(player.StaticId);
 
 			PlayerManager.DeletePlayer(player.RuntimeId);
 		}
@@ -151,7 +158,8 @@ namespace PrimS
 			runtimePlayer.LHandPosition = Vector3.Zero;
 			_log.Info($"{packet.Username} joined the game");
 
-			SendPacket(peer, new JoinAcceptPacket() { Id = peer.Id, Username = packet.Username, Position = runtimePlayer.HeadPosition, WorldSeed = World.Settings.Seed }, DeliveryMethod.ReliableOrdered);
+			SendPacket(peer, new JoinAcceptPacket() { Username = packet.Username, Position = runtimePlayer.Position, WorldSeed = World.Settings.Seed }, DeliveryMethod.ReliableOrdered);
+			SendPacketToAll(new PlayerJoinedPacket() { Position = runtimePlayer.Position, Username = packet.Username }, DeliveryMethod.ReliableOrdered);
 		}
 
 		private void OnPlayerUpdate(PlayerUpdatePacket packet, NetPeer peer)

@@ -26,11 +26,15 @@ namespace PrimitierMultiplayerMod
 
 		public NetPeer Server { get; private set; } = null;
 
+		public NetPeer Peer { get { return NetManager.FirstPeer; } }
+
 		private NetPacketProcessor _packetProcessor;
 		private NetDataWriter _writer;
 
 		public Client()
 		{
+
+
 			_writer = new NetDataWriter();
 			Listener = new EventBasedNetListener();
 			NetManager = new NetManager(Listener)
@@ -43,6 +47,7 @@ namespace PrimitierMultiplayerMod
 			Listener.PeerDisconnectedEvent += DisconnectedEvent;
 			Listener.PeerConnectedEvent += ConnectedEvent;
 
+			
 		}
 
 		public void Connect(string address, int port)
@@ -104,6 +109,7 @@ namespace PrimitierMultiplayerMod
 
 		private void OnJoinAcceptPacket(JoinAcceptPacket packet)
 		{
+
 			PMFLog.Message("Successfully joined the game");
 			IsInGame = true;
 			TerrainGenerator.worldSeed = packet.WorldSeed;
