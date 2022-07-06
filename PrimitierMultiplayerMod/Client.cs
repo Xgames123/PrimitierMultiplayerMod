@@ -59,6 +59,7 @@ namespace PrimitierMultiplayerMod
 			_packetProcessor.SubscribeReusable<JoinAcceptPacket>(OnJoinAcceptPacket);
 			_packetProcessor.SubscribeReusable<PlayerJoinedPacket>(OnPlayerJoinedPacket);
 			_packetProcessor.SubscribeReusable<PlayerLeavePacket>(OnPlayerLeavePacket);
+			_packetProcessor.SubscribeReusable<ServerUpdatePacket>(OnServerUpdatePacket);
 
 			PMFLog.Message("Starting client");
 			NetManager.Start();
@@ -144,6 +145,22 @@ namespace PrimitierMultiplayerMod
 			RemotePlayer.Create(packet.Id, packet.Username, packet.Position.ToUnity());
 		}
 
+		private void OnServerUpdatePacket(ServerUpdatePacket packet)
+		{
+			
+			foreach (var networkPlayer in packet.Players)
+			{
+				var remotePlayer = RemotePlayer.RemotePlayers[networkPlayer.Id];
+				PMFLog.Message("")
+
+				remotePlayer.transform.position = networkPlayer.Position.ToUnity();
+				remotePlayer.Head.transform.position = networkPlayer.HeadPosition.ToUnity();
+				remotePlayer.LHand.transform.position = networkPlayer.LHandPosition.ToUnity();
+				remotePlayer.RHand.transform.position = networkPlayer.RHandPosition.ToUnity();
+
+			}
+
+		}
 
 	}
 }

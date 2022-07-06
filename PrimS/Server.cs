@@ -225,7 +225,7 @@ namespace PrimS
 				return;
 			}
 
-			_log.Debug($"PLAYER UPDATE Position={packet.Position}; HeadPosition={packet.HeadPosition}; RHandPosition={packet.RHandPosition}; LHandPosition={packet.LHandPosition};");
+			//_log.Debug($"PLAYER UPDATE Position={packet.Position}; HeadPosition={packet.HeadPosition}; RHandPosition={packet.RHandPosition}; LHandPosition={packet.LHandPosition};");
 
 			player.Position = packet.Position;
 			player.HeadPosition = packet.HeadPosition;

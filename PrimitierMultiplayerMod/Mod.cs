@@ -87,6 +87,8 @@ namespace PrimitierMultiplayerMod
 		public override void OnFixedUpdate()
 		{
 			base.OnFixedUpdate();
+			if (Client == null)
+				return;
 			Client.Update();
 		}
 		
