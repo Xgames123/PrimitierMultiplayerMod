@@ -12,6 +12,7 @@ using PrimS.shared.Packets.c2s;
 using PrimS.shared.Packets.s2c;
 using PrimS.shared;
 using System.Numerics;
+using System.Diagnostics;
 
 namespace PrimS
 {
@@ -26,6 +27,8 @@ namespace PrimS
 
 		private NetPacketProcessor _packetProcessor;
 		private NetDataWriter _writer;
+
+		private Stopwatch UpdateStopwatch = Stopwatch.StartNew();
 
 		public Server()
 		{
@@ -139,17 +142,17 @@ namespace PrimS
 
 			NetManager.PollEvents();
 
+			if (ConfigLoader.Config == null)
+				return;
+
+			if(UpdateStopwatch.ElapsedMilliseconds >= ConfigLoader.Config.UpdateDelay)
+			{
+				UpdateStopwatch.Restart();
+
+				SendUpdatePackets();
+			}
+
 		}
-
-		public void Stop()
-		{
-
-
-			_log.Info("Stopping server");
-			NetManager.Stop(true);
-
-		}
-
 		private void SendUpdatePackets()
 		{
 			foreach (var peer in NetManager.ConnectedPeerList)
@@ -161,8 +164,8 @@ namespace PrimS
 					_log.Error($"Connected peer '{peer.Id}' has no player");
 					continue;
 				}
-					
-				
+
+
 				SendPacket<ServerUpdatePacket>(peer, new ServerUpdatePacket() { Players = FindNetworkPlayersAroundPlayer(currentPlayer, 20).ToArray() }, DeliveryMethod.Unreliable);
 
 			}
@@ -187,6 +190,17 @@ namespace PrimS
 		}
 
 
+
+		public void Stop()
+		{
+
+
+			_log.Info("Stopping server");
+			NetManager.Stop(true);
+
+		}
+
+		
 		private void OnJoinRequest(JoinRequestPacket packet, NetPeer peer)
 		{
 			var runtimePlayer = PlayerManager.CreateNewPlayer(packet.Username, peer.Id, packet.StaticPlayerId);

@@ -30,6 +30,7 @@ namespace PrimitierMultiplayerMod
 
 		private void FixedUpdate()
 		{
+			//Get from server primsconfig.json
 			if(stopwatch.ElapsedMilliseconds >= 10)
 			{
 				stopwatch.Restart();
@@ -48,8 +49,7 @@ namespace PrimitierMultiplayerMod
 
 				};
 
-				PMFLog.Message($"PLAYER UPDATE Position ={ packet.Position}; HeadPosition ={ packet.HeadPosition}; RHandPosition ={ packet.RHandPosition}; LHandPosition ={ packet.LHandPosition}; ");
-
+				
 				Mod.Client.SendPacket(packet, LiteNetLib.DeliveryMethod.Unreliable);
 			}
 

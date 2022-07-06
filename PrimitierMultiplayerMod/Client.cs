@@ -69,6 +69,9 @@ namespace PrimitierMultiplayerMod
 
 		public void Update()
 		{
+			if (NetManager == null)
+				return;
+
 			NetManager.PollEvents();
 		}
 

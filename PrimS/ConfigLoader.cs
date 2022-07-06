@@ -18,6 +18,15 @@ namespace PrimS
 		public string ListenIp { get; set; } = "localhost";
 		public int ListenPort { get; set; } = 9543;
 
+		public int UpdateDelay { get; set; } = 10;
+		public ClientConfig Client { get; set; }
+	}
+
+	public class ClientConfig
+	{
+		public int IdleUpdateDelay { get; set; } = 1000;
+		public int ActiveUpdateDelay { get; set; } = 20;
+
 	}
 
 

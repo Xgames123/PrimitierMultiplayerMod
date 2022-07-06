@@ -12,5 +12,21 @@
 3) Run ```sudo docker load -i {path to the .tar file}```
 4) Run ```sudo docker run --rm -d --network host prims -p 9543:9543/udp```
 
-## primsconfig
-PrimSConfig is a tool to configure prims while it is running
+## primsconfig.json
+primsconfig.json is the configuration file for the server
+```json
+{
+	"ListenPort": 9543, //Port to listen on
+	"ListenIp": "localhost", //Ip address to use for the server
+
+	"MaxPlayers": 10, //Maximum players that can be in the world
+	"WorldDirectory": "World", //The path to the directory to store world data into
+    "UpdateDelay": 10, //Amount of milliseconds between server updates (When the server sends a packet to all connected clients)
+
+    //Configurations for the clients that connect
+    "Client": {
+        "IdleUpdateDelay": 1000, //Amount of milliseconds between client updates when the client is idle (when the client is too far away from other players to be seen)
+        "ActiveUpdateDelay": 20 //Amount of milliseconds between client updates when the client can be seen by other players
+    }
+}
+```
