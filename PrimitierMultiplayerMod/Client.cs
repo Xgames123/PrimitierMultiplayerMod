@@ -54,8 +54,11 @@ namespace PrimitierMultiplayerMod
 		{
 			_packetProcessor = new NetPacketProcessor();
 			_packetProcessor.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetVector3());
+			_packetProcessor.RegisterNestedType<NetworkPlayer>(NetworkPlayer.Serialize, NetworkPlayer.Deserialize);
+
 			_packetProcessor.SubscribeReusable<JoinAcceptPacket>(OnJoinAcceptPacket);
 			_packetProcessor.SubscribeReusable<PlayerJoinedPacket>(OnPlayerJoinedPacket);
+			_packetProcessor.SubscribeReusable<PlayerLeavePacket>(OnPlayerLeavePacket);
 
 			PMFLog.Message("Starting client");
 			NetManager.Start();
@@ -116,12 +119,26 @@ namespace PrimitierMultiplayerMod
 			TerrainGenerator.worldSeed = packet.WorldSeed;
 		}
 
+		private void OnPlayerLeavePacket(PlayerLeavePacket packet)
+		{
+			var player = RemotePlayer.RemotePlayers[packet.Id];
+			if (player != null)
+			{
+				Mod.Chat.AddServerMessage($"{player.NameTag.text} has left the game");
+				RemotePlayer.DeletePlayer(player);
+			}
+
+		}
+
+
 		private void OnPlayerJoinedPacket(PlayerJoinedPacket packet)
 		{
-			Mod.Chat.AddMessage("SERVER", $"{packet.Username} Joined the game");
+			PMFLog.Message(packet.Username);
+			PMFLog.Message(packet.Position);
+			PMFLog.Message(packet.Id);
+			Mod.Chat.AddServerMessage($"{packet.Username} has Joined the game");
 
-			//TODO create player
-
+			RemotePlayer.Create(packet.Id, packet.Username, packet.Position.ToUnity());
 		}
 
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace PrimS
 	public static class PlayerManager
 	{
 		public static Dictionary<int, PrimitierPlayer> Players = new Dictionary<int, PrimitierPlayer>();
+
 
 
 
@@ -36,8 +38,8 @@ namespace PrimS
 
 
 		public static void StorePlayer(StoredPlayer player)
-		{	
-			World.Settings.Players.Add(player.StaticId, player);
+		{
+			World.Settings.Players[player.StaticId] = player;
 			World.WriteWorldSettings();
 		}
 

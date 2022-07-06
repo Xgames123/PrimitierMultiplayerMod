@@ -7,9 +7,9 @@ namespace PrimS.shared.Packets.c2s
 {
 	public class PlayerUpdatePacket
 	{
-		public Vector3 Position;
-		public Vector3 HeadPosition;
-		public Vector3 LHandPosition;
-		public Vector3 RHandPosition;
+		public Vector3 Position { get; set; }
+		public Vector3 HeadPosition { get; set; }
+		public Vector3 LHandPosition { get; set; }
+		public Vector3 RHandPosition { get; set; }
 	}
 }

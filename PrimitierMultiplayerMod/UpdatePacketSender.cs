@@ -24,7 +24,7 @@ namespace PrimitierMultiplayerMod
 
 			updatePacketSenderGameObject.transform.parent = PMFHelper.SystemTransform;
 
-
+			
 		}
 
 
@@ -39,15 +39,18 @@ namespace PrimitierMultiplayerMod
 					return;
 				}
 
-				var playerPos = PMFHelper.CameraRig.transform.position.ToNumerics();
-				Mod.Client.SendPacket(new PlayerUpdatePacket()
+				var packet = new PlayerUpdatePacket()
 				{
-					Position = playerPos,
+					Position = PMFHelper.CameraRig.transform.position.ToNumerics(),
 					HeadPosition = Camera.main.transform.position.ToNumerics(),
-					LHandPosition = playerPos-PMFHelper.LHand.transform.position.ToNumerics(),
-					RHandPosition = playerPos - PMFHelper.RHand.transform.position.ToNumerics()
+					LHandPosition = PMFHelper.LHand.transform.position.ToNumerics(),
+					RHandPosition = PMFHelper.RHand.transform.position.ToNumerics()
 
-				}, LiteNetLib.DeliveryMethod.Unreliable);
+				};
+
+				PMFLog.Message($"PLAYER UPDATE Position ={ packet.Position}; HeadPosition ={ packet.HeadPosition}; RHandPosition ={ packet.RHandPosition}; LHandPosition ={ packet.LHandPosition}; ");
+
+				Mod.Client.SendPacket(packet, LiteNetLib.DeliveryMethod.Unreliable);
 			}
 
 		}

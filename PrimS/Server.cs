@@ -44,6 +44,8 @@ namespace PrimS
 			_writer = new NetDataWriter();
 			_packetProcessor = new NetPacketProcessor();
 			_packetProcessor.RegisterNestedType<Vector3>((writer, value) => writer.Put(value), reader => reader.GetVector3());
+			_packetProcessor.RegisterNestedType<NetworkPlayer>(NetworkPlayer.Serialize, NetworkPlayer.Deserialize);
+
 			_packetProcessor.SubscribeReusable<JoinRequestPacket, NetPeer>(OnJoinRequest);
 			_packetProcessor.SubscribeReusable<PlayerUpdatePacket, NetPeer>(OnPlayerUpdate);
 
@@ -105,6 +107,7 @@ namespace PrimS
 			_log.Info($"{player.Username} left the game");
 
 			PlayerManager.DeletePlayer(player.RuntimeId);
+			SendPacketToAll(new PlayerLeavePacket() { Id = peer.Id }, DeliveryMethod.ReliableOrdered);
 		}
 
 
@@ -147,6 +150,43 @@ namespace PrimS
 
 		}
 
+		private void SendUpdatePackets()
+		{
+			foreach (var peer in NetManager.ConnectedPeerList)
+			{
+				var currentPlayer = PlayerManager.GetPlayerById(peer.Id);
+
+				if (currentPlayer == null)
+				{
+					_log.Error($"Connected peer '{peer.Id}' has no player");
+					continue;
+				}
+					
+				
+				SendPacket<ServerUpdatePacket>(peer, new ServerUpdatePacket() { Players = FindNetworkPlayersAroundPlayer(currentPlayer, 20).ToArray() }, DeliveryMethod.Unreliable);
+
+			}
+
+		}
+		private List<NetworkPlayer> FindNetworkPlayersAroundPlayer(PrimitierPlayer currentPlayer, int radius)
+		{
+			var foundPlayers = new List<NetworkPlayer>();
+			var players = PlayerManager.Players.Values;
+			foreach (var player in players)
+			{
+				if (player.RuntimeId == currentPlayer.RuntimeId)
+					continue;
+
+				if (Vector3.Distance(player.Position, currentPlayer.Position) <= radius)
+				{
+					foundPlayers.Add(new NetworkPlayer() { Id = player.RuntimeId, Position = player.Position, HeadPosition = player.HeadPosition, LHandPosition = player.LHandPosition, RHandPosition = player.RHandPosition });
+				}
+
+			}
+			return foundPlayers;
+		}
+
+
 		private void OnJoinRequest(JoinRequestPacket packet, NetPeer peer)
 		{
 			var runtimePlayer = PlayerManager.CreateNewPlayer(packet.Username, peer.Id, packet.StaticPlayerId);
@@ -170,7 +210,8 @@ namespace PrimS
 				_log.Error("Got update form non registered player");
 				return;
 			}
-				
+
+			_log.Debug($"PLAYER UPDATE Position={packet.Position}; HeadPosition={packet.HeadPosition}; RHandPosition={packet.RHandPosition}; LHandPosition={packet.LHandPosition};");
 
 			player.Position = packet.Position;
 			player.HeadPosition = packet.HeadPosition;

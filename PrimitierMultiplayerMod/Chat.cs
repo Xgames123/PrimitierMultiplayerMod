@@ -57,6 +57,11 @@ namespace PrimitierMultiplayerMod
 		}
 
 
+		public void AddServerMessage(string message)
+		{
+			AddMessage("SERVER", message, true);
+		}
+
 
 		public void AddMessage(string sender, string message, bool IsSpecialMessage = false)
 		{

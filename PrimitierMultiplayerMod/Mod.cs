@@ -50,7 +50,6 @@ namespace PrimitierMultiplayerMod
 		{
 			base.OnRealyLateStart();
 
-			RemotePlayer.Create(-1);
 		}
 
 		public override void OnApplicationStart()
@@ -82,8 +81,7 @@ namespace PrimitierMultiplayerMod
 				PMFLog.Message("Reconnecting to server...");
 
 			}
-
-
+			
 		}
 
 		public override void OnFixedUpdate()

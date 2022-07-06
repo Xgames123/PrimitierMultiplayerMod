@@ -12,12 +12,24 @@ namespace PrimitierMultiplayerMod
 	{
 		public RemotePlayer(System.IntPtr ptr) : base(ptr) { }
 
+		public static Dictionary<int, RemotePlayer> RemotePlayers = new Dictionary<int, RemotePlayer>();
+
 		public Transform Head;
 		public Transform LHand;
 		public Transform RHand;
 		public TextMeshPro NameTag;
 
 		public int Id;
+
+		public static void DeletePlayer(RemotePlayer player)
+		{
+			if (player != null)
+			{
+				Destroy(player.gameObject);
+				RemotePlayers.Remove(player.Id);
+			}
+
+		}
 
 
 		public static RemotePlayer Create(int id, string username, Vector3 position)
@@ -40,7 +52,7 @@ namespace PrimitierMultiplayerMod
 			nameTag.alignment = TextAlignmentOptions.Center;
 			nameTag.color = Color.white;
 			nameTagGo.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 10);
-			nameTag.text = "Null";
+			nameTag.text = username;
 			nameTag.outlineColor = Color.black;
 			nameTag.outlineWidth = 1f;
 
@@ -66,6 +78,9 @@ namespace PrimitierMultiplayerMod
 			remotePlayer.NameTag = nameTag;
 			remotePlayer.Id = id;
 
+			remotePlayerGo.transform.position = position;
+
+			RemotePlayers.Add(id, remotePlayer);
 			return remotePlayer;
 		}
 
