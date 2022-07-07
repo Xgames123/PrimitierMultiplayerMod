@@ -52,6 +52,9 @@ namespace PrimitierMultiplayerMod
 
 		public void Connect(string address, int port)
 		{
+			if (IsConnected)
+				Disconnect();
+
 			_packetProcessor = new NetPacketProcessor();
 			_packetProcessor.RegisterNestedType((w, v) => w.Put(v), reader => reader.GetVector3());
 			_packetProcessor.RegisterNestedType<NetworkPlayer>(NetworkPlayer.Serialize, NetworkPlayer.Deserialize);
@@ -66,6 +69,12 @@ namespace PrimitierMultiplayerMod
 
 			PMFLog.Message($"Connecting to {address}:{port}...");
 			NetManager.Connect(address, port, "");
+		}
+
+		public void Disconnect()
+		{
+			NetManager.DisconnectAll();
+			PMFLog.Message("Disconnecting from server");
 		}
 
 		public void Update()
@@ -103,6 +112,7 @@ namespace PrimitierMultiplayerMod
 			IsInGame = false;
 			Server = null;
 			PMFLog.Message("Disconnected from the server Reason:" + disconnectInfo.Reason);
+			Mod.Chat.AddSystemMessage("Disconnected from the server");
 		}
 
 		private void NetworkErrorEvent(IPEndPoint endPoint, System.Net.Sockets.SocketError socketError)
@@ -118,7 +128,8 @@ namespace PrimitierMultiplayerMod
 		private void OnJoinAcceptPacket(JoinAcceptPacket packet)
 		{
 			LocalId = packet.Id;
-			PMFLog.Message("Successfully joined the game");
+			Mod.Chat.AddSystemMessage("Successfully joined the game");
+
 			IsInGame = true;
 			TerrainGenerator.worldSeed = packet.WorldSeed;
 		}
@@ -151,7 +162,7 @@ namespace PrimitierMultiplayerMod
 			foreach (var networkPlayer in packet.Players)
 			{
 				var remotePlayer = RemotePlayer.RemotePlayers[networkPlayer.Id];
-				PMFLog.Message("")
+				PMFLog.Message($"NET PLAYER Position={networkPlayer.Position}; Position={networkPlayer.HeadPosition};");
 
 				remotePlayer.transform.position = networkPlayer.Position.ToUnity();
 				remotePlayer.Head.transform.position = networkPlayer.HeadPosition.ToUnity();

@@ -160,13 +160,11 @@ namespace PrimS
 				var currentPlayer = PlayerManager.GetPlayerById(peer.Id);
 
 				if (currentPlayer == null)
-				{
-					_log.Error($"Connected peer '{peer.Id}' has no player");
 					continue;
-				}
 
+				var players = FindNetworkPlayersAroundPlayer(currentPlayer, 20);
 
-				SendPacket<ServerUpdatePacket>(peer, new ServerUpdatePacket() { Players = FindNetworkPlayersAroundPlayer(currentPlayer, 20).ToArray() }, DeliveryMethod.Unreliable);
+				SendPacket<ServerUpdatePacket>(peer, new ServerUpdatePacket() { Players = players.ToArray() }, DeliveryMethod.Unreliable);
 
 			}
 
@@ -177,10 +175,13 @@ namespace PrimS
 			var players = PlayerManager.Players.Values;
 			foreach (var player in players)
 			{
-				if (player.RuntimeId == currentPlayer.RuntimeId)
-					continue;
+				//TODO uncomment (This is commented out for testing)
+				//if (player.RuntimeId == currentPlayer.RuntimeId)
+				//	continue;
 
-				if (Vector3.Distance(player.Position, currentPlayer.Position) <= radius)
+				var dist = Vector3.Distance(player.Position, currentPlayer.Position);
+
+				if (dist <= radius)
 				{
 					foundPlayers.Add(new NetworkPlayer() { Id = player.RuntimeId, Position = player.Position, HeadPosition = player.HeadPosition, LHandPosition = player.LHandPosition, RHandPosition = player.RHandPosition });
 				}
@@ -221,7 +222,7 @@ namespace PrimS
 			var player = PlayerManager.GetPlayerById(peer.Id);
 			if (player == null)
 			{
-				_log.Error("Got update form non registered player");
+				_log.Error("Got update form non joined player");
 				return;
 			}
 

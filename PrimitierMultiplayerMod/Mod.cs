@@ -8,6 +8,7 @@ using MelonLoader;
 using System.Net;
 using LiteNetLib;
 using PrimitierModdingFramework.SubstanceModding;
+using PrimitierMultiplayerMod.ComponentDumpers;
 
 namespace PrimitierMultiplayerMod
 {
@@ -15,12 +16,10 @@ namespace PrimitierMultiplayerMod
 	public class Mod : PrimitierMod
     {
 
-		public static Client Client;
+
 		public static Chat Chat;
 
-		public string ServerAddress;
-		public int ServerPort;
-
+		
 		public override void OnSceneWasLoaded(int buildIndex, string sceneName)
 		{
 			base.OnSceneWasLoaded(buildIndex, sceneName);
@@ -28,28 +27,19 @@ namespace PrimitierMultiplayerMod
 			PlayerInfo.Load();
 			UpdatePacketSender.Setup();
 
-			var connectSettings = MelonPreferences.CreateCategory("ConnectSettings");
-
-			ServerAddress = connectSettings.CreateEntry("ServerIp", "localhost").Value;
-			ServerPort = connectSettings.CreateEntry<int>("ServerPort", 9543).Value;
-
-			Connect();
-			PMFLog.Message("Connecting to server");
-
+			
 			Chat = Chat.Setup();
-		}
-		private void Connect()
-		{
-			Client = new Client();
-			Client.Connect(ServerAddress, ServerPort);
 
+			JoinGameButton.Create();
+			
 		}
+
 
 
 		public override void OnRealyLateStart()
 		{
 			base.OnRealyLateStart();
-
+			HierarchyXmlDumper.DumpSceneToFile();
 		}
 
 		public override void OnApplicationStart()
@@ -62,12 +52,14 @@ namespace PrimitierMultiplayerMod
 			ClassInjector.RegisterTypeInIl2Cpp<Chat>();
 			ClassInjector.RegisterTypeInIl2Cpp<NameTag>();
 			ClassInjector.RegisterTypeInIl2Cpp<RemotePlayer>();
+			ClassInjector.RegisterTypeInIl2CppWithInterfaces<JoinGameButton>(typeof(IButton));
+			HierarchyXmlDumper.DefaultDumperList.Add(new TextMeshProComponentDumper());
 		}
 		public override void OnApplicationQuit()
 		{
 			base.OnApplicationQuit();
-			PMFLog.Message("Stopping client");
-			Client.Stop();
+			MultiplayerManager.Stop();
+			
 		}
 
 		public override void OnUpdate()
@@ -76,9 +68,7 @@ namespace PrimitierMultiplayerMod
 
 			if (Input.GetKeyUp(KeyCode.Return))
 			{
-				Client.Stop();
-				Connect();
-				PMFLog.Message("Reconnecting to server...");
+				MultiplayerManager.ConnectToServer();
 
 			}
 			
@@ -87,9 +77,8 @@ namespace PrimitierMultiplayerMod
 		public override void OnFixedUpdate()
 		{
 			base.OnFixedUpdate();
-			if (Client == null)
-				return;
-			Client.Update();
+
+			MultiplayerManager.UpdateClient();
 		}
 		
 

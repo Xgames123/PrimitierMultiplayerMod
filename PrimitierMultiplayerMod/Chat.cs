@@ -1,4 +1,5 @@
 ﻿using PrimitierModdingFramework;
+using PrimitierModdingFramework.Debugging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,19 +21,21 @@ namespace PrimitierMultiplayerMod
 
 		public static Chat Setup()
 		{
+
 			GameObject chatGo = new GameObject("Chat");
-			chatGo.transform.parent = null;
-			chatGo.transform.localScale = new Vector3(1f, 1f, 1f);
-			chatGo.transform.position = new Vector3(0, 1, 0);
+			chatGo.transform.parent = PMFHelper.MenuWindowL;
+			chatGo.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+			chatGo.transform.localRotation = Quaternion.identity;
+			chatGo.transform.localPosition = new Vector3(-0.5f, 0.2f, 0f);
 			var canvas = chatGo.AddComponent<Canvas>();
 			canvas.renderMode = RenderMode.WorldSpace;
-			
 
 			var chatComp = chatGo.AddComponent<Chat>();
 
 
 			GameObject backgroundGo = new GameObject("Background");
 			backgroundGo.transform.parent = chatGo.transform;
+			backgroundGo.transform.localRotation = Quaternion.identity;
 			backgroundGo.transform.localPosition = Vector3.zero;
 			backgroundGo.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
 			var image = backgroundGo.AddComponent<Image>();
@@ -44,6 +47,7 @@ namespace PrimitierMultiplayerMod
 			textGo.transform.parent = chatGo.transform;
 			textGo.transform.localPosition = Vector3.zero;
 			textGo.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+			textGo.transform.localRotation = Quaternion.identity;
 			chatComp.Text = textGo.AddComponent<TextMeshPro>();
 			chatComp.Text.color = Color.white;
 			chatComp.Text.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 100);
@@ -60,6 +64,10 @@ namespace PrimitierMultiplayerMod
 		public void AddServerMessage(string message)
 		{
 			AddMessage("SERVER", message, true);
+		}
+		public void AddSystemMessage(string message)
+		{
+			AddMessage("SYSTEM", message, true);
 		}
 
 
