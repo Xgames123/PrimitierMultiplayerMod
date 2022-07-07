@@ -35,6 +35,7 @@ namespace PrimitierMultiplayerMod
 			GameObject.Destroy(GameObject.Find("TitleSpace"));
 			JoinGameButton.Destroy();
 
+
 			//WARNING the flowing lines will contain bad code
 			TerrainGenerator.Generate(new Vector2Int(0, 0));
 			TerrainMeshGenerator.instance.GenerateMesh(new Vector2Int(0, 0));
