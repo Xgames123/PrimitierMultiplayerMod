@@ -133,6 +133,8 @@ namespace PrimitierMultiplayerMod
 
 			IsInGame = true;
 			TerrainGenerator.worldSeed = packet.WorldSeed;
+
+			MultiplayerManager.EnterGame();
 		}
 
 		private void OnPlayerLeavePacket(PlayerLeavePacket packet)
@@ -149,9 +151,6 @@ namespace PrimitierMultiplayerMod
 
 		private void OnPlayerJoinedPacket(PlayerJoinedPacket packet)
 		{
-			PMFLog.Message(packet.Username);
-			PMFLog.Message(packet.Position);
-			PMFLog.Message(packet.Id);
 			Mod.Chat.AddServerMessage($"{packet.Username} has Joined the game");
 
 			RemotePlayer.Create(packet.Id, packet.Username, packet.Position.ToUnity());

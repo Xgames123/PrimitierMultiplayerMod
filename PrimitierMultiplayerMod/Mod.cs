@@ -39,7 +39,7 @@ namespace PrimitierMultiplayerMod
 		public override void OnRealyLateStart()
 		{
 			base.OnRealyLateStart();
-			//HierarchyXmlDumper.DumpSceneToFile();
+			HierarchyXmlDumper.DumpSceneToFile();
 		}
 
 		public override void OnApplicationStart()
@@ -54,6 +54,7 @@ namespace PrimitierMultiplayerMod
 			ClassInjector.RegisterTypeInIl2Cpp<RemotePlayer>();
 			ClassInjector.RegisterTypeInIl2CppWithInterfaces<JoinGameButton>(typeof(IButton));
 			HierarchyXmlDumper.DefaultDumperList.Add(new TextMeshProComponentDumper());
+			HierarchyXmlDumper.DefaultDumperList.Add(new StartButtonComponentDumper());
 		}
 		public override void OnApplicationQuit()
 		{

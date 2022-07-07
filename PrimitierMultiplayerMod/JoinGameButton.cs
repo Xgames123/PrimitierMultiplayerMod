@@ -15,6 +15,12 @@ namespace PrimitierMultiplayerMod
 	{
 		public JoinGameButton(System.IntPtr ptr) : base(ptr) { }
 
+		public static void Destroy()
+		{
+			Destroy(GameObject.Find("JoinGameButton"));
+
+		}
+
 
 		public static JoinGameButton Create()
 		{

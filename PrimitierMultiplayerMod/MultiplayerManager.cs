@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace PrimitierMultiplayerMod
 {
@@ -28,6 +29,26 @@ namespace PrimitierMultiplayerMod
 			Client = new Client();
 			Client.Connect(ServerAddress.Value, ServerPort.Value);
 		}
+
+		public static void EnterGame()
+		{
+			GameObject.Destroy(GameObject.Find("TitleSpace"));
+			JoinGameButton.Destroy();
+
+			TerrainGenerator.Generate(new Vector2Int(0, 0));
+			TerrainMeshGenerator.instance.GenerateMesh(new Vector2Int(0, 0));
+			TerrainMeshGenerator.instance.GenerateMesh(new Vector2Int(-1, 0));
+			TerrainMeshGenerator.instance.GenerateMesh(new Vector2Int(0, -1));
+			TerrainMeshGenerator.instance.GenerateMesh(new Vector2Int(-1, -1));
+			CubeGenerator.GenerateChunk(new Vector2Int(0, 0));
+			
+			
+		}
+		public static void ExitGame()
+		{
+
+		}
+
 
 		public static void UpdateClient()
 		{
