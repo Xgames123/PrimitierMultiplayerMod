@@ -35,13 +35,14 @@ namespace PrimitierMultiplayerMod
 			GameObject.Destroy(GameObject.Find("TitleSpace"));
 			JoinGameButton.Destroy();
 
+			//WARNING the flowing lines will contain bad code
 			TerrainGenerator.Generate(new Vector2Int(0, 0));
 			TerrainMeshGenerator.instance.GenerateMesh(new Vector2Int(0, 0));
 			TerrainMeshGenerator.instance.GenerateMesh(new Vector2Int(-1, 0));
 			TerrainMeshGenerator.instance.GenerateMesh(new Vector2Int(0, -1));
 			TerrainMeshGenerator.instance.GenerateMesh(new Vector2Int(-1, -1));
 			CubeGenerator.GenerateChunk(new Vector2Int(0, 0));
-			
+			//It is safe to look now
 			
 		}
 		public static void ExitGame()
