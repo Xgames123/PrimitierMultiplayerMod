@@ -11,6 +11,15 @@ using UnityEngine.UI;
 
 namespace PrimitierMultiplayerMod
 {
+	public enum ChatColor
+	{
+		NormalText,
+		SystemMessage,
+		ServerMessage,
+
+	}
+
+
 	public class Chat : MonoBehaviour
 	{
 		public Chat(System.IntPtr ptr) : base(ptr) { }
@@ -63,28 +72,39 @@ namespace PrimitierMultiplayerMod
 
 		public void AddServerMessage(string message)
 		{
-			AddMessage("SERVER", message, true);
+			AddMessage("SERVER", message, ChatColor.ServerMessage);
 		}
 		public void AddSystemMessage(string message)
 		{
-			AddMessage("SYSTEM", message, true);
+			AddMessage("SYSTEM", message, ChatColor.SystemMessage);
 		}
 
 
-		public void AddMessage(string sender, string message, bool IsSpecialMessage = false)
+		public void AddMessage(string sender, string message, ChatColor color=ChatColor.NormalText)
 		{
 			var fullMessage = $"[{sender}] {message}";
 
-			if (IsSpecialMessage)
+			switch (color)
 			{
-				PMFLog.Message($"CHAT "+ fullMessage, ConsoleColor.Yellow);
-				AddLine($"<color=#FFFF00>{fullMessage}</color>");
+				case ChatColor.NormalText:
+					goto default;
+				
+				case ChatColor.ServerMessage:
+					PMFLog.Message($"CHAT " + fullMessage, ConsoleColor.Yellow);
+					AddLine($"<color=#DDFF00>{fullMessage}</color>");
+					break;
+				case ChatColor.SystemMessage:
+					PMFLog.Message($"CHAT " + fullMessage, ConsoleColor.Cyan);
+					AddLine($"<color=#00BBFF>{fullMessage}</color>");
+					break;
+
+				default:
+					PMFLog.Message($"CHAT " + fullMessage);
+					AddLine(fullMessage);
+					break;
+
 			}
-			else
-			{
-				PMFLog.Message($"CHAT "+fullMessage);
-				AddLine(fullMessage);
-			}
+
 			UpdateText();
 
 

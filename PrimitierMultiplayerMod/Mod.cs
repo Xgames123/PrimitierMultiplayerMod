@@ -39,7 +39,7 @@ namespace PrimitierMultiplayerMod
 		public override void OnRealyLateStart()
 		{
 			base.OnRealyLateStart();
-			HierarchyXmlDumper.DumpSceneToFile();
+			//HierarchyXmlDumper.DumpSceneToFile();
 		}
 
 		public override void OnApplicationStart()

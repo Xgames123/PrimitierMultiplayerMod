@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using UnityEngine;
 
+//TODO: replace with PMF one
 namespace PrimitierMultiplayerMod.ComponentDumpers
 {
 	public class TextMeshProComponentDumper : ComponentDumper
@@ -15,13 +16,23 @@ namespace PrimitierMultiplayerMod.ComponentDumpers
 
 		public override void OnDump(Component component, XmlElement xmlElement, ComponentDumperList dumperList)
 		{
-			var tmp = component.Cast<TMPro.TextMeshPro>();
+			try
+			{
+				var tmp = component.Cast<TMPro.TextMeshPro>();
 
-			xmlElement.SetAttribute("Text", tmp.text);
-			xmlElement.SetAttribute("FontSize", tmp.fontSize.ToString());
-			xmlElement.SetAttribute("Font", tmp.font.name);
-			xmlElement.SetAttribute("Color", tmp.color.ToString());
-			xmlElement.SetAttribute("FontWeight", tmp.fontWeight.ToString());
+				xmlElement.SetAttribute("Text", tmp.text);
+				xmlElement.SetAttribute("FontSize", tmp.fontSize.ToString());
+				if (tmp.font != null)
+					xmlElement.SetAttribute("Font", tmp.font.name);
+				else
+					xmlElement.SetAttribute("Font", "Null");
+				xmlElement.SetAttribute("Color", tmp.color.ToString());
+				xmlElement.SetAttribute("FontWeight", tmp.fontWeight.ToString());
+			}catch(NullReferenceException)
+			{
+				xmlElement.InnerText = "FAILED TO DUMP THIS COMPONENT (NullReferenceException)";
+			}
+		
 
 		}
 	}

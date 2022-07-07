@@ -30,12 +30,12 @@ namespace PrimitierMultiplayerMod
 
 		private void FixedUpdate()
 		{
-			//Get from server primsconfig.json
+			//TODO: Get from server primsconfig.json
 			if(stopwatch.ElapsedMilliseconds >= 10)
 			{
 				stopwatch.Restart();
 				
-				if(Mod.Client == null || !Mod.Client.IsInGame)
+				if(MultiplayerManager.Client == null || !MultiplayerManager.Client.IsInGame)
 				{
 					return;
 				}
@@ -49,8 +49,8 @@ namespace PrimitierMultiplayerMod
 
 				};
 
-				
-				Mod.Client.SendPacket(packet, LiteNetLib.DeliveryMethod.Unreliable);
+
+				MultiplayerManager.Client.SendPacket(packet, LiteNetLib.DeliveryMethod.Unreliable);
 			}
 
 		}

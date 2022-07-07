@@ -64,6 +64,8 @@ namespace PrimitierMultiplayerMod
 			_packetProcessor.SubscribeReusable<PlayerLeavePacket>(OnPlayerLeavePacket);
 			_packetProcessor.SubscribeReusable<ServerUpdatePacket>(OnServerUpdatePacket);
 
+			Mod.Chat.AddSystemMessage("Connecting to the server");
+
 			PMFLog.Message("Starting client");
 			NetManager.Start();
 
@@ -128,7 +130,6 @@ namespace PrimitierMultiplayerMod
 		private void OnJoinAcceptPacket(JoinAcceptPacket packet)
 		{
 			LocalId = packet.Id;
-			Mod.Chat.AddSystemMessage("Successfully joined the game");
 
 			IsInGame = true;
 			TerrainGenerator.worldSeed = packet.WorldSeed;
@@ -162,7 +163,7 @@ namespace PrimitierMultiplayerMod
 			foreach (var networkPlayer in packet.Players)
 			{
 				var remotePlayer = RemotePlayer.RemotePlayers[networkPlayer.Id];
-				PMFLog.Message($"NET PLAYER Position={networkPlayer.Position}; Position={networkPlayer.HeadPosition};");
+				//PMFLog.Message($"NET PLAYER Position={networkPlayer.Position}; Position={networkPlayer.HeadPosition};");
 
 				remotePlayer.transform.position = networkPlayer.Position.ToUnity();
 				remotePlayer.Head.transform.position = networkPlayer.HeadPosition.ToUnity();
