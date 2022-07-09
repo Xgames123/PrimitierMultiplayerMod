@@ -26,7 +26,7 @@ namespace PrimitierMultiplayerMod
 		{
 			var joinGameButtonGo = new GameObject("JoinGameButton");
 			//Setting the parent to TitleMenu (the other buttons) breaks Primitier for some reason
-			joinGameButtonGo.transform.parent = null;
+			joinGameButtonGo.transform.parent = SafeTransformFind("TitleSpace");
 			joinGameButtonGo.transform.localPosition = new Vector3(-1.5f, 1.1f, 1.9f);
 			joinGameButtonGo.transform.localRotation = Quaternion.identity;
 			joinGameButtonGo.transform.localScale = new Vector3(1, 1, 1);

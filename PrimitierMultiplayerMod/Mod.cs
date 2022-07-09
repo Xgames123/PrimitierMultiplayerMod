@@ -66,12 +66,6 @@ namespace PrimitierMultiplayerMod
 		public override void OnUpdate()
 		{
 			base.OnUpdate();
-
-			if (Input.GetKeyUp(KeyCode.Return))
-			{
-				MultiplayerManager.ConnectToServer();
-
-			}
 			
 		}
 

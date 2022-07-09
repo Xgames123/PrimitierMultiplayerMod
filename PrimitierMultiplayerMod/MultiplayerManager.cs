@@ -32,19 +32,14 @@ namespace PrimitierMultiplayerMod
 
 		public static void EnterGame()
 		{
-			GameObject.Destroy(GameObject.Find("TitleSpace"));
-			JoinGameButton.Destroy();
 
-
-			//WARNING the flowing lines will contain bad code
-			TerrainGenerator.Generate(new Vector2Int(0, 0));
-			TerrainMeshGenerator.instance.GenerateMesh(new Vector2Int(0, 0));
-			TerrainMeshGenerator.instance.GenerateMesh(new Vector2Int(-1, 0));
-			TerrainMeshGenerator.instance.GenerateMesh(new Vector2Int(0, -1));
-			TerrainMeshGenerator.instance.GenerateMesh(new Vector2Int(-1, -1));
-			CubeGenerator.GenerateChunk(new Vector2Int(0, 0));
-			//It is safe to look now
+			GameObject.Find("StartButton").GetComponent<ObjectActivateButton>().OnPress();
+			var startButton = GameObject.Find("LoadButton_8").GetComponent<StartButton>();
+			startButton.enableOnPress = new UnhollowerBaseLib.Il2CppReferenceArray<GameObject>(0); //Disable the save, load and die buttons
+			startButton.OnPress();
 			
+
+
 		}
 		public static void ExitGame()
 		{
