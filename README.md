@@ -1,5 +1,5 @@
 # PrimitierMultiplayerMod
-**This is in development so the main branch doens't always work**
+**This is in development so the main branch doesn't always work**
 
 ## Mod installation
 1) Install [Primitier mod manager](https://github.com/Xgames123/PrimitierModManager)
