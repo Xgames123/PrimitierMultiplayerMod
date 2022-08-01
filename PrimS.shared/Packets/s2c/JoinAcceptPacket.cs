@@ -14,5 +14,7 @@ namespace PrimS.shared.Packets.s2c
 		public Vector3 Position { get; set; }
 
 		public int WorldSeed { get; set; }
+
+		public List<PlayerJoinedPacket> PlayersAlreadyInGame { get; set; }
 	}
 }

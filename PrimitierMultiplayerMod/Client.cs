@@ -131,6 +131,11 @@ namespace PrimitierMultiplayerMod
 		{
 			LocalId = packet.Id;
 
+			foreach (var playerInGame in packet.PlayersAlreadyInGame)
+			{
+				OnPlayerJoinedPacket(playerInGame);
+			} 
+
 			IsInGame = true;
 			TerrainGenerator.worldSeed = packet.WorldSeed;
 

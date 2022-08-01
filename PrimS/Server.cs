@@ -213,7 +213,17 @@ namespace PrimS
 			runtimePlayer.LHandPosition = Vector3.Zero;
 			_log.Info($"{packet.Username} joined the game");
 
-			SendPacket(peer, new JoinAcceptPacket() { Id = peer.Id, Username = packet.Username, Position = runtimePlayer.Position, WorldSeed = World.Settings.Seed }, DeliveryMethod.ReliableOrdered);
+			var playersAlreadyInGame = new List<PlayerJoinedPacket>();
+			foreach (var primPlayer in PlayerManager.Players.Values)
+			{
+				if (primPlayer.RuntimeId == peer.Id)
+					continue;
+
+				playersAlreadyInGame.Add(new PlayerJoinedPacket() { Id = primPlayer.RuntimeId, Position = primPlayer.Position, Username = primPlayer.Username });
+			}
+
+
+			SendPacket(peer, new JoinAcceptPacket() { Id = peer.Id, Username = packet.Username, Position = runtimePlayer.Position, WorldSeed = World.Settings.Seed, PlayersAlreadyInGame = playersAlreadyInGame }, DeliveryMethod.ReliableOrdered);
 			SendPacketToAll(new PlayerJoinedPacket() { Id = peer.Id ,Position = runtimePlayer.Position, Username = packet.Username }, DeliveryMethod.ReliableOrdered);
 		}
 
