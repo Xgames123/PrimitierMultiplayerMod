@@ -59,10 +59,12 @@ namespace PrimS
 		{
 			if (Chunks.TryGetValue(position, out var chunk))
 			{
-
+				return chunk;
 			}
+			LoadChunk()
 
 		}
+		private static PrimitierChunk LoadChunk()
 
 
 		public static void CreateEmptyWorld()
