@@ -1,21 +1,26 @@
-﻿#if false
-using HarmonyLib;
+﻿using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace PrimitierMultiplayerMod.Patches
 {
-	[HarmonyPatch(typeof(TerrainGenerator), nameof(TerrainGenerator.Generate))]
-	public class TerrainGenerator_GeneratePatch
+	[HarmonyPatch(typeof(CubeGenerator), nameof(CubeGenerator.GenerateChunk))]
+	public class CubeGenerator_GenerateChunk
 	{
-		private static void Postfix()
+		private static void Postfix(Vector2Int chunkPos)
 		{
-			PrimitierModdingFramework.PMFLog.Message("TerrainGenerator_GeneratePatch");			
+			if (!MultiplayerManager.IsInMultiplayerMode)
+			{
+				return;
+			}
+
+
+			
 		}
 
 	}
 }
-#endif

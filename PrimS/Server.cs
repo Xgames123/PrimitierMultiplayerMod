@@ -164,11 +164,20 @@ namespace PrimS
 
 				var players = FindNetworkPlayersAroundPlayer(currentPlayer, 20);
 
+				var chunks = FindNetworkChunksAroundPlayer(currentPlayer, 20);
+
 				SendPacket<ServerUpdatePacket>(peer, new ServerUpdatePacket() { Players = players.ToArray() }, DeliveryMethod.Unreliable);
 
 			}
 
 		}
+
+		private List<NetworkChunk> FindNetworkChunksAroundPlayer(PrimitierPlayer currentPlayer, int radius)
+		{
+			World
+		}
+
+
 		private List<NetworkPlayer> FindNetworkPlayersAroundPlayer(PrimitierPlayer currentPlayer, int radius)
 		{
 			var foundPlayers = new List<NetworkPlayer>();

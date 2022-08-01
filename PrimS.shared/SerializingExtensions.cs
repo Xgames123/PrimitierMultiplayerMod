@@ -20,5 +20,18 @@ namespace PrimS.shared
 		{
 			return new Vector3(reader.GetFloat(), reader.GetFloat(), reader.GetFloat());
 		}
+
+		public static void Put(this NetDataWriter writer, Quaternion quaternion)
+		{
+			writer.Put(quaternion.X);
+			writer.Put(quaternion.Y);
+			writer.Put(quaternion.Z);
+			writer.Put(quaternion.W);
+		}
+
+		public static Quaternion GetQuaternion(this NetDataReader reader)
+		{
+			return new Quaternion(reader.GetFloat(), reader.GetFloat(), reader.GetFloat(), reader.GetFloat());
+		}
 	}
 }

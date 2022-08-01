@@ -39,6 +39,8 @@ namespace PrimS
 
 		public static WorldSettings Settings { get; private set; }
 
+		private static Dictionary<Vector2, PrimitierChunk> Chunks = new Dictionary<Vector2, PrimitierChunk>();
+
 		public static void LoadFromDirectory(string dir)
 		{
 			WorldDirectory = dir;
@@ -52,6 +54,16 @@ namespace PrimS
 
 			ReloadWorldSettings();
 		}
+
+		public static PrimitierChunk GetChunk(Vector2 position)
+		{
+			if (Chunks.TryGetValue(position, out var chunk))
+			{
+
+			}
+
+		}
+
 
 		public static void CreateEmptyWorld()
 		{

@@ -8,5 +8,6 @@ namespace PrimS.shared.Packets.s2c
 	{
 		public NetworkPlayer[] Players { get; set; }
 
+		public NetworkChunk[] Chunks { get; set; }
 	}
 }
