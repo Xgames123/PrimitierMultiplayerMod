@@ -1,4 +1,5 @@
 # PrimitierMultiplayerMod
+**This is in development so the main branch doesn't always work**
 
 ## Mod installation
 1) Install [Primitier mod manager](https://github.com/Xgames123/PrimitierModManager)
@@ -7,10 +8,11 @@
 4) Launch Primitier
 
 ## Server installation with docker
-1) Download the docker image from the latest release.
-2) On your server install docker
-3) Run ```sudo docker load -i {path to the .tar file}```
-4) Run ```sudo docker run --rm -d --network host prims -p 9543:9543/udp```
+1) install git and docker
+2) git clone https://github.com/Xgames123/PrimitierMultiplayerMod.git
+3) edit primsconfig.json
+3) Run ```sudo docker build . -t multiplayerserver```
+4) Run ```sudo docker run --rm -d --network host multiplayerserver -p 9543:9543/udp```
 
 ## primsconfig.json
 primsconfig.json is the configuration file for the server
