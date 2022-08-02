@@ -13,7 +13,12 @@ namespace PrimitierMultiplayerMod.Patches
 	{
 		private static bool Prefix(Vector2Int chunkPos)
 		{
+			if (MultiplayerManager.IsInMultiplayerMode)
+			{
+				return false;
+			}
 
+			return true;
 		}
 
 	}
