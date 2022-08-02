@@ -250,7 +250,7 @@ namespace PrimS
 			}
 
 
-			SendPacket(peer, new JoinAcceptPacket() { Id = peer.Id, Username = packet.Username, Position = runtimePlayer.Position, WorldSeed = World.Settings.Seed, PlayersAlreadyInGame = playersAlreadyInGame }, DeliveryMethod.ReliableOrdered);
+			SendPacket(peer, new JoinAcceptPacket() { Id = peer.Id, Username = packet.Username, Position = runtimePlayer.Position, WorldSeed = World.Settings.Seed, PlayersAlreadyInGame = playersAlreadyInGame.ToArray() }, DeliveryMethod.ReliableOrdered);
 			SendPacketToAll(new PlayerJoinedPacket() { Id = peer.Id ,Position = runtimePlayer.Position, Username = packet.Username }, DeliveryMethod.ReliableOrdered);
 		}
 

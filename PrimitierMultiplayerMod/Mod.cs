@@ -31,7 +31,6 @@ namespace PrimitierMultiplayerMod
 			Chat = Chat.Setup();
 
 			JoinGameButton.Create();
-			
 		}
 
 
@@ -39,7 +38,9 @@ namespace PrimitierMultiplayerMod
 		public override void OnRealyLateStart()
 		{
 			base.OnRealyLateStart();
-			HierarchyXmlDumper.DumpSceneToFile();
+			//HierarchyXmlDumper.DumpSceneToFile();
+
+			MultiplayerManager.ConnectToServer();
 		}
 
 		public override void OnApplicationStart()
@@ -74,6 +75,20 @@ namespace PrimitierMultiplayerMod
 			base.OnFixedUpdate();
 
 			MultiplayerManager.UpdateClient();
+
+			if(Input.GetKeyUp(KeyCode.F1))
+			{
+				var chunks = new Il2CppSystem.Collections.Generic.List<Vector2Int>();
+				chunks.Add(new Vector2Int(0, 0));
+				CubeGenerator.DestroyChunks(chunks);
+				
+				
+			}
+			if (Input.GetKeyUp(KeyCode.F2))
+			{
+				CubeGenerator.GenerateChunk(new Vector2Int(0, 0));
+			}
+
 		}
 		
 

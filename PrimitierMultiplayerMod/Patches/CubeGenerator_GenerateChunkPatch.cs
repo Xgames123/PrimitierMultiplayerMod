@@ -17,8 +17,7 @@ namespace PrimitierMultiplayerMod.Patches
 			{
 				return;
 			}
-
-
+			
 			
 		}
 
