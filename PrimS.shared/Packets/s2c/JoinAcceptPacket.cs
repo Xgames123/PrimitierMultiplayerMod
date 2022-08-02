@@ -15,6 +15,6 @@ namespace PrimS.shared.Packets.s2c
 
 		public int WorldSeed { get; set; }
 
-		public PlayerJoinedPacket[] PlayersAlreadyInGame { get; set; }
+		public List<InitialPlayerData> PlayersAlreadyInGame { get; set; }
 	}
 }

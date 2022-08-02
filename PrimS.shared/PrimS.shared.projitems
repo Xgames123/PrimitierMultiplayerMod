@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ErrorCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ErrorGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InitialPlayerData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkChunk.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkCube.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkPlayer.cs" />

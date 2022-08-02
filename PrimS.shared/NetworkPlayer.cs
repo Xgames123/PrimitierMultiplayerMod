@@ -7,7 +7,7 @@ using LiteNetLib.Utils;
 
 namespace PrimS.shared
 {
-	public class NetworkPlayer
+	public struct NetworkPlayer : INetSerializable
 	{
 		public int Id;
 		public Vector3 Position;
@@ -15,28 +15,22 @@ namespace PrimS.shared
 		public Vector3 LHandPosition;
 		public Vector3 RHandPosition;
 
-		public static NetworkPlayer Deserialize(NetDataReader reader)
+		public void Serialize(NetDataWriter writer)
 		{
-			return new NetworkPlayer()
-			{
-				Id = reader.GetInt(),
-				Position = reader.GetVector3(),
-				HeadPosition = reader.GetVector3(),
-				LHandPosition = reader.GetVector3(),
-				RHandPosition = reader.GetVector3(),
-			};
-
-			
-			
+			writer.Put(Id);
+			writer.Put(Position);
+			writer.Put(HeadPosition);
+			writer.Put(LHandPosition);
+			writer.Put(RHandPosition);
 		}
 
-		public static void Serialize(NetDataWriter writer, NetworkPlayer player)
+		public void Deserialize(NetDataReader reader)
 		{
-			writer.Put(player.Id);
-			writer.Put(player.Position);
-			writer.Put(player.HeadPosition);
-			writer.Put(player.LHandPosition);
-			writer.Put(player.RHandPosition);
+			Id = reader.GetInt();
+			Position = reader.GetVector3();
+			HeadPosition = reader.GetVector3();
+			LHandPosition = reader.GetVector3();
+			RHandPosition = reader.GetVector3();
 
 		}
 	}

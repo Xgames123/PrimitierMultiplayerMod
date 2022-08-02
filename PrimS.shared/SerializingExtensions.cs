@@ -21,6 +21,31 @@ namespace PrimS.shared
 			return new Vector3(reader.GetFloat(), reader.GetFloat(), reader.GetFloat());
 		}
 
+
+		public static void PutList<T>(this NetDataWriter writer, List<T> list) where T : INetSerializable, new()
+		{
+			writer.Put(list.Count);
+
+			foreach (var item in list)
+			{
+				item.Serialize(writer);
+			}
+
+		}
+		public static List<T> GetList<T>(this NetDataReader reader) where T : INetSerializable, new()
+		{
+			var count = reader.GetInt();
+			var list = new List<T>(count);
+
+			for (int i = 0; i < count; i++)
+			{
+				list.Add(reader.Get<T>());
+			}
+
+			return list;
+		}
+
+
 		public static void Put(this NetDataWriter writer, Quaternion quaternion)
 		{
 			writer.Put(quaternion.X);

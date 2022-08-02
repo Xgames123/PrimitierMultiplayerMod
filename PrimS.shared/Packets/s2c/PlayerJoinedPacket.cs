@@ -7,9 +7,7 @@ namespace PrimS.shared.Packets.s2c
 {
 	public class PlayerJoinedPacket
 	{
-		public int Id { get; set; }
-		public string Username { get; set; }
-		public Vector3 Position { get; set; }
+		public InitialPlayerData initialPlayerData;
 
 	}
 }

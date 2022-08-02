@@ -5,7 +5,7 @@
     <RootNamespace>PrimitierMultiplayerMod</RootNamespace>
     <AssemblyName>PrimitierMultiplayerMod</AssemblyName>
     <Title>Multiplayer Mod</Title>
-    <Version>1.0.0</Version>
+    <Version>0.0.1</Version>
     <Authors>XGames105</Authors>
     <Description>A mod to add multiplayer to Primitier</Description>
     <!--Use this to set the namespace.classname of your entry point class (Mod.cs)-->
@@ -19,6 +19,8 @@
     <ProjectReference Include="..\LiteNetLib\LiteNetLib\LiteNetLib.csproj" />
   </ItemGroup>
   <Import Project="..\PrimS.shared\PrimS.shared.projitems" Label="Shared" />
+	
+	
   <PropertyGroup>
     <UseDirectLink>true</UseDirectLink>
   </PropertyGroup>

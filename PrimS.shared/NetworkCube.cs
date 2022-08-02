@@ -5,22 +5,25 @@ using System.Text;
 
 namespace PrimS.shared
 {
-	public class NetworkCube
+	public struct NetworkCube : INetSerializable
 	{
 		public uint Id;
 		public System.Numerics.Vector3 Position;
 		public System.Numerics.Quaternion Rotation;
 
-		public static NetworkCube Deserialize(NetDataReader reader)
+
+		public void Serialize(NetDataWriter writer)
 		{
-			return new NetworkCube() { Id = reader.GetUInt(), Position = reader.GetVector3(), Rotation = reader.GetQuaternion() };
+			writer.Put(Id);
+			writer.Put(Position);
+			writer.Put(Rotation);
 		}
 
-		public static void Serialize(NetDataWriter writer, NetworkCube cube)
+		void INetSerializable.Deserialize(NetDataReader reader)
 		{
-			writer.Put(cube.Id);
-			writer.Put(cube.Position);
-			writer.Put(cube.Rotation);
+			Id = reader.GetUInt();
+			Position = reader.GetVector3();
+			Rotation = reader.GetQuaternion();
 		}
 	}
 }

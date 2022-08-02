@@ -46,8 +46,9 @@ namespace PrimS
 
 			_writer = new NetDataWriter();
 			_packetProcessor = new NetPacketProcessor();
-			_packetProcessor.RegisterNestedType<Vector3>((writer, value) => writer.Put(value), reader => reader.GetVector3());
-			_packetProcessor.RegisterNestedType<NetworkPlayer>(NetworkPlayer.Serialize, NetworkPlayer.Deserialize);
+			_packetProcessor.RegisterNestedType<NetworkPlayer>();
+			_packetProcessor.RegisterNestedType((writer, value) => writer.Put(value), reader => reader.GetVector3());
+			_packetProcessor.RegisterNestedType((writer, value) => writer.PutList(value), reader => reader.GetList<InitialPlayerData>());
 
 			_packetProcessor.SubscribeReusable<JoinRequestPacket, NetPeer>(OnJoinRequest);
 			_packetProcessor.SubscribeReusable<PlayerUpdatePacket, NetPeer>(OnPlayerUpdate);

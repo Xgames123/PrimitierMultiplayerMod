@@ -13,7 +13,7 @@ namespace PrimS.shared
 
 	}
 
-	public class NetworkChunk
+	public class NetworkChunk : INetSerializable
 	{
 		public static NetworkChunk EmptyChunk { get; private set; } = new NetworkChunk() { ChunkType = NetworkChunkType.Empty };
 		public static NetworkChunk BrokenChunk { get; private set; } = new NetworkChunk() { ChunkType = NetworkChunkType.Broken };
@@ -22,30 +22,24 @@ namespace PrimS.shared
 
 		public List<NetworkCube> Cubes = new List<NetworkCube>();
 
-		public static NetworkChunk Deserialize(NetDataReader reader)
-		{
-			var type = (NetworkChunkType)reader.GetByte();
-			if (type == NetworkChunkType.Empty)
-			{
-				return EmptyChunk;
-			}
-			if(type == NetworkChunkType.Broken)
-			{
-				return BrokenChunk;
-			}
-			//TODO deserialize cubes
 
-			return new NetworkChunk() { };
-		}
-
-		public static void Serialize(NetDataWriter writer, NetworkChunk chunk)
+		public void Serialize(NetDataWriter writer)
 		{
-			writer.Put((byte)chunk.ChunkType);
-			if (chunk.ChunkType == NetworkChunkType.Broken || chunk.ChunkType == NetworkChunkType.Empty)
+			writer.Put((byte)ChunkType);
+			if (ChunkType == NetworkChunkType.Broken || ChunkType == NetworkChunkType.Empty)
 				return;
 
-			//TODO serialize cubes
+			writer.PutList(Cubes);
 
+		}
+
+		public void Deserialize(NetDataReader reader)
+		{
+			ChunkType = (NetworkChunkType)reader.GetByte();
+			if (ChunkType != NetworkChunkType.Normal)
+				return;
+
+			Cubes = reader.GetList<NetworkCube>();
 		}
 	}
 }
