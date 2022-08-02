@@ -148,8 +148,6 @@ namespace PrimitierMultiplayerMod
 			} 
 
 			IsInGame = true;
-			 packet.WorldSeed;
-
 			MultiplayerManager.EnterGame(packet.WorldSeed);
 		}
 

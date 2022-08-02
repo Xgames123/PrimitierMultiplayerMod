@@ -78,6 +78,7 @@ namespace PrimitierMultiplayerMod
 
 			if(Input.GetKeyUp(KeyCode.F1))
 			{
+				PMFLog.Message("Destroying chunks");
 				var chunks = new Il2CppSystem.Collections.Generic.List<Vector2Int>();
 				chunks.Add(new Vector2Int(0, 0));
 				CubeGenerator.DestroyChunks(chunks);
