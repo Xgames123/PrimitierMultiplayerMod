@@ -25,10 +25,6 @@ public static class Program
 		{
 			stoppingServer = true;
 			server.Stop();
-			while (IsServerRunning != false)
-			{
-				Thread.Sleep(200);
-			}
 
 			e.Cancel = true;
 

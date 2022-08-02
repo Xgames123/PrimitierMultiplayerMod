@@ -166,7 +166,7 @@ namespace PrimS
 
 				var chunks = FindNetworkChunksAroundPlayer(currentPlayer, 20);
 
-				SendPacket<ServerUpdatePacket>(peer, new ServerUpdatePacket() { Players = players.ToArray() }, DeliveryMethod.Unreliable);
+				SendPacket<ServerUpdatePacket>(peer, new ServerUpdatePacket() { Players = players.ToArray(), Chunks = chunks.ToArray() }, DeliveryMethod.Unreliable);
 
 			}
 
@@ -174,7 +174,25 @@ namespace PrimS
 
 		private List<NetworkChunk> FindNetworkChunksAroundPlayer(PrimitierPlayer currentPlayer, int radius)
 		{
-			World
+			var foundChunks = new List<NetworkChunk>();
+
+			int centerX = 0;
+			int centerY = 0;
+
+			for (int x = centerX-radius; x < centerX + radius; x++)
+			{
+				for (int y = centerY-radius; y < centerY+radius; y++)
+				{
+					var position = new Vector2(centerX, centerY);
+					if (Vector2.Distance(new Vector2(x, y), position) < radius)
+					{
+						foundChunks.Add(World.GetChunk(position));
+					}
+
+				}
+			}
+
+			return foundChunks;
 		}
 
 
@@ -192,7 +210,7 @@ namespace PrimS
 
 				if (dist <= radius)
 				{
-					foundPlayers.Add(new NetworkPlayer() { Id = player.RuntimeId, Position = player.Position, HeadPosition = player.HeadPosition, LHandPosition = player.LHandPosition, RHandPosition = player.RHandPosition });
+					foundPlayers.Add(player.MapToNetworkPlayer());
 				}
 
 			}

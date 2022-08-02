@@ -8,6 +8,7 @@ using log4net;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Numerics;
+using PrimS.shared;
 
 namespace PrimS
 {
@@ -39,7 +40,7 @@ namespace PrimS
 
 		public static WorldSettings Settings { get; private set; }
 
-		private static Dictionary<Vector2, PrimitierChunk> Chunks = new Dictionary<Vector2, PrimitierChunk>();
+		private static Dictionary<Vector2, NetworkChunk> Chunks = new Dictionary<Vector2, NetworkChunk>();
 
 		public static void LoadFromDirectory(string dir)
 		{
@@ -55,16 +56,46 @@ namespace PrimS
 			ReloadWorldSettings();
 		}
 
-		public static PrimitierChunk GetChunk(Vector2 position)
+		public static NetworkChunk GetChunk(Vector2 position)
 		{
 			if (Chunks.TryGetValue(position, out var chunk))
 			{
 				return chunk;
 			}
-			LoadChunk()
-
+			var newChunk = LoadChunk(position);
+			Chunks.Add(position, newChunk);
+			return newChunk;
 		}
-		private static PrimitierChunk LoadChunk()
+		private static NetworkChunk LoadChunk(Vector2 position)
+		{
+			string? chunkJson;
+			try
+			{
+				chunkJson = File.ReadAllText(Path.Combine(ChunkDirectoryPath, $"{position.X}_{position.Y}.chunk"));
+			}catch(FileNotFoundException e)
+			{
+				return NetworkChunk.EmptyChunk;
+			}catch(DirectoryNotFoundException e)
+			{
+				return NetworkChunk.EmptyChunk;
+			}
+			catch(Exception)
+			{
+				return NetworkChunk.BrokenChunk;
+			}
+			NetworkChunk? chunk;
+			try
+			{
+				chunk = JsonSerializer.Deserialize<NetworkChunk>(chunkJson);
+
+			}catch(Exception)
+			{
+				return NetworkChunk.BrokenChunk;
+			}
+			if (chunk == null)
+				return NetworkChunk.BrokenChunk;
+			return chunk;
+		}
 
 
 		public static void CreateEmptyWorld()
