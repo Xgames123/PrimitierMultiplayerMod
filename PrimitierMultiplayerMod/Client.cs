@@ -56,7 +56,10 @@ namespace PrimitierMultiplayerMod
 				Disconnect();
 
 			_packetProcessor = new NetPacketProcessor();
+			_packetProcessor.RegisterNestedType<NetworkChunk>();
+			_packetProcessor.RegisterNestedType<NetworkCube>();
 			_packetProcessor.RegisterNestedType<NetworkPlayer>();
+			_packetProcessor.RegisterNestedType<InitialPlayerData>();
 			_packetProcessor.RegisterNestedType((writer, value) => writer.Put(value), reader => reader.GetVector3());
 			_packetProcessor.RegisterNestedType((writer, value) => writer.PutList(value), reader => reader.GetList<InitialPlayerData>());
 
@@ -128,19 +131,26 @@ namespace PrimitierMultiplayerMod
 			_packetProcessor.ReadAllPackets(reader);
 		}
 
+		private void CreateInitialPlayer(InitialPlayerData initialPlayerData)
+		{
+			Mod.Chat.AddServerMessage($"{initialPlayerData.Username} has Joined the game");
+
+			RemotePlayer.Create(initialPlayerData.Id, initialPlayerData.Username, initialPlayerData.Position.ToUnity());
+		}
+
 		private void OnJoinAcceptPacket(JoinAcceptPacket packet)
 		{
 			LocalId = packet.Id;
 
 			foreach (var playerInGame in packet.PlayersAlreadyInGame)
 			{
-				OnPlayerJoinedPacket(playerInGame);
+				CreateInitialPlayer(playerInGame);
 			} 
 
 			IsInGame = true;
-			TerrainGenerator.worldSeed = packet.WorldSeed;
+			 packet.WorldSeed;
 
-			MultiplayerManager.EnterGame();
+			MultiplayerManager.EnterGame(packet.WorldSeed);
 		}
 
 		private void OnPlayerLeavePacket(PlayerLeavePacket packet)
@@ -154,13 +164,11 @@ namespace PrimitierMultiplayerMod
 
 		}
 
-
 		private void OnPlayerJoinedPacket(PlayerJoinedPacket packet)
 		{
-			Mod.Chat.AddServerMessage($"{packet.Username} has Joined the game");
-
-			RemotePlayer.Create(packet.Id, packet.Username, packet.Position.ToUnity());
+			CreateInitialPlayer(packet.initialPlayerData);
 		}
+		
 
 		private void OnServerUpdatePacket(ServerUpdatePacket packet)
 		{

@@ -28,7 +28,7 @@ namespace PrimS.shared
 
 			foreach (var item in list)
 			{
-				item.Serialize(writer);
+				writer.Put(item);
 			}
 
 		}

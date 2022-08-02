@@ -83,7 +83,7 @@ namespace PrimS
 			{
 				return NetworkChunk.BrokenChunk;
 			}
-			NetworkChunk? chunk;
+			NetworkChunk chunk;
 			try
 			{
 				chunk = JsonSerializer.Deserialize<NetworkChunk>(chunkJson);
@@ -92,8 +92,6 @@ namespace PrimS
 			{
 				return NetworkChunk.BrokenChunk;
 			}
-			if (chunk == null)
-				return NetworkChunk.BrokenChunk;
 			return chunk;
 		}
 

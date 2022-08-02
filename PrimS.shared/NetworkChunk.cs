@@ -13,14 +13,14 @@ namespace PrimS.shared
 
 	}
 
-	public class NetworkChunk : INetSerializable
+	public struct NetworkChunk : INetSerializable
 	{
 		public static NetworkChunk EmptyChunk { get; private set; } = new NetworkChunk() { ChunkType = NetworkChunkType.Empty };
 		public static NetworkChunk BrokenChunk { get; private set; } = new NetworkChunk() { ChunkType = NetworkChunkType.Broken };
 
-		public NetworkChunkType ChunkType = NetworkChunkType.Normal;
+		public NetworkChunkType ChunkType;
 
-		public List<NetworkCube> Cubes = new List<NetworkCube>();
+		public List<NetworkCube> Cubes;
 
 
 		public void Serialize(NetDataWriter writer)

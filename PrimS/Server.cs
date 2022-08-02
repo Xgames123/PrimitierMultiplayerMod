@@ -46,7 +46,10 @@ namespace PrimS
 
 			_writer = new NetDataWriter();
 			_packetProcessor = new NetPacketProcessor();
+			_packetProcessor.RegisterNestedType<NetworkChunk>();
+			_packetProcessor.RegisterNestedType<NetworkCube>();
 			_packetProcessor.RegisterNestedType<NetworkPlayer>();
+			_packetProcessor.RegisterNestedType<InitialPlayerData>();
 			_packetProcessor.RegisterNestedType((writer, value) => writer.Put(value), reader => reader.GetVector3());
 			_packetProcessor.RegisterNestedType((writer, value) => writer.PutList(value), reader => reader.GetList<InitialPlayerData>());
 
@@ -180,12 +183,13 @@ namespace PrimS
 			int centerX = 0;
 			int centerY = 0;
 
-			for (int x = centerX-radius; x < centerX + radius; x++)
+			var chunkRadius = 2;
+			for (int x = centerX- chunkRadius; x < centerX + chunkRadius; x++)
 			{
-				for (int y = centerY-radius; y < centerY+radius; y++)
+				for (int y = centerY- chunkRadius; y < centerY+ chunkRadius; y++)
 				{
 					var position = new Vector2(centerX, centerY);
-					if (Vector2.Distance(new Vector2(x, y), position) < radius)
+					if (Vector2.Distance(new Vector2(x, y), position) < chunkRadius)
 					{
 						foundChunks.Add(World.GetChunk(position));
 					}
@@ -241,18 +245,18 @@ namespace PrimS
 			runtimePlayer.LHandPosition = Vector3.Zero;
 			_log.Info($"{packet.Username} joined the game");
 
-			var playersAlreadyInGame = new List<PlayerJoinedPacket>();
+			var playersAlreadyInGame = new List<InitialPlayerData>();
 			foreach (var primPlayer in PlayerManager.Players.Values)
 			{
 				if (primPlayer.RuntimeId == peer.Id)
 					continue;
 
-				playersAlreadyInGame.Add(new PlayerJoinedPacket() { Id = primPlayer.RuntimeId, Position = primPlayer.Position, Username = primPlayer.Username });
+				playersAlreadyInGame.Add(new InitialPlayerData() { Id = primPlayer.RuntimeId, Position = primPlayer.Position, Username = primPlayer.Username });
 			}
 
 
-			SendPacket(peer, new JoinAcceptPacket() { Id = peer.Id, Username = packet.Username, Position = runtimePlayer.Position, WorldSeed = World.Settings.Seed, PlayersAlreadyInGame = playersAlreadyInGame.ToArray() }, DeliveryMethod.ReliableOrdered);
-			SendPacketToAll(new PlayerJoinedPacket() { Id = peer.Id ,Position = runtimePlayer.Position, Username = packet.Username }, DeliveryMethod.ReliableOrdered);
+			SendPacket(peer, new JoinAcceptPacket() { Id = peer.Id, Username = packet.Username, Position = runtimePlayer.Position, WorldSeed = World.Settings.Seed, PlayersAlreadyInGame = playersAlreadyInGame }, DeliveryMethod.ReliableOrdered);
+			SendPacketToAll(new PlayerJoinedPacket() { initialPlayerData = new InitialPlayerData() { Id = peer.Id, Position = runtimePlayer.Position, Username = packet.Username } }, DeliveryMethod.ReliableOrdered);
 		}
 
 		private void OnPlayerUpdate(PlayerUpdatePacket packet, NetPeer peer)

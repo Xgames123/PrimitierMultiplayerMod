@@ -11,14 +11,9 @@ namespace PrimitierMultiplayerMod.Patches
 	[HarmonyPatch(typeof(CubeGenerator), nameof(CubeGenerator.GenerateChunk))]
 	public class CubeGenerator_GenerateChunk
 	{
-		private static void Postfix(Vector2Int chunkPos)
+		private static bool Prefix(Vector2Int chunkPos)
 		{
-			if (!MultiplayerManager.IsInMultiplayerMode)
-			{
-				return;
-			}
-			
-			
+
 		}
 
 	}

@@ -32,7 +32,7 @@ namespace PrimitierMultiplayerMod
 			Client.Connect(ServerAddress.Value, ServerPort.Value);
 		}
 
-		public static void EnterGame()
+		public static void EnterGame(int seed)
 		{
 			IsInMultiplayerMode = true;
 
@@ -49,6 +49,8 @@ namespace PrimitierMultiplayerMod
 			var enableObjects = new UnhollowerBaseLib.Il2CppReferenceArray<GameObject>(0);
 
 			loadingSequence.StartLoading(-1, GameObject.Find("InfoText").GetComponent<TextMeshPro>(), destroyObject, enableObjects);
+			TerrainGenerator.worldSeed = seed;
+
 			JoinGameButton.Destroy();
 
 		}
