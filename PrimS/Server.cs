@@ -193,7 +193,12 @@ namespace PrimitierServer
 					var position = new Vector2(centerX, centerY);
 					if (Vector2.Distance(new Vector2(x, y), position) < chunkRadius)
 					{
-						foundChunks.Add(World.GetChunk(position));
+
+						var chunk = World.GetChunk(position);
+						if (chunk.Owner == -1)
+							World.UpdateChunkOwner(position, currentPlayer.RuntimeId);
+
+						foundChunks.Add(chunk);
 					}
 
 				}

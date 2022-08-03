@@ -49,6 +49,20 @@ namespace PrimitierServer.WorldStorage
 			ReloadWorldSettings();
 		}
 
+
+		public static void UpdateChunkOwner(Vector2 chunkPosition, int owner)
+		{
+			if (Chunks.TryGetValue(chunkPosition, out var chunk))
+			{
+				chunk.Owner = owner;
+				Chunks[chunkPosition] = chunk;
+				return;
+			}
+				
+		}
+
+
+
 		public static NetworkChunk GetChunk(Vector2 position)
 		{
 			if (Chunks.TryGetValue(position, out var chunk))

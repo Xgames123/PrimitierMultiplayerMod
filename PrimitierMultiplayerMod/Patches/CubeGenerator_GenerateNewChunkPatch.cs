@@ -1,5 +1,4 @@
-﻿#if false
-using HarmonyLib;
+﻿using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +7,22 @@ using System.Threading.Tasks;
 
 namespace PrimitierMultiplayerMod.Patches
 {
-	[HarmonyPatch(typeof(CubeGenerator), nameof(CubeGenerator.GenerateCube))]
+	[HarmonyPatch(typeof(CubeGenerator), nameof(CubeGenerator.GenerateNewChunk))]
 	public class CubeGenerator_GenerateNewChunkPatch
 	{
-		private static void Postfix()
+		private static bool Prefix(UnityEngine.Vector2Int chunkPos)
 		{
-			PrimitierModdingFramework.PMFLog.Message("CubeGenerator_GenerateNewChunkPatch");
+			if (MultiplayerManager.IsInMultiplayerMode)
+			{
+				if (ChunkManager.GenerateNextChunk)
+					return true;
+
+				return false;
+			}
+
+			return true;
 
 		}
 
 	}
 }
-#endif

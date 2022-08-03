@@ -12,7 +12,7 @@ namespace PrimitierServer.Mappers
 	{
 		public static NetworkCube ToNetworkCube(this StoredCube storedCube)
 		{
-			return new NetworkCube() {Id =  storedCube.Id, Position = storedCube.Position, Rotation = storedCube.Rotation};
+			return new NetworkCube() {Id = storedCube.Id, Position = storedCube.Position, Rotation = storedCube.Rotation, Size=storedCube.Size, Substance = storedCube.Substance};
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using MelonLoader;
+using PrimitierModdingFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,8 +49,9 @@ namespace PrimitierMultiplayerMod
 
 			var enableObjects = new UnhollowerBaseLib.Il2CppReferenceArray<GameObject>(0);
 
+			PMFLog.Message("Seed: " + seed);
+			ChunkManager.WorldSeed = seed;
 			loadingSequence.StartLoading(-1, GameObject.Find("InfoText").GetComponent<TextMeshPro>(), destroyObject, enableObjects);
-			TerrainGenerator.worldSeed = seed;
 
 			JoinGameButton.Destroy();
 

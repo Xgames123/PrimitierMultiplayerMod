@@ -12,5 +12,7 @@ namespace PrimitierServer.WorldStorage
 		public uint Id { get; set; }
 		public Vector3 Position { get; set; }
 		public Quaternion Rotation { get; set; }
+		public Vector3 Size { get; set; }
+		public int Substance { get; set; }
 	}
 }

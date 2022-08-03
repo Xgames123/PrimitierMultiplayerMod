@@ -1,5 +1,4 @@
-﻿#if false
-using HarmonyLib;
+﻿using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +7,14 @@ using System.Threading.Tasks;
 
 namespace PrimitierMultiplayerMod.Patches
 {
-	[HarmonyPatch(typeof(CubeGenerator), nameof(CubeGenerator.GenerateChunk))]
-	public class CubeGenerator_GenerateChunkPatch
+	[HarmonyPatch(typeof(TerrainGenerator), nameof(TerrainGenerator.Generate))]
+	public class TerrainGenerator_GeneratePatch
 	{
-		private static void Postfix()
+		private static void Prefix(UnityEngine.Vector2Int areaPos)
 		{
-			PrimitierModdingFramework.PMFLog.Message("CubeGenerator_GenerateChunkPatch");
+			TerrainGenerator.worldSeed = ChunkManager.WorldSeed;
 
 		}
 
 	}
 }
-#endif

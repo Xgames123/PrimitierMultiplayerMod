@@ -40,7 +40,8 @@ namespace PrimitierMultiplayerMod
 			base.OnRealyLateStart();
 			//HierarchyXmlDumper.DumpSceneToFile();
 
-			MultiplayerManager.ConnectToServer();
+			if (FlyCam.Current != null)
+				MultiplayerManager.ConnectToServer();
 		}
 
 		public override void OnApplicationStart()
@@ -80,14 +81,41 @@ namespace PrimitierMultiplayerMod
 			{
 				PMFLog.Message("Destroying chunks");
 				var chunks = new Il2CppSystem.Collections.Generic.List<Vector2Int>();
+				chunks.Add(new Vector2Int(-1, -1));
+				chunks.Add(new Vector2Int(0, -1));
+				chunks.Add(new Vector2Int(1, -1));
+
+				chunks.Add(new Vector2Int(-1, 0));
 				chunks.Add(new Vector2Int(0, 0));
+				chunks.Add(new Vector2Int(1, 0));
+
+				chunks.Add(new Vector2Int(-1, 1));
+				chunks.Add(new Vector2Int(0, 1));
+				chunks.Add(new Vector2Int(1, 1));
 				CubeGenerator.DestroyChunks(chunks);
 				
 				
 			}
 			if (Input.GetKeyUp(KeyCode.F2))
 			{
-				CubeGenerator.GenerateChunk(new Vector2Int(0, 0));
+				PMFLog.Message("Generating chunks");
+				ChunkManager.GenerateNewChunk(new Vector2Int(-1, -1));
+				ChunkManager.GenerateNewChunk(new Vector2Int(0, -1));
+				ChunkManager.GenerateNewChunk(new Vector2Int(1, -1));
+
+				ChunkManager.GenerateNewChunk(new Vector2Int(-1, 0));
+				ChunkManager.GenerateNewChunk(new Vector2Int(0, 0));
+				ChunkManager.GenerateNewChunk(new Vector2Int(1, 0));
+
+				ChunkManager.GenerateNewChunk(new Vector2Int(-1, 1));
+				ChunkManager.GenerateNewChunk(new Vector2Int(0, 1));
+				ChunkManager.GenerateNewChunk(new Vector2Int(1, 1));
+			}
+			if (Input.GetKeyUp(KeyCode.F5))
+			{
+				var pos = CubeGenerator.WorldToChunkPos(Camera.main.transform.position);
+				PMFLog.Message($"player chunk pos X:{pos.x} Y{pos.y}");
+				PMFLog.Message($"world seed: {TerrainGenerator.worldSeed}");
 			}
 
 		}
