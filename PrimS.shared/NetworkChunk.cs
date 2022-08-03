@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PrimitierServer.shared
+namespace PrimitierServer.Shared
 {
 	public enum NetworkChunkType
 	{
@@ -19,7 +19,8 @@ namespace PrimitierServer.shared
 		public static NetworkChunk BrokenChunk { get; private set; } = new NetworkChunk() { ChunkType = NetworkChunkType.Broken };
 
 		public NetworkChunkType ChunkType;
-		public bool IsOwner;
+		
+		public int Owner;
 		public List<NetworkCube> Cubes;
 
 
@@ -30,7 +31,7 @@ namespace PrimitierServer.shared
 				return;
 
 			writer.PutList(Cubes);
-			writer.Put(IsOwner);
+			writer.Put(Owner);
 		}
 
 		public void Deserialize(NetDataReader reader)
@@ -40,7 +41,9 @@ namespace PrimitierServer.shared
 				return;
 
 			Cubes = reader.GetList<NetworkCube>();
-			IsOwner = reader.GetBool();
+			Owner = reader.GetInt();
 		}
 	}
+
+
 }

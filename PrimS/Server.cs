@@ -7,12 +7,14 @@ using LiteNetLib;
 using LiteNetLib.Utils;
 using log4net;
 using log4net.Core;
-using PrimitierServer.shared.Packets;
-using PrimitierServer.shared.Packets.c2s;
-using PrimitierServer.shared.Packets.s2c;
-using PrimitierServer.shared;
+using PrimitierServer.Shared.Packets;
+using PrimitierServer.Shared.Packets.c2s;
+using PrimitierServer.Shared.Packets.s2c;
+using PrimitierServer.Shared;
 using System.Numerics;
 using System.Diagnostics;
+using PrimitierServer.Mappers;
+using PrimitierServer.WorldStorage;
 
 namespace PrimitierServer
 {
@@ -127,7 +129,7 @@ namespace PrimitierServer
 			if (NetManager.ConnectedPeersCount >= ConfigLoader.Config.MaxPlayers)
 			{
 				_writer.Reset();
-				ErrorGenerator.Generate(ref _writer, ref _packetProcessor, shared.ErrorCode.ServerFull);
+				ErrorGenerator.Generate(ref _writer, ref _packetProcessor, Shared.ErrorCode.ServerFull);
 				request.Reject(_writer);
 				return;
 			}
@@ -215,7 +217,7 @@ namespace PrimitierServer
 
 				if (dist <= radius)
 				{
-					foundPlayers.Add(player.MapToNetworkPlayer());
+					foundPlayers.Add(player.ToNetworkPlayer());
 				}
 
 			}

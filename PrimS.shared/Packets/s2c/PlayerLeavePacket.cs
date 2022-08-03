@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PrimitierServer.shared.Packets.s2c
+namespace PrimitierServer.Shared.Packets.s2c
 {
 	public class PlayerLeavePacket
 	{

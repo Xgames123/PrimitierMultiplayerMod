@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PrimitierServer.shared
+namespace PrimitierServer.Shared
 {
 	public struct NetworkCube : INetSerializable
 	{

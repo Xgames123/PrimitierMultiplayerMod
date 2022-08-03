@@ -8,17 +8,11 @@ using log4net;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Numerics;
-using PrimitierServer.shared;
+using PrimitierServer.Shared;
+using PrimitierServer.Mappers;
 
-namespace PrimitierServer
+namespace PrimitierServer.WorldStorage
 {
-	public class StoredPlayer
-	{
-		public Vector3 Position { get; set; }
-		public float Hp {get; set; }
-		public string StaticId { get; set; }
-
-	}
 
 
 	public class WorldSettings
@@ -26,7 +20,6 @@ namespace PrimitierServer
 		public int Seed { get; set; }
 
 		public Dictionary<string, StoredPlayer> Players { get; set; }
-
 	}
 
 	public static class World
@@ -59,38 +52,49 @@ namespace PrimitierServer
 		public static NetworkChunk GetChunk(Vector2 position)
 		{
 			if (Chunks.TryGetValue(position, out var chunk))
-			{
 				return chunk;
-			}
 			var newChunk = LoadChunk(position);
-			Chunks.Add(position, newChunk);
-			return newChunk;
+			if (newChunk == null)
+			{
+				return NetworkChunk.BrokenChunk;
+			}
+			if(newChunk.Cubes.Count == 0)
+			{
+				return NetworkChunk.EmptyChunk;
+			}
+
+			var netChunk = newChunk.ToNetworkChunk(-1);
+			Chunks.Add(position, netChunk);
+			return netChunk;
 		}
-		private static NetworkChunk LoadChunk(Vector2 position)
+		private static StoredChunk? LoadChunk(Vector2 position)
 		{
 			string? chunkJson;
 			try
 			{
 				chunkJson = File.ReadAllText(Path.Combine(ChunkDirectoryPath, $"{position.X}_{position.Y}.chunk"));
-			}catch(FileNotFoundException e)
-			{
-				return NetworkChunk.EmptyChunk;
-			}catch(DirectoryNotFoundException e)
-			{
-				return NetworkChunk.EmptyChunk;
 			}
-			catch(Exception)
+			catch (FileNotFoundException e)
 			{
-				return NetworkChunk.BrokenChunk;
+				return new StoredChunk();
 			}
-			NetworkChunk chunk;
+			catch (DirectoryNotFoundException e)
+			{
+				return null;
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+			StoredChunk chunk;
 			try
 			{
-				chunk = JsonSerializer.Deserialize<NetworkChunk>(chunkJson);
+				chunk = JsonSerializer.Deserialize<StoredChunk>(chunkJson);
 
-			}catch(Exception)
+			}
+			catch (Exception)
 			{
-				return NetworkChunk.BrokenChunk;
+				return null;
 			}
 			return chunk;
 		}
@@ -133,12 +137,13 @@ namespace PrimitierServer
 			try
 			{
 				File.WriteAllText(settingsFilePath, JsonSerializer.Serialize(Settings));
-			}catch(Exception e)
+			}
+			catch (Exception e)
 			{
 				s_log.Fatal($"Could not write or serialize {WorldSettingsPath}", e);
 				return;
 			}
-			
+
 		}
 
 
@@ -150,17 +155,18 @@ namespace PrimitierServer
 				try
 				{
 					Settings = JsonSerializer.Deserialize<WorldSettings>(File.ReadAllText(settingsFilePath));
-				}catch(Exception e)
+				}
+				catch (Exception e)
 				{
 					s_log.Fatal($"Could not read or deserialize {WorldSettingsPath}", e);
 					return;
 				}
-				
+
 			}
 			else
 			{
 				s_log.Fatal($"No {WorldSettingsPath} file exist in world {WorldDirectory}");
-				
+
 			}
 
 		}
