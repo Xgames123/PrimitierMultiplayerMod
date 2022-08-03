@@ -1,4 +1,5 @@
-﻿using PrimitierMultiplayerMod.Components;
+﻿using PrimitierModdingFramework;
+using PrimitierMultiplayerMod.Components;
 using PrimitierServer.Shared;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace PrimitierMultiplayerMod
 		{
 			foreach (var cube in chunk.Cubes)
 			{
-				UpdateCube(cube);
+				UpdateSyncCube(cube);
 			}
 		}
 		public static void DestroyModChunk(System.Numerics.Vector2 chunkPos)
@@ -41,13 +42,15 @@ namespace PrimitierMultiplayerMod
 		}
 
 
-		public static void CreateCube(NetworkCube cube)
+		private static void CreateCube(NetworkCube cube)
 		{
 			var primCube = CubeGenerator.GenerateCube(cube.Position.ToUnity(), cube.Size.ToUnity(), (Substance)cube.Substance);
 			var networkSync = primCube.AddComponent<NetworkSync>();
 			networkSync.Id = cube.Id;
+			NetworkSync.Register(networkSync);
+			PMFLog.Message("Cube created");
 		}
-		public static void UpdateCube(NetworkCube cube)
+		public static void UpdateSyncCube(NetworkCube cube)
 		{
 			if (NetworkSync.NetworkSyncList.TryGetValue(cube.Id, out var sync))
 			{
@@ -59,14 +62,6 @@ namespace PrimitierMultiplayerMod
 			}
 		}
 
-		public static void UpdateChunk(NetworkChunk chunk)
-		{
-			foreach (var cube in chunk.Cubes)
-			{
-				UpdateCube(cube);
-			}
-
-		}
 
 		public static void DestroyPrimitierChunks(Il2CppSystem.Collections.Generic.List<Vector2Int> chunkPositions)
 		{
@@ -74,7 +69,6 @@ namespace PrimitierMultiplayerMod
 			CubeGenerator.DestroyChunks(chunkPositions);
 			AllowDestroyNextChunk = false;
 		}
-
 
 		public static void GenerateNewPrimitierChunk(UnityEngine.Vector2Int position)
 		{

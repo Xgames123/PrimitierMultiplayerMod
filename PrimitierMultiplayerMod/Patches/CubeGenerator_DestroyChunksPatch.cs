@@ -12,6 +12,8 @@ namespace PrimitierMultiplayerMod.Patches
 	{
 		private static bool Prefix(Il2CppSystem.Collections.Generic.List<UnityEngine.Vector2Int> destroyChunkPositions)
 		{
+			return false;
+
 			if (MultiplayerManager.IsInMultiplayerMode)
 			{
 				if (ChunkManager.AllowDestroyNextChunk)

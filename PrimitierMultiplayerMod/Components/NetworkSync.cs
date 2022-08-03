@@ -1,4 +1,5 @@
-﻿using PrimitierModdingFramework.SubstanceModding;
+﻿using PrimitierModdingFramework;
+using PrimitierModdingFramework.SubstanceModding;
 using PrimitierServer.Shared;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,14 @@ namespace PrimitierMultiplayerMod.Components
 			return outList;
 		}
 
+		public static void Register(NetworkSync sync)
+		{
+			sync._currentChunk = ((Vector2)CubeGenerator.WorldToChunkPos(sync.transform.position)).ToNumerics();
+			NetworkSyncList.Add(sync.Id, sync);
+			AddToChunk(sync._currentChunk, sync.Id);
+		}
+
+
 		public uint Id;
 
 
@@ -37,16 +46,17 @@ namespace PrimitierMultiplayerMod.Components
 		public void Start()
 		{
 			CubeBase = GetComponent<CubeBase>();
-			
-			_currentChunk = ((Vector2)CubeGenerator.WorldToChunkPos(transform.position)).ToNumerics();
-			NetworkSyncList.Add(Id, this);
-			AddToChunk(_currentChunk, Id);
+
+		}
+		public void OnDestroy()
+		{
+			RemoveFromChunk(_currentChunk, Id);
+			NetworkSyncList.Remove(Id);
+			PMFLog.Message("Cube destroyed");
 		}
 
 		public void DestroyCube()
 		{
-			RemoveFromChunk(_currentChunk, Id);
-			NetworkSyncList.Remove(Id);
 			Destroy(gameObject);
 		}
 
@@ -80,7 +90,7 @@ namespace PrimitierMultiplayerMod.Components
 
 		public void UpdateSync(NetworkCube cube)
 		{
-			if (!NetworkSyncList.ContainsKey(Id))
+			if (!NetworkSyncList.ContainsKey(Id) || CubeBase == null)
 				return;
 
 			var newChunk = ((UnityEngine.Vector2)CubeGenerator.WorldToChunkPos(transform.position)).ToNumerics();
