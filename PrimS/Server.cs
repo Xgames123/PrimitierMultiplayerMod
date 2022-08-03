@@ -7,14 +7,14 @@ using LiteNetLib;
 using LiteNetLib.Utils;
 using log4net;
 using log4net.Core;
-using PrimS.shared.Packets;
-using PrimS.shared.Packets.c2s;
-using PrimS.shared.Packets.s2c;
-using PrimS.shared;
+using PrimitierServer.shared.Packets;
+using PrimitierServer.shared.Packets.c2s;
+using PrimitierServer.shared.Packets.s2c;
+using PrimitierServer.shared;
 using System.Numerics;
 using System.Diagnostics;
 
-namespace PrimS
+namespace PrimitierServer
 {
 	public class Server
 	{

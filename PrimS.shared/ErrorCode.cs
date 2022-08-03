@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PrimS.shared
+namespace PrimitierServer.shared
 {
 	public enum ErrorCode
 	{

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 
-namespace PrimS.shared.Packets.s2c
+namespace PrimitierServer.shared.Packets.s2c
 {
 	public class JoinAcceptPacket 
 	{

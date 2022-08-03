@@ -1,10 +1,10 @@
 ﻿using LiteNetLib.Utils;
-using PrimS.shared.Packets;
+using PrimitierServer.shared.Packets;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PrimS.shared
+namespace PrimitierServer.shared
 {
 	public static class ErrorGenerator
 	{

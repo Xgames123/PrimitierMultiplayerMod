@@ -6,9 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using PrimS.shared.Packets.s2c;
-using PrimS.shared.Packets.c2s;
-using PrimS.shared;
+using PrimitierServer.shared.Packets.s2c;
+using PrimitierServer.shared.Packets.c2s;
+using PrimitierServer.shared;
 using UnityEngine;
 using System.Reflection;
 using PrimitierModdingFramework;
@@ -170,7 +170,7 @@ namespace PrimitierMultiplayerMod
 
 		private void OnServerUpdatePacket(ServerUpdatePacket packet)
 		{
-			
+		
 			foreach (var networkPlayer in packet.Players)
 			{
 				var remotePlayer = RemotePlayer.RemotePlayers[networkPlayer.Id];
@@ -180,6 +180,11 @@ namespace PrimitierMultiplayerMod
 				remotePlayer.Head.transform.position = networkPlayer.HeadPosition.ToUnity();
 				remotePlayer.LHand.transform.position = networkPlayer.LHandPosition.ToUnity();
 				remotePlayer.RHand.transform.position = networkPlayer.RHandPosition.ToUnity();
+
+			}
+
+			foreach (var chunk in packet.Chunks)
+			{
 
 			}
 

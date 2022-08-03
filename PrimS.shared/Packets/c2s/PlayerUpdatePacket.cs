@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 
-namespace PrimS.shared.Packets.c2s
+namespace PrimitierServer.shared.Packets.c2s
 {
 	public class PlayerUpdatePacket
 	{

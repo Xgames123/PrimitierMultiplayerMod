@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using log4net;
 
-namespace PrimS
+namespace PrimitierServer
 {
 	public class ConfigFile
 	{

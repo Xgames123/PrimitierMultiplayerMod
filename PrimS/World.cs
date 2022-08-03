@@ -8,9 +8,9 @@ using log4net;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Numerics;
-using PrimS.shared;
+using PrimitierServer.shared;
 
-namespace PrimS
+namespace PrimitierServer
 {
 	public class StoredPlayer
 	{

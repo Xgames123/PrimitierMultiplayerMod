@@ -1,5 +1,5 @@
 ﻿using PrimitierModdingFramework;
-using PrimS.shared.Packets.c2s;
+using PrimitierServer.shared.Packets.c2s;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
