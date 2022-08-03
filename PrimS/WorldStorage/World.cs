@@ -84,9 +84,10 @@ namespace PrimitierServer.WorldStorage
 		private static StoredChunk? LoadChunk(Vector2 position)
 		{
 			string? chunkJson;
+			var chunkName = $"{position.X}_{position.Y}chunk.json";
 			try
 			{
-				chunkJson = File.ReadAllText(Path.Combine(ChunkDirectoryPath, $"{position.X}_{position.Y}.chunk"));
+				chunkJson = File.ReadAllText(Path.Combine(WorldDirectory, ChunkDirectoryPath, chunkName));
 			}
 			catch (FileNotFoundException e)
 			{
@@ -106,8 +107,9 @@ namespace PrimitierServer.WorldStorage
 				chunk = JsonSerializer.Deserialize<StoredChunk>(chunkJson);
 
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
+				s_log.Error($"Could not parse json for chunk '{chunkName}'\nInternalError: {e}");
 				return null;
 			}
 			return chunk;

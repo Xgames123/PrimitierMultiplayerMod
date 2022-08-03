@@ -1,5 +1,6 @@
 ﻿using MelonLoader;
 using PrimitierModdingFramework;
+using PrimitierMultiplayerMod.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,6 +76,8 @@ namespace PrimitierMultiplayerMod
 				return;
 
 			Client.Stop();
+			RemotePlayer.DeleteAllPlayers();
+			ChunkManager.DestroyAllModChunks();
 		}
 	}
 }

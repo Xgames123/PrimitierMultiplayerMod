@@ -9,33 +9,92 @@ using UnityEngine;
 
 namespace PrimitierMultiplayerMod.Components
 {
-	public class NetworkSync : MonoBehaviour, ICustomCubeBehaviour
+	public class NetworkSync : MonoBehaviour
 	{
 		public NetworkSync(System.IntPtr ptr) :base(ptr) { }
 
-		public static Dictionary<uint, NetworkSync> NetworkSyncs = new Dictionary<uint, NetworkSync>();
+		public static Dictionary<System.Numerics.Vector2, List<uint>> NetworkSyncChunk = new Dictionary<System.Numerics.Vector2, List<uint>>();
+		public static Dictionary<uint, NetworkSync> NetworkSyncList = new Dictionary<uint, NetworkSync>();
+
+		public static List<NetworkSync> GetSyncsInChunk(System.Numerics.Vector2 chunkPos)
+		{
+			var outList = new List<NetworkSync>();
+			foreach (var syncId in GetChunkIdList(chunkPos))
+			{
+				if(NetworkSyncList.TryGetValue(syncId, out NetworkSync sync))
+				{
+					outList.Add(sync);
+				}
+			}
+			return outList;
+		}
 
 		public uint Id;
 
 
-		private CubeBase cubeBase;
+		public CubeBase CubeBase;
+		private System.Numerics.Vector2 _currentChunk;
 		public void Start()
 		{
-			cubeBase = GetComponent<CubeBase>();
-			NetworkSyncs.Add(Id, this);
+			CubeBase = GetComponent<CubeBase>();
+			
+			_currentChunk = ((Vector2)CubeGenerator.WorldToChunkPos(transform.position)).ToNumerics();
+			NetworkSyncList.Add(Id, this);
+			AddToChunk(_currentChunk, Id);
+		}
+
+		public void DestroyCube()
+		{
+			RemoveFromChunk(_currentChunk, Id);
+			NetworkSyncList.Remove(Id);
+			Destroy(gameObject);
+		}
+
+
+		private static List<uint> GetChunkIdList(System.Numerics.Vector2 chunk)
+		{
+			List<uint> list;
+			if (NetworkSyncChunk.TryGetValue(chunk, out List<uint> getList))
+			{
+				list = getList;
+			}
+			else
+			{
+				var newList = new List<uint>();
+				list = newList;
+				NetworkSyncChunk.Add(chunk, newList);
+			}
+			return list;
+		}
+
+		private static void AddToChunk(System.Numerics.Vector2 chunk, uint id)
+		{
+			var list = GetChunkIdList(chunk);
+			list.Add(id);
+		}
+		private static void RemoveFromChunk(System.Numerics.Vector2 chunk, uint id)
+		{
+			var list = GetChunkIdList(chunk);
+			list.Remove(id);
 		}
 
 		public void UpdateSync(NetworkCube cube)
 		{
-			cubeBase.ChangeScale(cube.Size.ToUnity());
-			cubeBase.ChangeSubstance((Substance)cube.Substance);
-			cubeBase.transform.position = cube.Position.ToUnity();
-			cubeBase.transform.rotation = cube.Rotation.ToUnity();
-		}
+			if (!NetworkSyncList.ContainsKey(Id))
+				return;
 
-		public void OnDestroy()
-		{
-			NetworkSyncs.Remove(Id);
+			var newChunk = ((UnityEngine.Vector2)CubeGenerator.WorldToChunkPos(transform.position)).ToNumerics();
+			if (newChunk != _currentChunk)
+			{
+				AddToChunk(newChunk, Id);
+				RemoveFromChunk(_currentChunk, Id);
+				_currentChunk = newChunk;
+			}
+
+			CubeBase.ChangeScale(cube.Size.ToUnity());
+			CubeBase.ChangeSubstance((Substance)cube.Substance);
+			CubeBase.transform.position = cube.Position.ToUnity();
+			CubeBase.transform.rotation = cube.Rotation.ToUnity();
 		}
 
 		

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
-namespace PrimitierMultiplayerMod
+namespace PrimitierMultiplayerMod.Components
 {
 	public class RemotePlayer : MonoBehaviour
 	{
-		public RemotePlayer(System.IntPtr ptr) : base(ptr) { }
+		public RemotePlayer(IntPtr ptr) : base(ptr) { }
 
 		public static Dictionary<int, RemotePlayer> RemotePlayers = new Dictionary<int, RemotePlayer>();
 
@@ -30,6 +30,15 @@ namespace PrimitierMultiplayerMod
 			}
 
 		}
+
+		public static void DeleteAllPlayers()
+		{
+			foreach (var player in RemotePlayers.Values)
+			{
+				DeletePlayer(player);
+			}
+		}
+
 
 
 		public static RemotePlayer Create(int id, string username, Vector3 position)

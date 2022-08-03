@@ -12,6 +12,7 @@ using PrimitierServer.Shared;
 using UnityEngine;
 using System.Reflection;
 using PrimitierModdingFramework;
+using PrimitierMultiplayerMod.Components;
 
 namespace PrimitierMultiplayerMod
 {
@@ -119,6 +120,7 @@ namespace PrimitierMultiplayerMod
 			Server = null;
 			PMFLog.Message("Disconnected from the server Reason:" + disconnectInfo.Reason);
 			Mod.Chat.AddSystemMessage("Disconnected from the server");
+			MultiplayerManager.Stop();
 		}
 
 		private void NetworkErrorEvent(IPEndPoint endPoint, System.Net.Sockets.SocketError socketError)
@@ -187,7 +189,7 @@ namespace PrimitierMultiplayerMod
 			{
 				if (chunk.ChunkType == NetworkChunkType.Normal)
 				{
-
+					ChunkManager.UpdateModChunk(chunk);
 				}
 
 			}

@@ -21,6 +21,7 @@ namespace PrimitierServer
 			return Players.GetValueOrDefault(id);
 		}
 
+
 		public static void DeletePlayer(int id)
 		{
 			var player = GetPlayerById(id);

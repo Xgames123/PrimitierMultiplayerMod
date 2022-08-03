@@ -3,25 +3,43 @@ using PrimitierServer.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace PrimitierMultiplayerMod
 {
 	public static class ChunkManager
 	{
-		public static bool GenerateNextChunk = false;
+		public static bool AllowGenerateNextChunk = false;
+		public static bool AllowDestroyNextChunk = false;
 		public static int WorldSeed = -1;
 
 
-		public static void GenerateChunk(NetworkChunk chunk)
+		public static void UpdateModChunk(NetworkChunk chunk)
 		{
-			
 			foreach (var cube in chunk.Cubes)
 			{
 				UpdateCube(cube);
 			}
 		}
+		public static void DestroyModChunk(System.Numerics.Vector2 chunkPos)
+		{
+			var syncs = NetworkSync.GetSyncsInChunk(chunkPos);
+			foreach (var sync in syncs)
+			{
+				sync.DestroyCube();
+			}
+		}
+		public static void DestroyAllModChunks()
+		{
+			foreach (var chunk in NetworkSync.NetworkSyncChunk.Keys)
+			{
+				DestroyModChunk(chunk);
+			}
+		}
+
 
 		public static void CreateCube(NetworkCube cube)
 		{
@@ -31,7 +49,7 @@ namespace PrimitierMultiplayerMod
 		}
 		public static void UpdateCube(NetworkCube cube)
 		{
-			if (NetworkSync.NetworkSyncs.TryGetValue(cube.Id, out var sync))
+			if (NetworkSync.NetworkSyncList.TryGetValue(cube.Id, out var sync))
 			{
 				sync.UpdateSync(cube);
 			}
@@ -50,13 +68,20 @@ namespace PrimitierMultiplayerMod
 
 		}
 
-
-		public static void GenerateNewChunk(UnityEngine.Vector2Int position)
+		public static void DestroyPrimitierChunks(Il2CppSystem.Collections.Generic.List<Vector2Int> chunkPositions)
 		{
-			GenerateNextChunk = true;
+			AllowDestroyNextChunk = true;
+			CubeGenerator.DestroyChunks(chunkPositions);
+			AllowDestroyNextChunk = false;
+		}
+
+
+		public static void GenerateNewPrimitierChunk(UnityEngine.Vector2Int position)
+		{
+			AllowGenerateNextChunk = true;
 			CubeGenerator.GenerateNewChunk(position);
 
-			GenerateNextChunk = false;
+			AllowGenerateNextChunk = false;
 		}
 	}
 }
