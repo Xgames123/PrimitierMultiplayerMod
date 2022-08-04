@@ -35,7 +35,7 @@ namespace PrimitierMultiplayerMod
 			{
 				stopwatch.Restart();
 				
-				if(MultiplayerManager.Client == null || !MultiplayerManager.Client.IsInGame)
+				if(MultiplayerManager.Client == null || !MultiplayerManager.IsInMultiplayerMode)
 				{
 					return;
 				}

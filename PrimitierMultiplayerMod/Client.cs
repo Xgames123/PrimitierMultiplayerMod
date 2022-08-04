@@ -23,7 +23,6 @@ namespace PrimitierMultiplayerMod
 
 		public bool IsConnected { get { return NetManager.ConnectedPeersCount >= 1; } }
 
-		public bool IsInGame { get; private set; }
 
 		public NetPeer Server { get; private set; } = null;
 
@@ -116,11 +115,10 @@ namespace PrimitierMultiplayerMod
 
 		private void DisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
 		{
-			IsInGame = false;
+			MultiplayerManager.Stop();
 			Server = null;
 			PMFLog.Message("Disconnected from the server Reason:" + disconnectInfo.Reason);
 			Mod.Chat.AddSystemMessage("Disconnected from the server");
-			MultiplayerManager.Stop();
 		}
 
 		private void NetworkErrorEvent(IPEndPoint endPoint, System.Net.Sockets.SocketError socketError)
@@ -149,7 +147,6 @@ namespace PrimitierMultiplayerMod
 				CreateInitialPlayer(playerInGame);
 			} 
 
-			IsInGame = true;
 			MultiplayerManager.EnterGame(packet.WorldSeed);
 		}
 
@@ -190,6 +187,7 @@ namespace PrimitierMultiplayerMod
 			{
 				if (chunk.ChunkType == NetworkChunkType.Normal)
 				{
+					//TODO: this should be run on unity thread
 					ChunkManager.UpdateModChunk(chunk);
 				}
 
