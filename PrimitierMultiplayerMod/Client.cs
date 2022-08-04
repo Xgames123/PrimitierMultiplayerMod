@@ -185,6 +185,7 @@ namespace PrimitierMultiplayerMod
 
 			}
 
+			PMFLog.Message("Got server update");
 			foreach (var chunk in packet.Chunks)
 			{
 				if (chunk.ChunkType == NetworkChunkType.Normal)

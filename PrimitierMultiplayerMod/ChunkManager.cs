@@ -22,7 +22,7 @@ namespace PrimitierMultiplayerMod
 		{
 			foreach (var cube in chunk.Cubes)
 			{
-				UpdateSyncCube(cube);
+				UpdateCube(cube);
 			}
 		}
 		public static void DestroyModChunk(System.Numerics.Vector2 chunkPos)
@@ -42,7 +42,7 @@ namespace PrimitierMultiplayerMod
 		}
 
 
-		private static void CreateCube(NetworkCube cube)
+		public static void CreateCube(NetworkCube cube)
 		{
 			var primCube = CubeGenerator.GenerateCube(cube.Position.ToUnity(), cube.Size.ToUnity(), (Substance)cube.Substance);
 			var networkSync = primCube.AddComponent<NetworkSync>();
@@ -50,8 +50,10 @@ namespace PrimitierMultiplayerMod
 			NetworkSync.Register(networkSync);
 			PMFLog.Message("Cube created");
 		}
-		public static void UpdateSyncCube(NetworkCube cube)
+		public static void UpdateCube(NetworkCube cube)
 		{
+			PMFLog.Message($"Id: {cube.Id} Position: {cube.Position} Rotation: {cube.Rotation} Size: {cube.Size} Substance: {cube.Substance}");
+
 			if (NetworkSync.NetworkSyncList.TryGetValue(cube.Id, out var sync))
 			{
 				sync.UpdateSync(cube);

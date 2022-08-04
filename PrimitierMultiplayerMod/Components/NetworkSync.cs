@@ -57,7 +57,7 @@ namespace PrimitierMultiplayerMod.Components
 
 		public void DestroyCube()
 		{
-			Destroy(gameObject);
+			//Destroy(gameObject);
 		}
 
 

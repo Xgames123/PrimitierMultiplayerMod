@@ -35,6 +35,8 @@ namespace PrimitierServer.WorldStorage
 
 		private static Dictionary<Vector2, NetworkChunk> Chunks = new Dictionary<Vector2, NetworkChunk>();
 
+		private static JsonSerializerOptions s_options = null;
+
 		public static void LoadFromDirectory(string dir)
 		{
 			WorldDirectory = dir;
@@ -104,7 +106,15 @@ namespace PrimitierServer.WorldStorage
 			StoredChunk chunk;
 			try
 			{
-				chunk = JsonSerializer.Deserialize<StoredChunk>(chunkJson);
+				if(s_options == null)
+				{
+					s_options = new JsonSerializerOptions();
+					s_options.Converters.Add(new Vector2Converter());
+					s_options.Converters.Add(new Vector3Converter());
+					s_options.Converters.Add(new QuaternionConverter());
+				}
+
+				chunk = JsonSerializer.Deserialize<StoredChunk>(chunkJson, s_options);
 
 			}
 			catch (Exception e)

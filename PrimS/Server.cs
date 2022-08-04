@@ -182,6 +182,9 @@ namespace PrimitierServer
 		{
 			var foundChunks = new List<NetworkChunk>();
 
+			foundChunks.Add(World.GetChunk(new Vector2(0, 0)));
+			return foundChunks;
+
 			int centerX = 0;
 			int centerY = 0;
 
