@@ -13,6 +13,7 @@ using UnityEngine;
 using System.Reflection;
 using PrimitierModdingFramework;
 using PrimitierMultiplayerMod.Components;
+using MelonLoader.TinyJSON;
 
 namespace PrimitierMultiplayerMod
 {
@@ -183,7 +184,14 @@ namespace PrimitierMultiplayerMod
 			}
 
 			PMFLog.Message("Got server update");
-			MainThreadRunner.EnqueueTask(()=>ChunkManager.UpdateModChunks(packet.Chunks));
+			var testData = new PrimitierServer.Shared.NetworkChunk() { Cubes = new System.Collections.Generic.List<PrimitierServer.Shared.NetworkCube>() { new PrimitierServer.Shared.NetworkCube() { Id = 1, Position = new System.Numerics.Vector3(0, 0, 0), Size = new System.Numerics.Vector3(5, 5, 5), Substance = 0, Rotation = new System.Numerics.Quaternion(0, 0, 0, 0) } } };
+			PMFLog.Message(JSON.Dump(testData));
+			PMFLog.Message(packet.Chunks.Length);
+			PMFLog.Message(JSON.Dump(packet.Chunks[0]));
+			
+
+			//ChunkManager.UpdateModChunk();
+			//MainThreadRunner.EnqueueTask(()=>ChunkManager.UpdateModChunks(packet.Chunks));
 
 
 		}

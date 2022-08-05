@@ -43,6 +43,8 @@ namespace PrimitierServer.Shared
 			Cubes = reader.GetList<NetworkCube>();
 			Owner = reader.GetInt();
 		}
+
+
 	}
 
 

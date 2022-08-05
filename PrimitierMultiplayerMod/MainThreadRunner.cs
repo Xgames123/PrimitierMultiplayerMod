@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,14 +9,21 @@ namespace PrimitierMultiplayerMod
 {
 	public static class MainThreadRunner
 	{
-		private static Queue<Action> Todo = new Queue<Action>();
+		private static ConcurrentQueue<Action> Todo = new ConcurrentQueue<Action>();
 
 		public static void RunQueuedTasks()
 		{
-			foreach (var task in (Todo as IEnumerable<Action>))
+			while (Todo.Count > 0)
 			{
-				task.Invoke();
+				
+				if(Todo.TryDequeue(out var task))
+				{
+					task.Invoke();
+				}
+				
+
 			}
+			
 
 		}
 

@@ -12,7 +12,7 @@ namespace PrimitierMultiplayerMod.Patches
 	{
 		private static bool Prefix(Il2CppSystem.Collections.Generic.List<UnityEngine.Vector2Int> destroyChunkPositions)
 		{
-			return false;
+			return true;
 
 			if (MultiplayerManager.IsInMultiplayerMode)
 			{

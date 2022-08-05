@@ -38,13 +38,21 @@ namespace PrimitierServer
 
 		public static event Action<ConfigFile?> OnConfigReload;
 
+		private static JsonSerializerOptions? s_options = null;
 
 		public static void Load()
 		{
-			ConfigFile newConfig;
+			if (s_options == null)
+			{
+				s_options = new JsonSerializerOptions();
+				s_options.ReadCommentHandling = JsonCommentHandling.Skip;
+			}
+				
+
+			ConfigFile? newConfig;
 			try
 			{
-				newConfig = JsonSerializer.Deserialize<ConfigFile>(File.ReadAllText("primsconfig.json"));
+				newConfig = JsonSerializer.Deserialize<ConfigFile>(File.ReadAllText("primsconfig.json"), s_options);
 
 			}
 			catch (Exception e)
@@ -52,6 +60,12 @@ namespace PrimitierServer
 				_log.Error("Could not load config", e);
 				return;
 			}
+			if(newConfig == null)
+			{
+				_log.Error("loaded config was null");
+				return;
+			}
+
 			OnConfigReload?.Invoke(newConfig);
 			Config = newConfig;
 
