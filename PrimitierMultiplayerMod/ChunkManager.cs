@@ -17,9 +17,22 @@ namespace PrimitierMultiplayerMod
 		public static bool AllowDestroyNextChunk = false;
 		public static int WorldSeed = -1;
 
+		public static void UpdateModChunks(IEnumerable<NetworkChunk> chunks)
+		{
+			foreach (var chunk in chunks)
+			{
+				UpdateModChunk(chunk);
+			}
+
+		}
 
 		public static void UpdateModChunk(NetworkChunk chunk)
 		{
+			if(chunk.ChunkType != NetworkChunkType.Normal)
+			{
+				return;
+			}
+
 			foreach (var cube in chunk.Cubes)
 			{
 				UpdateCube(cube);

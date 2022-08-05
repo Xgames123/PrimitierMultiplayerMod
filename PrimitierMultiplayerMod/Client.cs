@@ -183,15 +183,8 @@ namespace PrimitierMultiplayerMod
 			}
 
 			PMFLog.Message("Got server update");
-			foreach (var chunk in packet.Chunks)
-			{
-				if (chunk.ChunkType == NetworkChunkType.Normal)
-				{
-					//TODO: this should be run on unity thread
-					ChunkManager.UpdateModChunk(chunk);
-				}
+			MainThreadRunner.EnqueueTask(()=>ChunkManager.UpdateModChunks(packet.Chunks));
 
-			}
 
 		}
 

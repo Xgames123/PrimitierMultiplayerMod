@@ -82,6 +82,7 @@ namespace PrimitierMultiplayerMod
 		{
 			base.OnFixedUpdate();
 
+			MainThreadRunner.RunQueuedTasks();
 			MultiplayerManager.UpdateClient();
 
 			if (Input.GetKeyUp(KeyCode.F1))
