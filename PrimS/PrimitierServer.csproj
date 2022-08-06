@@ -11,7 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LiteNetLib" Version="0.9.5.2" />
     <PackageReference Include="log4net" Version="2.0.15" />
   </ItemGroup>
 
@@ -26,6 +25,10 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LiteNetLib\LiteNetLib\LiteNetLib.csproj" />
   </ItemGroup>
 
   <Import Project="..\PrimS.shared\PrimS.shared.projitems" Label="Shared" />
