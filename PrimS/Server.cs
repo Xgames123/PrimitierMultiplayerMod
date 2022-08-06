@@ -15,6 +15,7 @@ using System.Numerics;
 using System.Diagnostics;
 using PrimitierServer.Mappers;
 using PrimitierServer.WorldStorage;
+using PrimitierServer.Shared;
 
 namespace PrimitierServer
 {
@@ -48,12 +49,7 @@ namespace PrimitierServer
 
 			_writer = new NetDataWriter();
 			_packetProcessor = new NetPacketProcessor();
-			_packetProcessor.RegisterNestedType<NetworkChunk>();
-			_packetProcessor.RegisterNestedType<NetworkCube>();
-			_packetProcessor.RegisterNestedType<NetworkPlayer>();
-			_packetProcessor.RegisterNestedType<InitialPlayerData>();
-			_packetProcessor.RegisterNestedType((writer, value) => writer.Put(value), reader => reader.GetVector3());
-			_packetProcessor.RegisterNestedType((writer, value) => writer.PutList(value), reader => reader.GetList<InitialPlayerData>());
+			PacketProcessorTypeRegister.RegisterNetworkTypes(ref _packetProcessor);
 
 			_packetProcessor.SubscribeReusable<JoinRequestPacket, NetPeer>(OnJoinRequest);
 			_packetProcessor.SubscribeReusable<PlayerUpdatePacket, NetPeer>(OnPlayerUpdate);

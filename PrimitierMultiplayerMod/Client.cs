@@ -58,12 +58,7 @@ namespace PrimitierMultiplayerMod
 				Disconnect();
 
 			_packetProcessor = new NetPacketProcessor();
-			_packetProcessor.RegisterNestedType<NetworkChunk>();
-			_packetProcessor.RegisterNestedType<NetworkCube>();
-			_packetProcessor.RegisterNestedType<NetworkPlayer>();
-			_packetProcessor.RegisterNestedType<InitialPlayerData>();
-			_packetProcessor.RegisterNestedType((writer, value) => writer.Put(value), reader => reader.GetVector3());
-			_packetProcessor.RegisterNestedType((writer, value) => writer.PutList(value), reader => reader.GetList<InitialPlayerData>());
+			PacketProcessorTypeRegister.RegisterNetworkTypes(ref _packetProcessor);
 
 			_packetProcessor.SubscribeReusable<JoinAcceptPacket>(OnJoinAcceptPacket);
 			_packetProcessor.SubscribeReusable<PlayerJoinedPacket>(OnPlayerJoinedPacket);
