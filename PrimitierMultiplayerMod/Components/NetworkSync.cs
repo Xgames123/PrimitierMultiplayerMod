@@ -105,6 +105,8 @@ namespace PrimitierMultiplayerMod.Components
 			CubeBase.ChangeSubstance((Substance)cube.Substance);
 			CubeBase.transform.position = cube.Position.ToUnity();
 			CubeBase.transform.rotation = cube.Rotation.ToUnity();
+			CubeBase.rb.velocity = cube.Velosity.ToUnity();
+			CubeBase.rb.angularVelocity = cube.AngularVelocity.ToUnity();
 		}
 
 		

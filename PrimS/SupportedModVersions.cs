@@ -8,8 +8,21 @@ namespace PrimitierServer
 {
 	public class SupportedVersions
 	{
-		public static Version[] SupportedModVersions = new Version[] { new Version(1, 0, 0, 0) };
+		public static Version LowestSupportedModVersion = new Version(0, 0, 1);
 
+
+
+
+
+		public static bool CheckModVersion(Version modVersion)
+		{
+			if (modVersion < LowestSupportedModVersion)
+			{
+				return false;
+			}
+
+			return true;
+		}
 	}
 }
 

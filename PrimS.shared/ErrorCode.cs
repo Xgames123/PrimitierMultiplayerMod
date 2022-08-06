@@ -9,6 +9,7 @@ namespace PrimitierServer.Shared
 		ProtocolError,
 		Unknown,
 		ServerFull,
+		ModVersionToLow,
 		UnsupportedModVersion,
 	}
 }

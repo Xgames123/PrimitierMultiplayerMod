@@ -14,7 +14,6 @@ namespace PrimitierMultiplayerMod.Patches
 		{
 			if (MultiplayerManager.IsInMultiplayerMode)
 			{
-				return true;
 				if (ChunkManager.AllowGenerateNextChunk)
 					return true;
 

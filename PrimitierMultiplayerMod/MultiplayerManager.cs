@@ -36,24 +36,24 @@ namespace PrimitierMultiplayerMod
 
 		public static void EnterGame(int seed)
 		{
-			//IsInMultiplayerMode = true;
+			IsInMultiplayerMode = true;
 
-			//var loadingSequence = GameObject.FindObjectOfType<LoadingSequence>();
+			var loadingSequence = GameObject.FindObjectOfType<LoadingSequence>();
 
-			//var destroyObject = new UnhollowerBaseLib.Il2CppReferenceArray<GameObject>(0);
-			//var titleSpace = GameObject.Find("TitleSpace");
-			//if (titleSpace != null)
-			//{
-			//	destroyObject = new UnhollowerBaseLib.Il2CppReferenceArray<GameObject>(1);
-			//	destroyObject[0] = titleSpace;
-			//}
+			var destroyObject = new UnhollowerBaseLib.Il2CppReferenceArray<GameObject>(0);
+			var titleSpace = GameObject.Find("TitleSpace");
+			if (titleSpace != null)
+			{
+				destroyObject = new UnhollowerBaseLib.Il2CppReferenceArray<GameObject>(1);
+				destroyObject[0] = titleSpace;
+			}
 
-			//var enableObjects = new UnhollowerBaseLib.Il2CppReferenceArray<GameObject>(0);
+			var enableObjects = new UnhollowerBaseLib.Il2CppReferenceArray<GameObject>(0);
 
-			//ChunkManager.WorldSeed = seed;
-			//loadingSequence.StartLoading(-1, GameObject.Find("InfoText").GetComponent<TextMeshPro>(), destroyObject, enableObjects);
+			ChunkManager.WorldSeed = seed;
+			loadingSequence.StartLoading(-1, GameObject.Find("InfoText").GetComponent<TextMeshPro>(), destroyObject, enableObjects);
 
-			//JoinGameButton.Destroy();
+			JoinGameButton.Destroy();
 
 		}
 		public static void ExitGame()

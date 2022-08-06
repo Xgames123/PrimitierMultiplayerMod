@@ -14,6 +14,7 @@ using System.Reflection;
 using PrimitierModdingFramework;
 using PrimitierMultiplayerMod.Components;
 using MelonLoader.TinyJSON;
+using PrimitierServer.Shared.Packets;
 
 namespace PrimitierMultiplayerMod
 {
@@ -68,6 +69,7 @@ namespace PrimitierMultiplayerMod
 			_packetProcessor.SubscribeReusable<PlayerJoinedPacket>(OnPlayerJoinedPacket);
 			_packetProcessor.SubscribeReusable<PlayerLeavePacket>(OnPlayerLeavePacket);
 			_packetProcessor.SubscribeReusable<ServerUpdatePacket>(OnServerUpdatePacket);
+			_packetProcessor.SubscribeReusable<ErrorPacket>(OnErrorPacket);
 
 			Mod.Chat.AddSystemMessage("Connecting to the server");
 
@@ -75,7 +77,14 @@ namespace PrimitierMultiplayerMod
 			NetManager.Start();
 
 			PMFLog.Message($"Connecting to {address}:{port}...");
-			NetManager.Connect(address, port, "");
+			_writer.Reset();
+
+			_writer.Put(Mod.ModVersion.Major);
+			_writer.Put(Mod.ModVersion.Minor);
+			_writer.Put(Mod.ModVersion.Build);
+			_writer.Put(Mod.ModVersion.Revision);
+
+			NetManager.Connect(address, port, _writer);
 		}
 
 		public void Disconnect()
@@ -118,8 +127,10 @@ namespace PrimitierMultiplayerMod
 		{
 			MultiplayerManager.Stop();
 			Server = null;
-			PMFLog.Message("Disconnected from the server Reason:" + disconnectInfo.Reason);
-			Mod.Chat.AddSystemMessage("Disconnected from the server");
+			ErrorGenerator.ReadError(ref disconnectInfo.AdditionalData, ref _packetProcessor);
+
+			Mod.Chat.AddSystemMessage($"Disconnected from the server Reason:{disconnectInfo.Reason}");
+			
 		}
 
 		private void NetworkErrorEvent(IPEndPoint endPoint, System.Net.Sockets.SocketError socketError)
@@ -131,6 +142,19 @@ namespace PrimitierMultiplayerMod
 		{
 			_packetProcessor.ReadAllPackets(reader);
 		}
+
+
+		private void OnErrorPacket(ErrorPacket packet)
+		{
+			var message = packet.Message;
+			if(message == null)
+			{
+				message = ErrorGenerator.ErrorCodeToString(packet.ErrorCode);
+			}
+
+			Mod.Chat.AddServerMessage($"ErrorCode: {packet.ErrorCode} {message}");
+		}
+
 
 		private void CreateInitialPlayer(InitialPlayerData initialPlayerData)
 		{
@@ -183,16 +207,15 @@ namespace PrimitierMultiplayerMod
 
 			}
 
-			PMFLog.Message("Got server update");
-			var testData = new PrimitierServer.Shared.NetworkChunk() { Cubes = new System.Collections.Generic.List<PrimitierServer.Shared.NetworkCube>() { new PrimitierServer.Shared.NetworkCube() { Id = 1, Position = new System.Numerics.Vector3(0, 0, 0), Size = new System.Numerics.Vector3(5, 5, 5), Substance = 0, Rotation = new System.Numerics.Quaternion(0, 0, 0, 0) } } };
-			PMFLog.Message(JSON.Dump(testData));
-			PMFLog.Message(packet.Chunks.Length);
-			PMFLog.Message(JSON.Dump(packet.Chunks[0]));
+			//PMFLog.Message("Got server update");
+			//var testData = new PrimitierServer.Shared.NetworkChunk() { Cubes = new System.Collections.Generic.List<PrimitierServer.Shared.NetworkCube>() { new PrimitierServer.Shared.NetworkCube() { Id = 1, Position = new System.Numerics.Vector3(0, 0, 0), Size = new System.Numerics.Vector3(5, 5, 5), Substance = 0, Rotation = new System.Numerics.Quaternion(0, 0, 0, 0) } } };
+			//PMFLog.Message(JSON.Dump(testData));
+			//PMFLog.Message(packet.Chunks.Length);
+			//PMFLog.Message(JSON.Dump(packet.Chunks[0]));
+
 			
-
-			//ChunkManager.UpdateModChunk();
-			//MainThreadRunner.EnqueueTask(()=>ChunkManager.UpdateModChunks(packet.Chunks));
-
+			ChunkManager.UpdateModChunks(packet.Chunks);
+			
 
 		}
 

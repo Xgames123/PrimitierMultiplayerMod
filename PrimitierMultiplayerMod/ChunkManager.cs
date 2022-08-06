@@ -61,11 +61,11 @@ namespace PrimitierMultiplayerMod
 			var networkSync = primCube.AddComponent<NetworkSync>();
 			networkSync.Id = cube.Id;
 			NetworkSync.Register(networkSync);
-			PMFLog.Message("Cube created");
+			//PMFLog.Message("Cube created");
 		}
 		public static void UpdateCube(NetworkCube cube)
 		{
-			PMFLog.Message($"Id: {cube.Id} Position: {cube.Position} Rotation: {cube.Rotation} Size: {cube.Size} Substance: {cube.Substance}");
+			//PMFLog.Message($"Id: {cube.Id} Position: {cube.Position} Rotation: {cube.Rotation} Size: {cube.Size} Substance: {cube.Substance}");
 
 			if (NetworkSync.NetworkSyncList.TryGetValue(cube.Id, out var sync))
 			{

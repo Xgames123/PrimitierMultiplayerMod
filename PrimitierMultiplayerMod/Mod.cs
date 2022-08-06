@@ -16,10 +16,8 @@ namespace PrimitierMultiplayerMod
 
 	public class Mod : PrimitierMod
     {
-
-
 		public static Chat Chat;
-
+		public static System.Version ModVersion;
 		
 		public override void OnSceneWasLoaded(int buildIndex, string sceneName)
 		{
@@ -32,6 +30,7 @@ namespace PrimitierMultiplayerMod
 			Chat = Chat.Setup();
 
 			JoinGameButton.Create();
+			
 		}
 
 
@@ -64,6 +63,8 @@ namespace PrimitierMultiplayerMod
 			ClassInjector.RegisterTypeInIl2CppWithInterfaces<JoinGameButton>(typeof(IButton));
 			HierarchyXmlDumper.DefaultDumperList.Add(new TextMeshProComponentDumper());
 			HierarchyXmlDumper.DefaultDumperList.Add(new StartButtonComponentDumper());
+
+			ModVersion = new System.Version(Info.Version);
 		}
 		public override void OnApplicationQuit()
 		{

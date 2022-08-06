@@ -1,4 +1,5 @@
-﻿using LiteNetLib.Utils;
+﻿using LiteNetLib;
+using LiteNetLib.Utils;
 using PrimitierServer.Shared.Packets;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace PrimitierServer.Shared
 		{
 			{ErrorCode.Unknown, "Unknown error"},
 			{ErrorCode.ServerFull, "The server is full"},
+			{ErrorCode.ModVersionToLow, "The version of the Multilayer mod was to low for the server" },
 			{ErrorCode.UnsupportedModVersion, "The version of Primitier multilayer mod was not supported by the server"},
 
 		};
@@ -26,7 +28,24 @@ namespace PrimitierServer.Shared
 
 		public static void Generate(ref NetDataWriter writer, ref NetPacketProcessor processor, ErrorCode code)
 		{
-			processor.Write(writer, new ErrorPacket() { ErrorCode = code, Message = ErrorMessages[code]});
+			processor.Write(writer, new ErrorPacket() { ErrorCode = code});
+		}
+
+
+		public static void ReadError(ref NetPacketReader reader, ref NetPacketProcessor processor)
+		{
+			processor.ReadAllPackets(reader);
+		}
+
+
+		public static string ErrorCodeToString(ErrorCode code)
+		{
+			if(ErrorMessages.TryGetValue(code, out var result))
+			{
+				return result;
+			}
+
+			return "No error message";
 		}
 	}
 }

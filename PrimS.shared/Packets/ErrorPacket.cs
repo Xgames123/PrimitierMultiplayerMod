@@ -7,7 +7,7 @@ namespace PrimitierServer.Shared.Packets
 	public class ErrorPacket
 	{
 		public ErrorCode ErrorCode;
-		public string Message;
+		public string? Message = null;
 
 	}
 }

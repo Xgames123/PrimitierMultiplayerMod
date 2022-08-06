@@ -134,7 +134,15 @@ namespace PrimitierServer
 				return;
 			}
 
-			//TODO check for unsupported versions
+			var reader = request.Data;
+			var modVersion = new Version(reader.GetInt(), reader.GetInt(), reader.GetInt(), reader.GetInt());
+
+			if (!SupportedVersions.CheckModVersion(modVersion))
+			{
+				_writer.Reset();
+				ErrorGenerator.Generate(ref _writer, ref _packetProcessor, Shared.ErrorCode.UnsupportedModVersion);
+				request.Reject(_writer);
+			}
 
 			request.Accept();
 
