@@ -9,8 +9,8 @@
 
 ## Server installation with docker
 1) install git and docker
-2) git clone https://github.com/Xgames123/PrimitierMultiplayerMod.git --reqursive
-3) edit primsconfig.json
+2) ```git clone https://github.com/Xgames123/PrimitierMultiplayerMod.git --recursive```
+3) edit `primsconfig.json`
 3) Run ```sudo docker build . -t multiplayerserver```
 4) Run ```sudo docker run --rm -d --network host multiplayerserver -p 9543:9543/udp```
 
