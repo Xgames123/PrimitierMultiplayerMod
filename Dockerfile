@@ -4,6 +4,7 @@ WORKDIR /app
 # Copy everything
 COPY PrimS/. ./PrimS
 COPY PrimS.shared/. ./PrimS.shared
+COPY LiteNetLib/. ./LiteNetLib
 
 #PrimS.shared
 WORKDIR /app/PrimS.shared
