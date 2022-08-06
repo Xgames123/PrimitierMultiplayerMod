@@ -19,6 +19,8 @@ namespace PrimitierServer.WorldStorage
 	{
 		public int Seed { get; set; }
 
+		public Vector3 WorldSpawn { get; set; } = Vector3.Zero;
+
 		public Dictionary<string, StoredPlayer> Players { get; set; }
 	}
 

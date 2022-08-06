@@ -33,7 +33,7 @@ namespace PrimitierMultiplayerMod.Components
 
 		public static void DeleteAllPlayers()
 		{
-			foreach (var player in RemotePlayers.Values)
+			foreach (var player in RemotePlayers.Values.ToArray())
 			{
 				DeletePlayer(player);
 			}
@@ -43,6 +43,9 @@ namespace PrimitierMultiplayerMod.Components
 
 		public static RemotePlayer Create(int id, string username, Vector3 position)
 		{
+			if (RemotePlayers.ContainsKey(id))
+				return null;
+
 			var remotePlayerGo = new GameObject("RemotePlayer");
 
 			var headGo = GameObject.CreatePrimitive(PrimitiveType.Sphere);

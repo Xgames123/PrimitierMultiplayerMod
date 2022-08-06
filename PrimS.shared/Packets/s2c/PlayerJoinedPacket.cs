@@ -7,7 +7,7 @@ namespace PrimitierServer.Shared.Packets.s2c
 {
 	public class PlayerJoinedPacket
 	{
-		public InitialPlayerData initialPlayerData;
+		public InitialPlayerData initialPlayerData { get; set; }
 
 	}
 }

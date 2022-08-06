@@ -179,6 +179,8 @@ namespace PrimitierMultiplayerMod
 
 		private void OnPlayerJoinedPacket(PlayerJoinedPacket packet)
 		{
+			
+
 			CreateInitialPlayer(packet.initialPlayerData);
 		}
 		

@@ -189,7 +189,7 @@ namespace PrimitierServer
 
 		}
 
-		private List<NetworkChunk> FindNetworkChunksAroundPlayer(PrimitierPlayer currentPlayer, int radius)
+		private List<NetworkChunk> FindNetworkChunksAroundPlayer(RuntimePlayer currentPlayer, int radius)
 		{
 			var foundChunks = new List<NetworkChunk>();
 
@@ -222,15 +222,14 @@ namespace PrimitierServer
 		}
 
 
-		private List<NetworkPlayer> FindNetworkPlayersAroundPlayer(PrimitierPlayer currentPlayer, int radius)
+		private List<NetworkPlayer> FindNetworkPlayersAroundPlayer(RuntimePlayer currentPlayer, int radius)
 		{
 			var foundPlayers = new List<NetworkPlayer>();
 			var players = PlayerManager.Players.Values;
 			foreach (var player in players)
 			{
-				//TODO uncomment (This is commented out for testing)
-				//if (player.RuntimeId == currentPlayer.RuntimeId)
-				//	continue;
+				if (player.RuntimeId == currentPlayer.RuntimeId)
+					continue;
 
 				var dist = Vector3.Distance(player.Position, currentPlayer.Position);
 
@@ -257,27 +256,25 @@ namespace PrimitierServer
 		
 		private void OnJoinRequest(JoinRequestPacket packet, NetPeer peer)
 		{
-			var runtimePlayer = PlayerManager.CreateNewPlayer(packet.Username, peer.Id, packet.StaticPlayerId);
+			var newRuntimePlayer = PlayerManager.CreateNewPlayer(packet.Username, peer.Id, packet.StaticPlayerId);
 
-			
-			runtimePlayer.StaticId = packet.StaticPlayerId;
 
-			runtimePlayer.RHandPosition = Vector3.Zero;
-			runtimePlayer.LHandPosition = Vector3.Zero;
 			_log.Info($"{packet.Username} joined the game");
 
 			var playersAlreadyInGame = new List<InitialPlayerData>();
-			foreach (var primPlayer in PlayerManager.Players.Values)
+			foreach (var runtimePlayer in PlayerManager.Players.Values)
 			{
-				if (primPlayer.RuntimeId == peer.Id)
+				if (runtimePlayer.RuntimeId == peer.Id)
 					continue;
 
-				playersAlreadyInGame.Add(new InitialPlayerData() { Id = primPlayer.RuntimeId, Position = primPlayer.Position, Username = primPlayer.Username });
+				playersAlreadyInGame.Add(runtimePlayer.ToInitialPlayerData());
 			}
 
 
-			SendPacket(peer, new JoinAcceptPacket() { Id = peer.Id, Username = packet.Username, Position = runtimePlayer.Position, WorldSeed = World.Settings.Seed, PlayersAlreadyInGame = playersAlreadyInGame }, DeliveryMethod.ReliableOrdered);
-			SendPacketToAll(new PlayerJoinedPacket() { initialPlayerData = new InitialPlayerData() { Id = peer.Id, Position = runtimePlayer.Position, Username = packet.Username } }, DeliveryMethod.ReliableOrdered);
+			SendPacket(peer, new JoinAcceptPacket() { Id = peer.Id, Username = newRuntimePlayer.Username, Position = newRuntimePlayer.Position, WorldSeed = World.Settings.Seed, PlayersAlreadyInGame = playersAlreadyInGame }, DeliveryMethod.ReliableOrdered);
+
+			var initialPlayerData = newRuntimePlayer.ToInitialPlayerData();
+			SendPacketToAll(new PlayerJoinedPacket() { initialPlayerData = initialPlayerData }, DeliveryMethod.ReliableOrdered);
 		}
 
 		private void OnPlayerUpdate(PlayerUpdatePacket packet, NetPeer peer)

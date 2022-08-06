@@ -12,12 +12,12 @@ namespace PrimitierServer
 {
 	public static class PlayerManager
 	{
-		public static Dictionary<int, PrimitierPlayer> Players = new Dictionary<int, PrimitierPlayer>();
+		public static Dictionary<int, RuntimePlayer> Players = new Dictionary<int, RuntimePlayer>();
 
 		private static ILog s_log = LogManager.GetLogger(nameof(PlayerManager));
 
 
-		public static PrimitierPlayer? GetPlayerById(int id)
+		public static RuntimePlayer? GetPlayerById(int id)
 		{
 			return Players.GetValueOrDefault(id);
 		}
@@ -60,17 +60,23 @@ namespace PrimitierServer
 		}
 
 
-		public static PrimitierPlayer CreateNewPlayer(string username, int runtimeId, string staticId)
+		public static RuntimePlayer CreateNewPlayer(string username, int runtimeId, string staticId)
 		{
-			var player = new PrimitierPlayer(username, runtimeId);
+			var player = new RuntimePlayer(username, runtimeId);
+			player.StaticId = staticId;
+			player.RHandPosition = Vector3.Zero;
+			player.LHandPosition = Vector3.Zero;
+			player.Hp = 100;
+			player.Position = World.Settings.WorldSpawn;
 
 			var storedPlayer = GetStoredPlayer(staticId);
 			if (storedPlayer != null)
 			{
 				player.Position = storedPlayer.Position;
 				player.Hp = storedPlayer.Hp;
-				player.StaticId = staticId;
 			}
+
+			
 
 			Players.Add(runtimeId, player);
 			return player;

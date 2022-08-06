@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace PrimitierServer
 {
-	public class PrimitierPlayer
+	public class RuntimePlayer
 	{
-		public PrimitierPlayer(string username, int id)
+		public RuntimePlayer(string username, int id)
 		{
 			Username = username;
 			RuntimeId = id;
