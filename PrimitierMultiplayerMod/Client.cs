@@ -72,13 +72,9 @@ namespace PrimitierMultiplayerMod
 			NetManager.Start();
 
 			PMFLog.Message($"Connecting to {address}:{port}...");
+
 			_writer.Reset();
-
-			_writer.Put(Mod.ModVersion.Major);
-			_writer.Put(Mod.ModVersion.Minor);
-			_writer.Put(Mod.ModVersion.Build);
-			_writer.Put(Mod.ModVersion.Revision);
-
+			_writer.Put(Mod.ModVersion.ToString());
 			NetManager.Connect(address, port, _writer);
 		}
 

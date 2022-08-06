@@ -14,7 +14,7 @@ namespace PrimitierServer.Shared
 		{
 			{ErrorCode.Unknown, "Unknown error"},
 			{ErrorCode.ServerFull, "The server is full"},
-			{ErrorCode.ModVersionToLow, "The version of the Multilayer mod was to low for the server" },
+			{ErrorCode.ModVersionToLow, "The version of the Multilayer mod was to low for the server (To fix this download the latest version from my github)" },
 			{ErrorCode.UnsupportedModVersion, "The version of Primitier multilayer mod was not supported by the server"},
 
 		};

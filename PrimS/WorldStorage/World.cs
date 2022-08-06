@@ -34,8 +34,44 @@ namespace PrimitierServer.WorldStorage
 		public static WorldSettings Settings { get; private set; }
 
 		private static Dictionary<Vector2, NetworkChunk> Chunks = new Dictionary<Vector2, NetworkChunk>();
+		private static Dictionary<Vector2, bool> NeedsSaving = new Dictionary<Vector2, bool>();
 
 		private static JsonSerializerOptions s_options = null;
+
+		public static void ClearChunkCash()
+		{
+			foreach (var chunk in Chunks.Keys)
+			{
+				TrySaveChunk(chunk);
+			}
+			NeedsSaving.Clear();
+			Chunks.Clear();
+			
+		}
+
+		public static bool TrySaveChunk(Vector2 position)
+		{
+			var chunkName = $"{position.X}_{position.Y}chunk.json";
+			if (NeedsSaving.TryGetValue(position, out var needsSaving))
+			{
+				if (needsSaving)
+				{
+					try
+					{
+						var json = JsonSerializer.Serialize(Chunks[position], s_options);
+						File.WriteAllText(Path.Combine(WorldDirectory, ChunkDirectoryPath, chunkName), json);
+					}catch(Exception e)
+					{
+						s_log.Error($"Could not save chunk '{chunkName}'\nInternalError: {e}");
+						return false;
+					}
+					
+				}
+
+			}
+			return true;
+		}
+
 
 		public static void LoadFromDirectory(string dir)
 		{
@@ -81,6 +117,7 @@ namespace PrimitierServer.WorldStorage
 
 			var netChunk = newChunk.ToNetworkChunk(-1);
 			Chunks.Add(position, netChunk);
+			NeedsSaving.Add(position, false);
 			return netChunk;
 		}
 		private static StoredChunk? LoadChunk(Vector2 position)

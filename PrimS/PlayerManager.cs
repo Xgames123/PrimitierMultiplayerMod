@@ -1,4 +1,5 @@
-﻿using PrimitierServer.WorldStorage;
+﻿using log4net;
+using PrimitierServer.WorldStorage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace PrimitierServer
 	{
 		public static Dictionary<int, PrimitierPlayer> Players = new Dictionary<int, PrimitierPlayer>();
 
-
+		private static ILog s_log = LogManager.GetLogger(nameof(PlayerManager));
 
 
 		public static PrimitierPlayer? GetPlayerById(int id)
@@ -36,6 +37,13 @@ namespace PrimitierServer
 			});
 
 			Players.Remove(id);
+
+			if (Players.Count == 0)
+			{
+				s_log.Info("Clearing chunk cash");
+				World.ClearChunkCash();
+			}
+
 		}
 
 
