@@ -29,12 +29,12 @@ primsconfig.json is the configuration file for the server
 
 	"MaxPlayers": 10, //Maximum players that can be in the world
 	"WorldDirectory": "World", //The path to the directory to store world data into
-    "UpdateDelay": 10, //Amount of milliseconds between server updates (When the server sends a packet to all connected clients)
+	"UpdateDelay": 10, //Amount of milliseconds between server updates (When the server sends a packet to all connected clients)
 
-    //Configurations for the clients that connect
-    "Client": {
-        "IdleUpdateDelay": 1000, //Amount of milliseconds between client updates when the client is idle (when the client is too far away from other players to be seen)
-        "ActiveUpdateDelay": 20 //Amount of milliseconds between client updates when the client can be seen by other players
-    }
+	//Configurations for the clients that connect
+	"Client": {
+		"IdleUpdateDelay": 1000, //Amount of milliseconds between client updates when the client is idle (when the client is too far away from other players to be seen)
+		"ActiveUpdateDelay": 20 //Amount of milliseconds between client updates when the client can be seen by other players
+	}
 }
 ```
