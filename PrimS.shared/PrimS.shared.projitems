@@ -6,9 +6,10 @@
     <SharedGUID>4d1fe002-bdf1-444b-80c8-f9a1063ac330</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>PrimS.shared</Import_RootNamespace>
+    <Import_RootNamespace>PrimitierServer.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)IPCCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ErrorCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ErrorGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InitialPlayerData.cs" />

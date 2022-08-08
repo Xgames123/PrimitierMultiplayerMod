@@ -22,6 +22,11 @@ namespace PrimitierServer
 			return Players.GetValueOrDefault(id);
 		}
 
+		public static IEnumerable<RuntimePlayer> GetAllPlayers()
+		{
+			return Players.Values;
+		}
+
 
 		public static void DeletePlayer(int id)
 		{

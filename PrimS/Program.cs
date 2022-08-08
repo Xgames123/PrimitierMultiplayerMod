@@ -1,6 +1,7 @@
 ﻿using PrimitierServer;
 using PrimitierServer.WorldStorage;
 using System;
+using System.IO;
 using System.Threading;
 
 [assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config")]
@@ -13,7 +14,13 @@ public static class Program
 
 		World.LoadFromDirectory(ConfigLoader.Config.WorldDirectory);
 
-		//var comunication = new StdInComunication();
+		var ipcStringListener = new IPCStringListener(
+			Path.Combine(ConfigLoader.Config.IPCDirectory, "PRIMITIERSERVER.cmdin"),
+			Path.Combine(ConfigLoader.Config.IPCDirectory, "PRIMITIERSERVER.cmdout"));
+		ipcStringListener.OnMessage += (string cmd) => 
+		{
+			return IPCCommandParser.ParseCommand(cmd);
+		};
 
 		bool stoppingServer = false;
 		bool IsServerRunning = true;
@@ -37,7 +44,6 @@ public static class Program
 		while (true)
 		{
 			server.Update();
-			//comunication.Update();
 			if (stoppingServer)
 			{
 				break;
@@ -46,7 +52,7 @@ public static class Program
 		}
 		IsServerRunning = false;
 
-		//comunication.Dispose();
+		ipcStringListener?.Dispose();
 
 
 	}

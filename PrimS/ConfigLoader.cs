@@ -20,6 +20,8 @@ namespace PrimitierServer
 
 		public int UpdateDelay { get; set; } = 10;
 		public ClientConfig Client { get; set; }
+
+		public string IPCDirectory = "/tmp";
 	}
 
 	public class ClientConfig
