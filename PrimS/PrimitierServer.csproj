@@ -27,5 +27,5 @@
   </ItemGroup>
 
 
-  <Import Project="../PMF.Shared.targets" />
+  <Import Project="../internal.shared.targets" />
 </Project>

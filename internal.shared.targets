@@ -1,6 +1,6 @@
-<!-- This file is used for sharing property's between the different projects -->
 <?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+<!-- This file is used for sharing property's between the different projects -->
+<Project>
 	<PropertyGroup>
 		<Version>0.0.2</Version>
 		<Authors>XGames105</Authors>
@@ -15,6 +15,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\LiteNetLib\LiteNetLib\LiteNetLib.csproj" />
 	</ItemGroup>
-	<Import Project="..\PrimS.shared\PrimS.shared.projitems" Label="Shared" />
+	<Import Project="PrimS.shared\PrimS.shared.projitems" Label="Shared" />
 	
 </Project>
