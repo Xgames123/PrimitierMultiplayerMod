@@ -11,17 +11,17 @@ namespace PrimitierServer
 {
 	public class ConfigFile
 	{
-		public int MaxPlayers { get; set; } = 10;
-
-		public string WorldDirectory { get; set; } = "World";
-
 		public string ListenIp { get; set; } = "localhost";
 		public int ListenPort { get; set; } = 9543;
 
+		public int MaxPlayers { get; set; } = 10;
+		public string WorldDirectory { get; set; } = "World";
 		public int UpdateDelay { get; set; } = 10;
+		public string? IPCDirectory = null;
+
 		public ClientConfig Client { get; set; }
 
-		public string IPCDirectory = "/tmp";
+		
 	}
 
 	public class ClientConfig

@@ -6,6 +6,7 @@
 	"MaxPlayers": 10, //Maximum players that can be in the world
 	"WorldDirectory": "World", //The path to the directory to store world data into
 	"UpdateDelay": 100, //Amount of milliseconds between server updates (When the server sends a packet to all connected clients)
+	"IPCDirectory": null, //Directory to put the files to communicate with the running instance of the server (Best to put it in a virtual file system)
 
 	//Configurations for the clients that connect
 	"Client": {

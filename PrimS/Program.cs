@@ -1,4 +1,5 @@
 ﻿using PrimitierServer;
+using PrimitierServer.IPC;
 using PrimitierServer.WorldStorage;
 using System;
 using System.IO;
@@ -14,9 +15,20 @@ public static class Program
 
 		World.LoadFromDirectory(ConfigLoader.Config.WorldDirectory);
 
-		var ipcStringListener = new IPCStringListener(
-			Path.Combine(ConfigLoader.Config.IPCDirectory, "PRIMITIERSERVER.cmdin"),
-			Path.Combine(ConfigLoader.Config.IPCDirectory, "PRIMITIERSERVER.cmdout"));
+		var ipcDir = ConfigLoader.Config.IPCDirectory;
+		if(ipcDir == null)
+		{
+			if(Environment.OSVersion.Platform == PlatformID.Unix)
+			{
+				ipcDir = "/tmp";
+			}else if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+			{
+				ipcDir = Path.GetTempPath();
+			}
+
+		}
+		
+		var ipcStringListener = new IPCStringListener(ipcDir);
 		ipcStringListener.OnMessage += (string cmd) => 
 		{
 			return IPCCommandParser.ParseCommand(cmd);

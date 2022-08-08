@@ -7,7 +7,7 @@ using log4net;
 using PrimitierServer.Shared;
 using PrimitierServer.WorldStorage;
 
-namespace PrimitierServer
+namespace PrimitierServer.IPC
 {
 
 
@@ -33,7 +33,8 @@ namespace PrimitierServer
 				var responce = RunCmd(cmd);
 				return JsonSerializer.Serialize(responce, options);
 
-			}catch(JsonException)
+			}
+			catch (JsonException)
 			{
 				return JsonSerializer.Serialize(IPCResponce.InvalidCommand(), options);
 			}
