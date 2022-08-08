@@ -7,6 +7,12 @@
 3) Drag it into primitier mod manager and click the arrow to select it
 4) Launch Primitier
 
+## Server installation without docker
+1) Download PrimitierServer from the release you want to install
+2) install .Net 5 runtime (When you run the application it will give you a download link)
+3) unpack the zip file
+4) run the main executable (You probably need to chmod it first)
+
 ## Server installation with docker
 1) install git and docker
 2) git clone https://github.com/Xgames123/PrimitierMultiplayerMod.git
