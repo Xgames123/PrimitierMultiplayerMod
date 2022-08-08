@@ -9,7 +9,6 @@
     <Import_RootNamespace>PrimitierServer.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)IPCCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ErrorCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ErrorGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InitialPlayerData.cs" />

@@ -50,14 +50,17 @@ namespace PrimitierServer.IPC
 
 			switch (cmd.Type)
 			{
-				case IPCCommandType.RELOAD_CONF:
+				case IPCCommandType.Invalid:
+					return IPCResponce.InvalidCommand();
+
+				case IPCCommandType.ReloadConfig:
 					ConfigLoader.Load();
 					return IPCResponce.Ok();
 
-				case IPCCommandType.LS_PLAYERS:
+				case IPCCommandType.ListPlayers:
 					return IPCResponce.Ok(PlayerManager.GetAllPlayers());
 
-				case IPCCommandType.RELOAD_WORLD:
+				case IPCCommandType.ReloadWorld:
 					World.ReloadWorldSettings();
 					World.ClearChunkCash();
 					return IPCResponce.Ok();

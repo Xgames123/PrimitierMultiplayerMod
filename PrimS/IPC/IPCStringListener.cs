@@ -33,7 +33,7 @@ namespace PrimitierServer.IPC
 			_inFile = Path.Combine(path, InFileName);
 			_watcher = new FileSystemWatcher(path);
 			_watcher.NotifyFilter = NotifyFilters.LastWrite;
-			_watcher.Filter = "";
+			_watcher.Filter = InFileName;
 			_watcher.Changed += _watcher_Changed;
 			_watcher.EnableRaisingEvents = true;
 
@@ -53,8 +53,6 @@ namespace PrimitierServer.IPC
 
 		private void _watcher_Changed(object sender, FileSystemEventArgs e)
 		{
-			if (e.FullPath != _inFile)
-				return;
 
 			string command;
 			try

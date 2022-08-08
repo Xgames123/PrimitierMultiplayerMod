@@ -7,37 +7,37 @@ namespace PrimitierServer.IPC
 
 	public enum IPCCommandType
 	{
-
-		RELOAD_CONF,
-		LS_PLAYERS,
-		RELOAD_WORLD,
-		CLEAR_CHUNK_CACHE,
+		Invalid,
+		ReloadConfig,
+		ListPlayers,
+		ReloadWorld,
+		ClearChunkCache,
 	}
 
 	public enum IPCResponceType
 	{
-		INVALID_COMMAND,
-		ERROR,
-		OK,
+		InvalidCommand,
+		Error,
+		Ok,
 
 	}
 
 	public class IPCCommand
 	{
-		public IPCCommandType Type;
+		public IPCCommandType Type { get; set; }
 
 	}
 	public class IPCResponce
 	{
-		public IPCResponceType Type;
-		public object? Data;
+		public IPCResponceType Type { get; set; }
+		public object? Data { get; set; }
 
-		private static IPCResponce c_invalidCommand = new IPCResponce() { Type = IPCResponceType.INVALID_COMMAND, Data = null };
+		private static IPCResponce c_invalidCommand = new IPCResponce() { Type = IPCResponceType.InvalidCommand, Data = null };
 	
 
 		public static IPCResponce Ok(object? data)
 		{
-			return new IPCResponce() { Type = IPCResponceType.OK, Data = data };
+			return new IPCResponce() { Type = IPCResponceType.Ok, Data = data };
 		}
 		public static IPCResponce Ok()
 		{
@@ -49,7 +49,7 @@ namespace PrimitierServer.IPC
 		}
 		public static IPCResponce Error(string? message)
 		{
-			return new IPCResponce() { Type = IPCResponceType.ERROR, Data = message };
+			return new IPCResponce() { Type = IPCResponceType.Error, Data = message };
 		}
 		
 		public static IPCResponce InvalidCommand()
