@@ -44,7 +44,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PrimS.shared\PrimS.shared.projitems*{4d1fe002-bdf1-444b-80c8-f9a1063ac330}*SharedItemsImports = 13
-		PrimS.shared\PrimS.shared.projitems*{641884ac-5b59-43c3-a166-fde4bad6e574}*SharedItemsImports = 5
-		PrimS.shared\PrimS.shared.projitems*{cb87e300-d425-48f9-9553-a4d2e449f9a2}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

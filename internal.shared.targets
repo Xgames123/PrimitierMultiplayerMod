@@ -1,0 +1,20 @@
+<!-- This file is used for sharing property's between the different projects -->
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<Version>0.0.2</Version>
+		<Authors>XGames105</Authors>
+	</PropertyGroup>
+	
+
+	<PropertyGroup>
+		<AssemblyVersion>$(Version)</AssemblyVersion>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LiteNetLib\LiteNetLib\LiteNetLib.csproj" />
+	</ItemGroup>
+	<Import Project="..\PrimS.shared\PrimS.shared.projitems" Label="Shared" />
+	
+</Project>
