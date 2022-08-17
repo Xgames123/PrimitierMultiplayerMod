@@ -274,7 +274,7 @@ namespace PrimitierServer
 			SendPacket(peer, new JoinAcceptPacket() 
 			{ 
 				Id = peer.Id, 
-				Username = newRuntimePlayer.Username, 
+				Username = newRuntimePlayer.Username,
 				Position = newRuntimePlayer.Position, 
 				WorldSeed = World.Settings.Seed, 
 				PlayersAlreadyInGame = playersAlreadyInGame, 

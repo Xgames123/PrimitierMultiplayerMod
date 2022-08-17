@@ -1,24 +1,9 @@
 {
 
-	"ListenPort": 9543, //Port to listen on
-	"ListenIp": "0.0.0.0", //Ip address to use for the server
+  "ListenIp": "localhost",
 
-	"MaxPlayers": 10, //Maximum players that can be in the world
-	"WorldDirectory": "World", //The path to the directory to store world data into
-	"UpdateDelay": 100, //Amount of milliseconds between server updates (When the server sends a packet to all connected clients)
-	"IPCDirectory": null, //Directory to put the files to communicate with the running instance of the server (Best to put it in a virtual file system)
-
-	//Configurations for the clients that connect
-	"Client": {
-		"IdleUpdateDelay": 1000, //Amount of milliseconds between client updates when the client is idle (when the client is too far away from other players to be seen)
-		"ActiveUpdateDelay": 20 //Amount of milliseconds between client updates when the client can be seen by other players
-	},
-
-	//You should probably remove this section
-	//Configurations for debugging the mod and server
-	"Debug": {
-		"Debug": false, //If false disable all other settings in this section
-
-		"ShowLocalPlayer": false //If true makes the server send the local player back to itself
-	}
+  "Debug": {
+    "Debug": true,
+    "ShowLocalPlayer": true
+  }
 }
