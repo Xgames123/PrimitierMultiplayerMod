@@ -1,0 +1,30 @@
+﻿using PrimitierServer.Shared;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PrimitierServer.Mappers
+{
+	public static class ClientConfigMapperExtentions
+	{
+		public static NetworkClientConfig ToNetworkClientConfig(this ClientConfig clientConfig)
+		{
+			return new NetworkClientConfig() { ActiveUpdateDelay = clientConfig.ActiveUpdateDelay, IdleUpdateDelay = clientConfig.IdleUpdateDelay, Debug = false };
+
+		}
+
+		public static NetworkClientConfig ToNetworkClientConfig(this ClientConfig clientConfig, DebugConfig debugConfig)
+		{
+			if (debugConfig == null)
+				return clientConfig.ToNetworkClientConfig();
+
+			var netClientConf = clientConfig.ToNetworkClientConfig();
+			netClientConf.Debug = true;
+			netClientConf.ShowLocalPlayer = debugConfig.ShowLocalPlayer;
+
+			return netClientConf;
+		}
+	}
+}

@@ -54,9 +54,11 @@ namespace PrimitierServer.IPC
 					return IPCResponce.InvalidCommand();
 
 				case IPCCommandType.ReloadConfig:
-					ConfigLoader.Load();
-					return IPCResponce.Ok();
-
+					if (ConfigLoader.Load())
+						return IPCResponce.Ok();
+					else
+						return IPCResponce.Error("Could not load config file");
+					
 				case IPCCommandType.ListPlayers:
 					return IPCResponce.Ok(PlayerManager.GetAllPlayers());
 

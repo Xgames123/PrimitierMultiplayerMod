@@ -12,5 +12,12 @@
 	"Client": {
 		"IdleUpdateDelay": 1000, //Amount of milliseconds between client updates when the client is idle (when the client is too far away from other players to be seen)
 		"ActiveUpdateDelay": 20 //Amount of milliseconds between client updates when the client can be seen by other players
+	},
+
+	//You should probably remove this section
+	//Configurations for debugging the mod and server
+	"Debug": {
+		//If true makes the server send the local player back to itself
+		"ShowLocalPlayer": false
 	}
 }

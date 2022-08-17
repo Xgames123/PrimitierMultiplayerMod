@@ -1,4 +1,5 @@
-﻿using PrimitierServer;
+﻿using log4net;
+using PrimitierServer;
 using PrimitierServer.IPC;
 using PrimitierServer.WorldStorage;
 using System;
@@ -9,9 +10,16 @@ using System.Threading;
 
 public static class Program
 {
+	private static ILog c_log = LogManager.GetLogger(nameof(Program));
+
 	public static void Main()
 	{
-		ConfigLoader.Load();
+		if (ConfigLoader.Load())
+		{
+			c_log.Fatal("Can not load configuration file");
+			Environment.Exit(-1);
+		}
+
 
 		World.LoadFromDirectory(ConfigLoader.Config.WorldDirectory);
 

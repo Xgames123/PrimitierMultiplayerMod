@@ -16,5 +16,7 @@ namespace PrimitierServer.Shared.Packets.s2c
 		public int WorldSeed { get; set; }
 
 		public List<InitialPlayerData> PlayersAlreadyInGame { get; set; }
+
+		public NetworkClientConfig ClientConfig { get; set; }
 	}
 }

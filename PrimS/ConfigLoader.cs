@@ -21,8 +21,15 @@ namespace PrimitierServer
 
 		public ClientConfig Client { get; set; }
 
-		
+		public DebugConfig? Debugging { get; set; }
 	}
+
+	public class DebugConfig
+	{
+		public bool ShowLocalPlayer = false;
+
+	}
+
 
 	public class ClientConfig
 	{
@@ -34,15 +41,18 @@ namespace PrimitierServer
 
 	public static class ConfigLoader
 	{
-		public static ConfigFile? Config = null;
+		
 
 		private static ILog _log = LogManager.GetLogger(nameof(ConfigLoader));
-
-		public static event Action<ConfigFile?> OnConfigReload;
-
+		private const string c_ConfigFileName = "primsconfig.json";
 		private static JsonSerializerOptions? s_options = null;
 
-		public static void Load()
+		public static ConfigFile? Config = null;
+		public static event Action<ConfigFile?>? OnConfigReload;
+
+		
+
+		public static bool Load()
 		{
 			if (s_options == null)
 			{
@@ -54,23 +64,23 @@ namespace PrimitierServer
 			ConfigFile? newConfig;
 			try
 			{
-				newConfig = JsonSerializer.Deserialize<ConfigFile>(File.ReadAllText("primsconfig.json"), s_options);
+				newConfig = JsonSerializer.Deserialize<ConfigFile>(File.ReadAllText(c_ConfigFileName), s_options);
 
 			}
 			catch (Exception e)
 			{
 				_log.Error("Could not load config", e);
-				return;
+				return false;
 			}
 			if(newConfig == null)
 			{
 				_log.Error("loaded config was null");
-				return;
+				return false;
 			}
 
 			OnConfigReload?.Invoke(newConfig);
 			Config = newConfig;
-
+			return true;
 		}
 
 
