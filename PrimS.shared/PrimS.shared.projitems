@@ -13,7 +13,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)ErrorGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InitialPlayerData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkChunk.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NetworkClientConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Config\NetworkDebugConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Config\NetworkClientConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkCube.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkPlayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PacketProcessorTypeRegister.cs" />
@@ -25,5 +26,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Packets\c2s\JoinRequestPacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\ErrorPacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\JoinAcceptPacket.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Config\" />
   </ItemGroup>
 </Project>

@@ -11,20 +11,10 @@ namespace PrimitierServer.Mappers
 	{
 		public static NetworkClientConfig ToNetworkClientConfig(this ClientConfig clientConfig)
 		{
-			return new NetworkClientConfig() { ActiveUpdateDelay = clientConfig.ActiveUpdateDelay, IdleUpdateDelay = clientConfig.IdleUpdateDelay, Debug = false };
+			return new NetworkClientConfig() { ActiveUpdateDelay = clientConfig.ActiveUpdateDelay, IdleUpdateDelay = clientConfig.IdleUpdateDelay};
 
 		}
 
-		public static NetworkClientConfig ToNetworkClientConfig(this ClientConfig clientConfig, DebugConfig debugConfig)
-		{
-			if (debugConfig == null)
-				return clientConfig.ToNetworkClientConfig();
 
-			var netClientConf = clientConfig.ToNetworkClientConfig();
-			netClientConf.Debug = true;
-			netClientConf.ShowLocalPlayer = debugConfig.ShowLocalPlayer;
-
-			return netClientConf;
-		}
 	}
 }

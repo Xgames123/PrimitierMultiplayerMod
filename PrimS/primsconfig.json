@@ -17,7 +17,7 @@
 	//You should probably remove this section
 	//Configurations for debugging the mod and server
 	"Debug": {
-		//If true makes the server send the local player back to itself
-		"ShowLocalPlayer": false
+		"Debug": false, //If false disable all other settings in this section
+		"ShowLocalPlayer": false //If true makes the server send the local player back to itself
 	}
 }

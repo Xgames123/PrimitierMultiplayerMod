@@ -271,7 +271,20 @@ namespace PrimitierServer
 			}
 
 
-			SendPacket(peer, new JoinAcceptPacket() { Id = peer.Id, Username = newRuntimePlayer.Username, Position = newRuntimePlayer.Position, WorldSeed = World.Settings.Seed, PlayersAlreadyInGame = playersAlreadyInGame, ClientConfig = ConfigLoader.Config.Client.ToNetworkClientConfig(ConfigLoader.Config.Debugging) }, DeliveryMethod.ReliableOrdered);
+			SendPacket(peer, new JoinAcceptPacket() 
+			{ 
+				Id = peer.Id, 
+				Username = newRuntimePlayer.Username, 
+				Position = newRuntimePlayer.Position, 
+				WorldSeed = World.Settings.Seed, 
+				PlayersAlreadyInGame = playersAlreadyInGame, 
+				
+				ClientConfig = ConfigLoader.Config.Client.ToNetworkClientConfig(),
+
+				Debug = ConfigLoader.Config.Debugging != null,
+				DebugConfig = ConfigLoader.Config.Debugging, 
+				
+			}, DeliveryMethod.ReliableOrdered);
 
 			var initialPlayerData = newRuntimePlayer.ToInitialPlayerData();
 			SendPacketToAll(new PlayerJoinedPacket() { initialPlayerData = initialPlayerData }, DeliveryMethod.ReliableOrdered);

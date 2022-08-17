@@ -18,5 +18,11 @@ namespace PrimitierServer.Shared.Packets.s2c
 		public List<InitialPlayerData> PlayersAlreadyInGame { get; set; }
 
 		public NetworkClientConfig ClientConfig { get; set; }
+
+		//TODO: notify client when connecting to debug server
+		public bool Debug { get; set; }
+		public NetworkDebugConfig DebugConfig { get; set; }
+
+		
 	}
 }

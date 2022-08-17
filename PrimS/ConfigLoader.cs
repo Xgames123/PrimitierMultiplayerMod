@@ -26,8 +26,8 @@ namespace PrimitierServer
 
 	public class DebugConfig
 	{
-		public bool ShowLocalPlayer = false;
-
+		public bool ShowLocalPlayer { get; set; } = false;
+		public bool Debug { get; set; } = false;
 	}
 
 
@@ -77,6 +77,13 @@ namespace PrimitierServer
 				_log.Error("loaded config was null");
 				return false;
 			}
+
+			if(newConfig.Debugging != null && newConfig.Debugging.Debug == false)
+			{
+				newConfig.Debugging = null;
+			}
+			
+
 
 			OnConfigReload?.Invoke(newConfig);
 			Config = newConfig;
