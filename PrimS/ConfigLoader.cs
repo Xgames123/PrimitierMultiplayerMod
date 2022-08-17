@@ -21,7 +21,7 @@ namespace PrimitierServer
 
 		public ClientConfig Client { get; set; }
 
-		public DebugConfig? Debugging { get; set; }
+		public DebugConfig? Debug { get; set; }
 	}
 
 	public class DebugConfig
@@ -78,9 +78,9 @@ namespace PrimitierServer
 				return false;
 			}
 
-			if(newConfig.Debugging != null && newConfig.Debugging.Debug == false)
+			if(newConfig.Debug != null && newConfig.Debug.Debug == false)
 			{
-				newConfig.Debugging = null;
+				newConfig.Debug = null;
 			}
 			
 

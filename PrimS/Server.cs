@@ -281,8 +281,8 @@ namespace PrimitierServer
 				
 				ClientConfig = ConfigLoader.Config.Client.ToNetworkClientConfig(),
 
-				Debug = ConfigLoader.Config.Debugging != null,
-				DebugConfig = ConfigLoader.Config.Debugging, 
+				Debug = ConfigLoader.Config.Debug != null,
+				DebugConfig = ConfigLoader.Config.Debug, 
 				
 			}, DeliveryMethod.ReliableOrdered);
 
