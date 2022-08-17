@@ -19,7 +19,7 @@ namespace PrimitierServer
 		public int UpdateDelay { get; set; } = 10;
 		public string? IPCDirectory = null;
 
-		public ClientConfig Client { get; set; }
+		public ClientConfig Client { get; set; } = new ClientConfig();
 
 		public DebugConfig? Debug { get; set; }
 	}

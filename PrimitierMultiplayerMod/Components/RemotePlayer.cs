@@ -1,4 +1,5 @@
-﻿using PrimitierServer.Shared;
+﻿using PrimitierModdingFramework;
+using PrimitierServer.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace PrimitierMultiplayerMod.Components
 {
 	public class RemotePlayer : MonoBehaviour
 	{
-		private const float InterpolationSmoothing = 1f;
+		private const float InterpolationSmoothing = 5;
 
 		public RemotePlayer(IntPtr ptr) : base(ptr) { }
 
@@ -31,20 +32,21 @@ namespace PrimitierMultiplayerMod.Components
 
 		
 
-		public void Update(NetworkPlayer networkPlayer)
+		public void Sync(NetworkPlayer networkPlayer)
 		{
 			TargetPosition = networkPlayer.Position.ToUnity();
 			TargetHeadPosition = networkPlayer.HeadPosition.ToUnity();
 			TargetLHandPosition = networkPlayer.LHandPosition.ToUnity();
 			TargetRHandPosition = networkPlayer.RHandPosition.ToUnity();
+
 		}
 
 		private void Update()
 		{
-			transform.position = Vector3.Lerp(transform.position, TargetPosition, Time.deltaTime* InterpolationSmoothing);
-			Head.position = Vector3.Lerp(Head.position, TargetHeadPosition, Time.deltaTime* InterpolationSmoothing);
-			LHand.position = Vector3.Lerp(LHand.position, TargetLHandPosition, Time.deltaTime* InterpolationSmoothing);
-			RHand.position = Vector3.Lerp(RHand.position, TargetRHandPosition, Time.deltaTime* InterpolationSmoothing);
+			transform.position = Vector3.Lerp(transform.position, TargetPosition, Mathf.SmoothStep(0, 1, Time.deltaTime* InterpolationSmoothing));
+			Head.position = Vector3.Lerp(Head.position, TargetHeadPosition, Mathf.SmoothStep(0, 1, Time.deltaTime* InterpolationSmoothing));
+			LHand.position = Vector3.Lerp(LHand.position, TargetLHandPosition, Mathf.SmoothStep(0, 1, Time.deltaTime* InterpolationSmoothing));
+			RHand.position = Vector3.Lerp(RHand.position, TargetRHandPosition, Mathf.SmoothStep(0, 1, Time.deltaTime* InterpolationSmoothing));
 		}
 
 

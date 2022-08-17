@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PrimitierServer.Shared;
+using PrimitierServer.Shared.Config;
 
 namespace PrimitierServer.Mappers
 {

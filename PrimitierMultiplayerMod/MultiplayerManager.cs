@@ -71,6 +71,7 @@ namespace PrimitierMultiplayerMod
 
 		public static void Stop()
 		{
+			ExitGame();
 			if (Client == null)
 				return;
 

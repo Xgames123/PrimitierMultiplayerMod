@@ -196,7 +196,7 @@ namespace PrimitierMultiplayerMod
 			{
 				var remotePlayer = RemotePlayer.RemotePlayers[networkPlayer.Id];
 				//PMFLog.Message($"NET PLAYER Position={networkPlayer.Position}; Position={networkPlayer.HeadPosition};");
-				remotePlayer.Update(networkPlayer);
+				remotePlayer.Sync(networkPlayer);
 
 
 

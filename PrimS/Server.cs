@@ -228,8 +228,14 @@ namespace PrimitierServer
 			var players = PlayerManager.Players.Values;
 			foreach (var player in players)
 			{
-				if (player.RuntimeId == currentPlayer.RuntimeId)
-					continue;
+				if (ConfigLoader.Config.Debug == null || ConfigLoader.Config.Debug.ShowLocalPlayer == false)
+				{
+					if (player.RuntimeId == currentPlayer.RuntimeId)
+						continue;
+
+				}
+
+				
 
 				var dist = Vector3.Distance(player.Position, currentPlayer.Position);
 
@@ -282,7 +288,7 @@ namespace PrimitierServer
 				ClientConfig = ConfigLoader.Config.Client.ToNetworkClientConfig(),
 
 				Debug = ConfigLoader.Config.Debug != null,
-				DebugConfig = ConfigLoader.Config.Debug, 
+				DebugConfig = ConfigLoader.Config.Debug.ToNetworkDebugConfig(), 
 				
 			}, DeliveryMethod.ReliableOrdered);
 

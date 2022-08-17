@@ -14,10 +14,14 @@ public static class Program
 
 	public static void Main()
 	{
-		if (ConfigLoader.Load())
+		if (!ConfigLoader.Load())
 		{
 			c_log.Fatal("Can not load configuration file");
 			Environment.Exit(-1);
+		}
+		if (ConfigLoader.Config.Debug != null)
+		{
+			c_log.Info("Debug mode");
 		}
 
 
