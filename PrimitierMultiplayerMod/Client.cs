@@ -161,7 +161,11 @@ namespace PrimitierMultiplayerMod
 			foreach (var playerInGame in packet.PlayersAlreadyInGame)
 			{
 				CreateInitialPlayer(playerInGame);
-			} 
+			}
+
+			ConfigManager.ClientConfig = packet.ClientConfig;
+			ConfigManager.Debug = packet.Debug;
+			ConfigManager.DebugConfig = packet.DebugConfig;
 
 			MultiplayerManager.EnterGame(packet.WorldSeed);
 		}
@@ -192,11 +196,9 @@ namespace PrimitierMultiplayerMod
 			{
 				var remotePlayer = RemotePlayer.RemotePlayers[networkPlayer.Id];
 				//PMFLog.Message($"NET PLAYER Position={networkPlayer.Position}; Position={networkPlayer.HeadPosition};");
+				remotePlayer.Update(networkPlayer);
 
-				remotePlayer.transform.position = networkPlayer.Position.ToUnity();
-				remotePlayer.Head.transform.position = networkPlayer.HeadPosition.ToUnity();
-				remotePlayer.LHand.transform.position = networkPlayer.LHandPosition.ToUnity();
-				remotePlayer.RHand.transform.position = networkPlayer.RHandPosition.ToUnity();
+
 
 			}
 

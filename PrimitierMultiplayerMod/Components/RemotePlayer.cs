@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PrimitierServer.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,16 @@ namespace PrimitierMultiplayerMod.Components
 {
 	public class RemotePlayer : MonoBehaviour
 	{
+		private const float InterpolationSmoothing = 1f;
+
 		public RemotePlayer(IntPtr ptr) : base(ptr) { }
 
 		public static Dictionary<int, RemotePlayer> RemotePlayers = new Dictionary<int, RemotePlayer>();
+
+		public Vector3 TargetPosition;
+		public Vector3 TargetHeadPosition;
+		public Vector3 TargetLHandPosition;
+		public Vector3 TargetRHandPosition;
 
 		public Transform Head;
 		public Transform LHand;
@@ -20,6 +28,25 @@ namespace PrimitierMultiplayerMod.Components
 		public TextMeshPro NameTag;
 
 		public int Id;
+
+		
+
+		public void Update(NetworkPlayer networkPlayer)
+		{
+			TargetPosition = networkPlayer.Position.ToUnity();
+			TargetHeadPosition = networkPlayer.HeadPosition.ToUnity();
+			TargetLHandPosition = networkPlayer.LHandPosition.ToUnity();
+			TargetRHandPosition = networkPlayer.RHandPosition.ToUnity();
+		}
+
+		private void Update()
+		{
+			transform.position = Vector3.Lerp(transform.position, TargetPosition, Time.deltaTime* InterpolationSmoothing);
+			Head.position = Vector3.Lerp(Head.position, TargetHeadPosition, Time.deltaTime* InterpolationSmoothing);
+			LHand.position = Vector3.Lerp(LHand.position, TargetLHandPosition, Time.deltaTime* InterpolationSmoothing);
+			RHand.position = Vector3.Lerp(RHand.position, TargetRHandPosition, Time.deltaTime* InterpolationSmoothing);
+		}
+
 
 		public static void DeletePlayer(RemotePlayer player)
 		{

@@ -30,15 +30,19 @@ namespace PrimitierMultiplayerMod
 
 		private void FixedUpdate()
 		{
-			//TODO: Get from server primsconfig.json
-			if(stopwatch.ElapsedMilliseconds >= 10)
+			if (MultiplayerManager.Client == null || !MultiplayerManager.IsInMultiplayerMode)
+			{
+				return;
+			}
+
+			var updateDelay = ConfigManager.ClientConfig.ActiveUpdateDelay;
+			//TODO: use idel update delay when client is idel
+
+			if (stopwatch.ElapsedMilliseconds >= updateDelay)
 			{
 				stopwatch.Restart();
 				
-				if(MultiplayerManager.Client == null || !MultiplayerManager.IsInMultiplayerMode)
-				{
-					return;
-				}
+			
 
 				var packet = new PlayerUpdatePacket()
 				{
