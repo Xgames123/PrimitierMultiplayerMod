@@ -1,4 +1,5 @@
 ﻿using PrimitierModdingFramework;
+using PrimitierMultiplayerMod.Interpolation;
 using PrimitierServer.Shared;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,10 @@ namespace PrimitierMultiplayerMod.Components
 
 		public static Dictionary<int, RemotePlayer> RemotePlayers = new Dictionary<int, RemotePlayer>();
 
-		public Vector3 TargetPosition;
-		public Vector3 TargetHeadPosition;
-		public Vector3 TargetLHandPosition;
-		public Vector3 TargetRHandPosition;
+		public Vector3Interpolator<SmoothInterpolator> PositionInterpolator = new Vector3Interpolator<SmoothInterpolator>();
+		public Vector3Interpolator<SmoothInterpolator> HeadInterpolator = new Vector3Interpolator<SmoothInterpolator>();
+		public Vector3Interpolator<SmoothInterpolator> LHandInterpolator = new Vector3Interpolator<SmoothInterpolator>();
+		public Vector3Interpolator<SmoothInterpolator> RHandInterpolator = new Vector3Interpolator<SmoothInterpolator>();
 
 		public Transform Head;
 		public Transform LHand;
@@ -34,19 +35,19 @@ namespace PrimitierMultiplayerMod.Components
 
 		public void Sync(NetworkPlayer networkPlayer)
 		{
-			TargetPosition = networkPlayer.Position.ToUnity();
-			TargetHeadPosition = networkPlayer.HeadPosition.ToUnity();
-			TargetLHandPosition = networkPlayer.LHandPosition.ToUnity();
-			TargetRHandPosition = networkPlayer.RHandPosition.ToUnity();
+			PositionInterpolator.SetTarget(networkPlayer.Position.ToUnity());
+			HeadInterpolator.SetTarget(networkPlayer.HeadPosition.ToUnity());
+			LHandInterpolator.SetTarget(networkPlayer.LHandPosition.ToUnity());
+			RHandInterpolator.SetTarget(networkPlayer.RHandPosition.ToUnity());
 
 		}
 
 		private void Update()
 		{
-			transform.position = Vector3.Lerp(transform.position, TargetPosition, Mathf.SmoothStep(0, 1, Time.deltaTime* InterpolationSmoothing));
-			Head.position = Vector3.Lerp(Head.position, TargetHeadPosition, Mathf.SmoothStep(0, 1, Time.deltaTime* InterpolationSmoothing));
-			LHand.position = Vector3.Lerp(LHand.position, TargetLHandPosition, Mathf.SmoothStep(0, 1, Time.deltaTime* InterpolationSmoothing));
-			RHand.position = Vector3.Lerp(RHand.position, TargetRHandPosition, Mathf.SmoothStep(0, 1, Time.deltaTime* InterpolationSmoothing));
+			transform.position = PositionInterpolator.GetCurrentValue(Time.deltaTime);
+			Head.position = HeadInterpolator.GetCurrentValue(Time.deltaTime);
+			LHand.position = LHandInterpolator.GetCurrentValue(Time.deltaTime);
+			RHand.position = RHandInterpolator.GetCurrentValue(Time.deltaTime);
 		}
 
 
