@@ -106,8 +106,6 @@ namespace PrimitierMultiplayerMod.Components
 			var firstPersonNameTag = CreateNameTag(username, headGo.transform, 9, Camera.main, "FirstPerson_NameTag");
 
 
-			
-
 			var remotePlayer = remotePlayerGo.AddComponent<RemotePlayer>();
 			remotePlayer.Head = headGo.transform;
 			remotePlayer.LHand = LHandGo.transform;

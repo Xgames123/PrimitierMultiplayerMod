@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PrimitierMultiplayerMod
 {
-	public static class ConvertExtentions
+	public static class MathConvertExtentions
 	{
 		public static System.Numerics.Vector2 ToNumerics(this UnityEngine.Vector2 vector2)
 		{

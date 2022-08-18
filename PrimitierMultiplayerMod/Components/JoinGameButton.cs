@@ -9,11 +9,11 @@ using TMPro;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 
-namespace PrimitierMultiplayerMod
+namespace PrimitierMultiplayerMod.Components
 {
 	public class JoinGameButton : MonoBehaviour
 	{
-		public JoinGameButton(System.IntPtr ptr) : base(ptr) { }
+		public JoinGameButton(IntPtr ptr) : base(ptr) { }
 
 		public static void Destroy()
 		{
@@ -46,35 +46,13 @@ namespace PrimitierMultiplayerMod
 			textGo.transform.localScale = new Vector3(1f, 1f, 1f);
 			var tmp = textGo.AddComponent<TextMeshPro>();
 			tmp.autoSizeTextContainer = true;
-			tmp.font = FindPrimitierDefaultFont();
+			tmp.font = PMFHelper.PrimitierDefaultFont;
 			tmp.text = "CONNECT TO SERVER";
 			tmp.color = Color.black;
 			tmp.fontSize = 0.8f;
 
 			return joinGameButton;
 		}
-
-		//TODO replace with pmf one
-		private static TMP_FontAsset FindPrimitierDefaultFont()
-		{
-
-			var fonts = GameObject.FindObjectsOfTypeIncludingAssets(UnhollowerRuntimeLib.Il2CppType.Of<TMP_FontAsset>());
-			foreach (var font in fonts)
-			{
-				if(font.name == "mplus-1p-black SDF")
-				{
-					var castedFont = font.TryCast<TMP_FontAsset>();
-					if (castedFont == null)
-						continue;
-
-					return castedFont;
-				}
-
-			}
-
-			return null;
-		}
-
 
 		private static Transform SafeTransformFind(string name)
 		{
@@ -83,8 +61,6 @@ namespace PrimitierMultiplayerMod
 				return null;
 			return go.transform;
 
-			
-			
 		}
 
 

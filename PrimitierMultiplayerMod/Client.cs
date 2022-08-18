@@ -158,11 +158,14 @@ namespace PrimitierMultiplayerMod
 		{
 			LocalId = packet.Id;
 
+
 			foreach (var playerInGame in packet.PlayersAlreadyInGame)
 			{
 				CreateInitialPlayer(playerInGame);
 			}
 
+			PMFHelper.CameraRig.position = packet.Position.ToUnity();
+			
 			ConfigManager.ClientConfig = packet.ClientConfig;
 			ConfigManager.Debug = packet.Debug;
 			ConfigManager.DebugConfig = packet.DebugConfig;

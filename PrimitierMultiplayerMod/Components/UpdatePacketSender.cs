@@ -8,13 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace PrimitierMultiplayerMod
+namespace PrimitierMultiplayerMod.Components
 {
 	public class UpdatePacketSender : MonoBehaviour
 	{
 		private Stopwatch stopwatch = Stopwatch.StartNew();
 
-		public UpdatePacketSender(IntPtr ptr) : base(ptr) {}
+		public UpdatePacketSender(IntPtr ptr) : base(ptr) { }
 
 
 		public static void Setup()
@@ -24,16 +24,14 @@ namespace PrimitierMultiplayerMod
 
 			updatePacketSenderGameObject.transform.parent = PMFHelper.SystemTransform;
 
-			
+
 		}
 
 
 		private void FixedUpdate()
 		{
 			if (MultiplayerManager.Client == null || !MultiplayerManager.IsInMultiplayerMode)
-			{
 				return;
-			}
 
 			var updateDelay = ConfigManager.ClientConfig.ActiveUpdateDelay;
 			//TODO: use idel update delay when client is idel
@@ -41,8 +39,8 @@ namespace PrimitierMultiplayerMod
 			if (stopwatch.ElapsedMilliseconds >= updateDelay)
 			{
 				stopwatch.Restart();
-				
-			
+
+
 
 				var packet = new PlayerUpdatePacket()
 				{
