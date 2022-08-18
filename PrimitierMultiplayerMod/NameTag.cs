@@ -19,10 +19,6 @@ namespace PrimitierMultiplayerMod
 		private void Start()
 		{
 			_text = GetComponent<TextMeshPro>();
-			if(TargetCamera == null)
-			{
-				TargetCamera = Camera.main;
-			}
 		}
 
 

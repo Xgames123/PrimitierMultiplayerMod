@@ -105,17 +105,6 @@ namespace PrimitierMultiplayerMod.Components
 
 			var firstPersonNameTag = CreateNameTag(username, headGo.transform, 9, Camera.main, "FirstPerson_NameTag");
 
-			var thirdPersonCamera = FindThirdPersonCamera();
-			TextMeshPro thirdPersonNameTag = null;
-			if (thirdPersonCamera != null)
-			{
-				thirdPersonNameTag = CreateNameTag(username, headGo.transform, 10, thirdPersonCamera, "ThirdPerson_NameTag");
-			}
-			else
-			{
-				PMFLog.Warning("Could not find third person camera. name tags might look messed up");
-			}
-				
 
 			
 
@@ -124,7 +113,6 @@ namespace PrimitierMultiplayerMod.Components
 			remotePlayer.LHand = LHandGo.transform;
 			remotePlayer.RHand = RHandGo.transform;
 			remotePlayer.FirstPersonNameTag = firstPersonNameTag;
-			remotePlayer.ThirdPersonNameTag = thirdPersonNameTag;
 			remotePlayer.Id = id;
 
 			remotePlayerGo.transform.position = position;
