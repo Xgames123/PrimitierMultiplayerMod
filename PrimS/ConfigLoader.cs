@@ -43,7 +43,7 @@ namespace PrimitierServer
 	{
 		
 
-		private static ILog _log = LogManager.GetLogger(nameof(ConfigLoader));
+		private static ILog c_log = LogManager.GetLogger(nameof(ConfigLoader));
 		private const string c_ConfigFileName = "primsconfig.json";
 		private static JsonSerializerOptions? s_options = null;
 
@@ -69,27 +69,36 @@ namespace PrimitierServer
 			}
 			catch (Exception e)
 			{
-				_log.Error("Could not load config", e);
+				c_log.Error("Could not load config", e);
 				return false;
 			}
 			if(newConfig == null)
 			{
-				_log.Error("loaded config was null");
+				c_log.Error("loaded config was null");
 				return false;
 			}
 
-			if(newConfig.Debug != null && newConfig.Debug.Debug == false)
-			{
-				newConfig.Debug = null;
-			}
+			newConfig = ValidateConfig(newConfig);
 			
-
 
 			OnConfigReload?.Invoke(newConfig);
 			Config = newConfig;
 			return true;
 		}
 
+		private static ConfigFile ValidateConfig(ConfigFile config)
+		{
+			if (config.Debug != null && config.Debug.Debug == false)
+			{
+				config.Debug = null;
+			}
+			if(config.UpdateDelay < 50)
+			{
+				c_log.Warn("UpdateDelay was smaller than 50 ms. The client can not handle so many packets");
+				config.UpdateDelay = 50;
+			}
+			return config;
+		}
 
 	}
 

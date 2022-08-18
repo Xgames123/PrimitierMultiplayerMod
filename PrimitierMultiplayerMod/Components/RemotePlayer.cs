@@ -27,7 +27,8 @@ namespace PrimitierMultiplayerMod.Components
 		public Transform Head;
 		public Transform LHand;
 		public Transform RHand;
-		public TextMeshPro NameTag;
+		public TextMeshPro FirstPersonNameTag;
+		public TextMeshPro ThirdPersonNameTag;
 
 		public int Id;
 
@@ -85,18 +86,7 @@ namespace PrimitierMultiplayerMod.Components
 			headGo.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
 			Destroy(headGo.GetComponent<SphereCollider>());
 
-			var nameTagGo = new GameObject("NameTag");
-			nameTagGo.transform.parent = headGo.transform;
-			nameTagGo.transform.localPosition = new Vector3(0, 0.6f, 0);
-			nameTagGo.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-			nameTagGo.AddComponent<NameTag>();
-			var nameTag = nameTagGo.AddComponent<TextMeshPro>();
-			nameTag.alignment = TextAlignmentOptions.Center;
-			nameTag.color = Color.white;
-			nameTagGo.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 10);
-			nameTag.text = username;
-			nameTag.outlineColor = Color.black;
-			nameTag.outlineWidth = 1f;
+			
 
 
 			var LHandGo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -113,11 +103,28 @@ namespace PrimitierMultiplayerMod.Components
 			RHandGo.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 			Destroy(RHandGo.GetComponent<SphereCollider>());
 
+			var firstPersonNameTag = CreateNameTag(username, headGo.transform, 9, Camera.main, "FirstPerson_NameTag");
+
+			var thirdPersonCamera = FindThirdPersonCamera();
+			TextMeshPro thirdPersonNameTag = null;
+			if (thirdPersonCamera != null)
+			{
+				thirdPersonNameTag = CreateNameTag(username, headGo.transform, 10, thirdPersonCamera, "ThirdPerson_NameTag");
+			}
+			else
+			{
+				PMFLog.Warning("Could not find third person camera. name tags might look messed up");
+			}
+				
+
+			
+
 			var remotePlayer = remotePlayerGo.AddComponent<RemotePlayer>();
 			remotePlayer.Head = headGo.transform;
 			remotePlayer.LHand = LHandGo.transform;
 			remotePlayer.RHand = RHandGo.transform;
-			remotePlayer.NameTag = nameTag;
+			remotePlayer.FirstPersonNameTag = firstPersonNameTag;
+			remotePlayer.ThirdPersonNameTag = thirdPersonNameTag;
 			remotePlayer.Id = id;
 
 			remotePlayerGo.transform.position = position;
@@ -126,5 +133,36 @@ namespace PrimitierMultiplayerMod.Components
 			return remotePlayer;
 		}
 
+
+		private static TextMeshPro CreateNameTag(string username, Transform parent, int layer, Camera camera, string goName)
+		{
+			var nameTagGo = new GameObject(goName);
+			nameTagGo.layer = layer;
+			nameTagGo.transform.parent = parent;
+			nameTagGo.transform.localPosition = new Vector3(0, 0.6f, 0);
+			nameTagGo.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+			var nametagComp = nameTagGo.AddComponent<NameTag>();
+			nametagComp.TargetCamera = camera;
+			var nameTag = nameTagGo.AddComponent<TextMeshPro>();
+			nameTag.alignment = TextAlignmentOptions.Center;
+			nameTag.color = Color.white;
+			nameTagGo.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 10);
+			nameTag.text = username;
+			nameTag.outlineColor = Color.black;
+			nameTag.outlineWidth = 1f;
+
+			return nameTag;
+		}
+
+		private static Camera FindThirdPersonCamera()
+		{
+			var camera = GameObject.Find("ThirdPersonUICamera");
+			if (camera == null)
+				return null;
+
+			return camera.GetComponent<Camera>();
+
+
+		}
 	}
 }

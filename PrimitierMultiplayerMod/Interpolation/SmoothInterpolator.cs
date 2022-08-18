@@ -3,34 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace PrimitierMultiplayerMod.Interpolation
 {
 	public class SmoothInterpolator : Interpolator
 	{
-		public float Velosity;
-		public List<float> Targets = new List<float>(5);
-		public float LastTarget = 0;
-		public float Value;
+		public Queue<float> Targets = new Queue<float>(5);
+		public float Value = 0;
+
+		private float _velosity = 0;
+		private float _currentTarget = 0;
 
 		public override float GetCurrentValue(float deltaTime)
 		{
-			Value += Velosity;
 
-			var error = Targets[0] - Value;
+			var smoothTime = 0.5f - (0.2f * Targets.Count);
+			if(smoothTime <= 0)
+			{
+				smoothTime = 0.05f;
+			}
+			Value = Mathf.SmoothDamp(Value, _currentTarget, ref _velosity, smoothTime, 100f, deltaTime);
 
-			var length = (Targets[0] - LastTarget);
 
-			Value += error / 2;
+			if(Value > _currentTarget-0.2f)
+			{
+				if (Targets.Count == 0)
+					return Value;
 
-			var progress = (length - error)/length;
+				_currentTarget = Targets.Dequeue();
+			}
+
+
 
 			return Value;
 		}
 
 		public override void SetTarget(float value)
 		{
-			Targets.Add(value);
+			Targets.Enqueue(value);
 		}
 	}
 }

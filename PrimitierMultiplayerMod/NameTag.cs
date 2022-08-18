@@ -14,15 +14,21 @@ namespace PrimitierMultiplayerMod
 
 		private TextMeshPro _text;
 
+		public Camera TargetCamera;
+
 		private void Start()
 		{
 			_text = GetComponent<TextMeshPro>();
+			if(TargetCamera == null)
+			{
+				TargetCamera = Camera.main;
+			}
 		}
 
 
 		private void FixedUpdate()
 		{
-			_text.transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
+			_text.transform.rotation = Quaternion.LookRotation(transform.position - TargetCamera.transform.position);
 
 		}
 

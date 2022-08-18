@@ -8,8 +8,8 @@ using MelonLoader;
 using System.Net;
 using LiteNetLib;
 using PrimitierModdingFramework.SubstanceModding;
-using PrimitierMultiplayerMod.ComponentDumpers;
 using PrimitierMultiplayerMod.Components;
+using System.Linq;
 
 namespace PrimitierMultiplayerMod
 {
@@ -30,6 +30,7 @@ namespace PrimitierMultiplayerMod
 			Chat = Chat.Setup();
 
 			JoinGameButton.Create();
+
 			
 		}
 
@@ -47,6 +48,7 @@ namespace PrimitierMultiplayerMod
 			PMFLog.Message("You can press F2 to destroy the generated chunks from pressing F2");
 			PMFLog.Message("You can press F3 to reconnect to the server");
 			PMFLog.Message("You can press F5 for general info");
+			PMFLog.Message("You can press F6 to dump scene");
 		}
 
 		public override void OnApplicationStart()
@@ -61,8 +63,6 @@ namespace PrimitierMultiplayerMod
 			ClassInjector.RegisterTypeInIl2Cpp<RemotePlayer>();
 			ClassInjector.RegisterTypeInIl2Cpp<NetworkSync>();
 			ClassInjector.RegisterTypeInIl2CppWithInterfaces<JoinGameButton>(typeof(IButton));
-			HierarchyXmlDumper.DefaultDumperList.Add(new TextMeshProComponentDumper());
-			HierarchyXmlDumper.DefaultDumperList.Add(new StartButtonComponentDumper());
 
 			ModVersion = new System.Version(Info.Version);
 		}
@@ -139,6 +139,22 @@ namespace PrimitierMultiplayerMod
 				PMFLog.Message($"player pos X: {playerPos.x}, Y: {playerPos.y}, Z: {playerPos.z}");
 				PMFLog.Message($"player chunk pos X: {playerChunkPos.x}, Y: {playerChunkPos.y}");
 				
+			}
+			if (Input.GetKeyUp(KeyCode.F6))
+			{
+				HierarchyXmlDumper.DumpSceneToFile();
+
+				PMFLog.Message("Layer mask dump");
+
+				for (int i = 0; i < 31; i++)
+				{
+					var layer = LayerMask.LayerToName(i);
+					if (!string.IsNullOrWhiteSpace(layer))
+					{
+						PMFLog.Message($"{i} : {layer}");
+					}
+				}
+
 			}
 
 		}

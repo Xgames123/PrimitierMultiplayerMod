@@ -175,7 +175,7 @@ namespace PrimitierMultiplayerMod
 			var player = RemotePlayer.RemotePlayers[packet.Id];
 			if (player != null)
 			{
-				Mod.Chat.AddServerMessage($"{player.NameTag.text} has left the game");
+				Mod.Chat.AddServerMessage($"{player.FirstPersonNameTag.text} has left the game");
 				RemotePlayer.DeletePlayer(player);
 			}
 

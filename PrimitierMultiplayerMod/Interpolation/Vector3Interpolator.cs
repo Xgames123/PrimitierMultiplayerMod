@@ -31,9 +31,9 @@ namespace PrimitierMultiplayerMod.Interpolation
 
 		public void SetTarget(Vector3 value)
 		{
-			XInterpolator.SetTarget(value.X);
-			YInterpolator.SetTarget(value.Y);
-			ZInterpolator.SetTarget(value.Z);
+			XInterpolator.SetTarget(value.x);
+			YInterpolator.SetTarget(value.y);
+			ZInterpolator.SetTarget(value.z);
 		}
 	}
 }

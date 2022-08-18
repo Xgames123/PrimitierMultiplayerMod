@@ -2,7 +2,7 @@
 
   "ListenIp": "localhost",
 
-  "UpdateDelay":300,
+  "UpdateDelay":50,
 
   "Debug": {
     "Debug": true,
