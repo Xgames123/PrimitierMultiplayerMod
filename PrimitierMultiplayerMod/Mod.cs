@@ -138,7 +138,7 @@ namespace PrimitierMultiplayerMod
 				PMFLog.Message($"world seed: {TerrainGenerator.worldSeed}");
 				PMFLog.Message($"player pos X: {playerPos.x}, Y: {playerPos.y}, Z: {playerPos.z}");
 				PMFLog.Message($"player chunk pos X: {playerChunkPos.x}, Y: {playerChunkPos.y}");
-				
+				PMFLog.Message($"Remote player count: {RemotePlayer.RemotePlayers.Count}");
 			}
 			if (Input.GetKeyUp(KeyCode.F6))
 			{

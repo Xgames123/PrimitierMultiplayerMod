@@ -52,10 +52,21 @@ namespace PrimitierMultiplayerMod
 
 			var enableObjects = new UnhollowerBaseLib.Il2CppReferenceArray<GameObject>(0);
 
+
 			PMFHelper.CameraRig.position = Vector3.zero;
+			
+			
 			WorldManager.WorldSeed = seed;
 			WorldManager.PlayerStartPosition = playerPosition;
-			loadingSequence.StartLoading(-1, GameObject.Find("InfoText").GetComponent<TextMeshPro>(), destroyObject, enableObjects);
+
+			var infoTextGo = GameObject.Find("InfoText");
+			TextMeshPro infoText = null;
+			if (infoTextGo != null)
+			{
+				infoText = infoTextGo.GetComponent<TextMeshPro>();
+			}
+
+			loadingSequence.StartLoading(-1, infoText, destroyObject, enableObjects);
 
 			JoinGameButton.Destroy();
 		}

@@ -31,7 +31,15 @@ namespace PrimitierMultiplayerMod.Components
 		public TextMeshPro ThirdPersonNameTag;
 
 		public int Id;
+		
 
+		public void TeleportInterpolators()
+		{
+			PositionInterpolator.Teleport(transform.position);
+			HeadInterpolator.Teleport(Head.position);
+			LHandInterpolator.Teleport(LHand.position);
+			RHandInterpolator.Teleport(RHand.position);
+		}
 		
 
 		public void Sync(NetworkPlayer networkPlayer)
@@ -50,6 +58,8 @@ namespace PrimitierMultiplayerMod.Components
 			LHand.position = LHandInterpolator.GetCurrentValue(Time.deltaTime);
 			RHand.position = RHandInterpolator.GetCurrentValue(Time.deltaTime);
 		}
+
+		
 
 
 		public static void DeletePlayer(RemotePlayer player)
@@ -112,6 +122,7 @@ namespace PrimitierMultiplayerMod.Components
 			remotePlayer.RHand = RHandGo.transform;
 			remotePlayer.FirstPersonNameTag = firstPersonNameTag;
 			remotePlayer.Id = id;
+			
 
 			remotePlayerGo.transform.position = position;
 

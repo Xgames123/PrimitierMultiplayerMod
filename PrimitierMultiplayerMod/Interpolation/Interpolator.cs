@@ -9,6 +9,8 @@ namespace PrimitierMultiplayerMod.Interpolation
 	public abstract class Interpolator
 	{
 
+		public abstract void Teleport(float value);
+
 		public abstract void SetTarget(float value);
 
 

@@ -21,6 +21,13 @@ namespace PrimitierMultiplayerMod.Interpolation
 			ZInterpolator = new T();
 		}
 
+		public void Teleport(Vector3 value)
+		{
+			XInterpolator.Teleport(value.x);
+			YInterpolator.Teleport(value.y);
+			ZInterpolator.Teleport(value.z);
+		}
+
 		public Vector3 GetCurrentValue(float deltaTime)
 		{
 			return new Vector3(
