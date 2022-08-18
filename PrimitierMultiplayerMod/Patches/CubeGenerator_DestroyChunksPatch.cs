@@ -14,7 +14,7 @@ namespace PrimitierMultiplayerMod.Patches
 		{
 			if (MultiplayerManager.IsInMultiplayerMode)
 			{
-				if (ChunkManager.AllowDestroyNextChunk)
+				if (WorldManager.AllowDestroyNextChunk)
 					return true;
 
 				return false;

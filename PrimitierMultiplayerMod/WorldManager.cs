@@ -11,11 +11,13 @@ using UnityEngine;
 
 namespace PrimitierMultiplayerMod
 {
-	public static class ChunkManager
+	public static class WorldManager
 	{
 		public static bool AllowGenerateNextChunk = false;
 		public static bool AllowDestroyNextChunk = false;
 		public static int WorldSeed = -1;
+
+		public static UnityEngine.Vector3 PlayerStartPosition;
 
 		public static void UpdateModChunks(IEnumerable<NetworkChunk> chunks)
 		{

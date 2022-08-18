@@ -9,14 +9,14 @@ namespace PrimitierMultiplayerMod
 {
 	public static class MainThreadRunner
 	{
-		private static ConcurrentQueue<Action> Todo = new ConcurrentQueue<Action>();
+		private static ConcurrentQueue<Action> Tasks = new ConcurrentQueue<Action>();
 
 		public static void RunQueuedTasks()
 		{
-			while (Todo.Count > 0)
+			while (Tasks.Count > 0)
 			{
 				
-				if(Todo.TryDequeue(out var task))
+				if(Tasks.TryDequeue(out var task))
 				{
 					task.Invoke();
 				}
@@ -32,7 +32,7 @@ namespace PrimitierMultiplayerMod
 			if (action == null)
 				return;
 
-			Todo.Enqueue(action);
+			Tasks.Enqueue(action);
 		}
 
 	}

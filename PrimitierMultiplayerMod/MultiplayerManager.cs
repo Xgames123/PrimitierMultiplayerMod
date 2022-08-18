@@ -4,7 +4,9 @@ using PrimitierMultiplayerMod.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -34,7 +36,7 @@ namespace PrimitierMultiplayerMod
 			Client.Connect(ServerAddress.Value, ServerPort.Value);
 		}
 
-		public static void EnterGame(int seed)
+		public static void EnterGame(int seed, Vector3 playerPosition)
 		{
 			IsInMultiplayerMode = true;
 
@@ -50,12 +52,14 @@ namespace PrimitierMultiplayerMod
 
 			var enableObjects = new UnhollowerBaseLib.Il2CppReferenceArray<GameObject>(0);
 
-			ChunkManager.WorldSeed = seed;
+			PMFHelper.CameraRig.position = Vector3.zero;
+			WorldManager.WorldSeed = seed;
+			WorldManager.PlayerStartPosition = playerPosition;
 			loadingSequence.StartLoading(-1, GameObject.Find("InfoText").GetComponent<TextMeshPro>(), destroyObject, enableObjects);
 
 			JoinGameButton.Destroy();
-
 		}
+
 		public static void ExitGame()
 		{
 			IsInMultiplayerMode = false;
@@ -77,7 +81,7 @@ namespace PrimitierMultiplayerMod
 
 			Client.Stop();
 			RemotePlayer.DeleteAllPlayers();
-			ChunkManager.DestroyAllModChunks();
+			WorldManager.DestroyAllModChunks();
 		}
 	}
 }

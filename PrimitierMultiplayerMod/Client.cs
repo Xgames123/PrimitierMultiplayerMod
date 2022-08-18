@@ -163,14 +163,14 @@ namespace PrimitierMultiplayerMod
 			{
 				CreateInitialPlayer(playerInGame);
 			}
-
-			PMFHelper.CameraRig.position = packet.Position.ToUnity();
+			
+			
 			
 			ConfigManager.ClientConfig = packet.ClientConfig;
 			ConfigManager.Debug = packet.Debug;
 			ConfigManager.DebugConfig = packet.DebugConfig;
 
-			MultiplayerManager.EnterGame(packet.WorldSeed);
+			MultiplayerManager.EnterGame(packet.WorldSeed, packet.Position.ToUnity());
 		}
 
 		private void OnPlayerLeavePacket(PlayerLeavePacket packet)
@@ -212,7 +212,7 @@ namespace PrimitierMultiplayerMod
 			//PMFLog.Message(JSON.Dump(packet.Chunks[0]));
 
 			
-			ChunkManager.UpdateModChunks(packet.Chunks);
+			WorldManager.UpdateModChunks(packet.Chunks);
 			
 
 		}

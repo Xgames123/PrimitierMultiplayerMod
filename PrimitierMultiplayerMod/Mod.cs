@@ -90,17 +90,17 @@ namespace PrimitierMultiplayerMod
 			if (Input.GetKeyUp(KeyCode.F1))
 			{
 				PMFLog.Message("Generating chunks");
-				ChunkManager.GenerateNewPrimitierChunk(new Vector2Int(-1, -1));
-				ChunkManager.GenerateNewPrimitierChunk(new Vector2Int(0, -1));
-				ChunkManager.GenerateNewPrimitierChunk(new Vector2Int(1, -1));
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(-1, -1));
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(0, -1));
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(1, -1));
 
-				ChunkManager.GenerateNewPrimitierChunk(new Vector2Int(-1, 0));
-				ChunkManager.GenerateNewPrimitierChunk(new Vector2Int(0, 0));
-				ChunkManager.GenerateNewPrimitierChunk(new Vector2Int(1, 0));
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(-1, 0));
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(0, 0));
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(1, 0));
 
-				ChunkManager.GenerateNewPrimitierChunk(new Vector2Int(-1, 1));
-				ChunkManager.GenerateNewPrimitierChunk(new Vector2Int(0, 1));
-				ChunkManager.GenerateNewPrimitierChunk(new Vector2Int(1, 1));
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(-1, 1));
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(0, 1));
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(1, 1));
 			}
 			if (Input.GetKeyUp(KeyCode.F2))
 			{
@@ -117,7 +117,7 @@ namespace PrimitierMultiplayerMod
 				chunks.Add(new Vector2Int(-1, 1));
 				chunks.Add(new Vector2Int(0, 1));
 				chunks.Add(new Vector2Int(1, 1));
-				ChunkManager.DestroyPrimitierChunks(chunks);
+				WorldManager.DestroyPrimitierChunks(chunks);
 			}
 			if (Input.GetKeyUp(KeyCode.F3))
 			{
@@ -126,7 +126,7 @@ namespace PrimitierMultiplayerMod
 			}
 			if (Input.GetKeyUp(KeyCode.F4))
 			{
-				ChunkManager.UpdateCube(new PrimitierServer.Shared.NetworkCube() { Id = 2, Position = new System.Numerics.Vector3(0, 0, 0), Size = new System.Numerics.Vector3(5, 5, 5), Substance = 0, Rotation = new System.Numerics.Quaternion(0, 0, 0, 0) });
+				WorldManager.UpdateCube(new PrimitierServer.Shared.NetworkCube() { Id = 2, Position = new System.Numerics.Vector3(0, 0, 0), Size = new System.Numerics.Vector3(5, 5, 5), Substance = 0, Rotation = new System.Numerics.Quaternion(0, 0, 0, 0) });
 			}
 			//ChunkManager.UpdateModChunk(new PrimitierServer.Shared.NetworkChunk() { Cubes = new System.Collections.Generic.List<PrimitierServer.Shared.NetworkCube>() { new PrimitierServer.Shared.NetworkCube() { Id = 1, Position = new System.Numerics.Vector3(0, 0, 0), Size = new System.Numerics.Vector3(5, 5, 5), Substance = 0, Rotation = new System.Numerics.Quaternion(0, 0, 0, 0) } } });
 

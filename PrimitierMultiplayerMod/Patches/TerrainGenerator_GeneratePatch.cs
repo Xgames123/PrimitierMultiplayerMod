@@ -12,7 +12,7 @@ namespace PrimitierMultiplayerMod.Patches
 	{
 		private static void Prefix(UnityEngine.Vector2Int areaPos)
 		{
-			TerrainGenerator.worldSeed = ChunkManager.WorldSeed;
+			TerrainGenerator.worldSeed = WorldManager.WorldSeed;
 
 		}
 

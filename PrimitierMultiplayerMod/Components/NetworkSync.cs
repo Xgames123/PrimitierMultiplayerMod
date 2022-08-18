@@ -19,6 +19,7 @@ namespace PrimitierMultiplayerMod.Components
 
 		public static List<NetworkSync> GetSyncsInChunk(System.Numerics.Vector2 chunkPos)
 		{
+			
 			var outList = new List<NetworkSync>();
 			foreach (var syncId in GetChunkIdList(chunkPos))
 			{
@@ -45,6 +46,7 @@ namespace PrimitierMultiplayerMod.Components
 		private System.Numerics.Vector2 _currentChunk;
 		public void Start()
 		{
+
 			CubeBase = GetComponent<CubeBase>();
 
 		}
