@@ -54,11 +54,12 @@ namespace PrimitierMultiplayerMod
 
 
 			PMFHelper.CameraRig.position = Vector3.zero;
-			
-			
+			TerrainMeshGenerator.areaPosOffset = Vector2Int.zero;
+
 			WorldManager.WorldSeed = seed;
 			WorldManager.PlayerStartPosition = playerPosition;
 
+			
 			var infoTextGo = GameObject.Find("InfoText");
 			TextMeshPro infoText = null;
 			if (infoTextGo != null)

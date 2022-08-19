@@ -31,7 +31,14 @@ namespace PrimitierMultiplayerMod
 
 			JoinGameButton.Create();
 
-			
+			//Validate terrain settings
+			if (TerrainMeshGenerator.tileLength != 4 || CubeGenerator.chunkTileCount != 4)
+			{
+				PMFLog.Error("Terrain generator settings are changed. Trying to reset settings");
+				TerrainMeshGenerator.tileLength = 4;
+				CubeGenerator.chunkTileCount = 4;
+			}
+
 		}
 
 
@@ -139,6 +146,8 @@ namespace PrimitierMultiplayerMod
 				PMFLog.Message($"player pos X: {playerPos.x}, Y: {playerPos.y}, Z: {playerPos.z}");
 				PMFLog.Message($"player chunk pos X: {playerChunkPos.x}, Y: {playerChunkPos.y}");
 				PMFLog.Message($"Remote player count: {RemotePlayer.RemotePlayers.Count}");
+				PMFLog.Message($"Chunk size: {TerrainMeshGenerator.tileLength}");
+				PMFLog.Message($"Tiles per chunk: {CubeGenerator.chunkTileCount}");
 			}
 			if (Input.GetKeyUp(KeyCode.F6))
 			{

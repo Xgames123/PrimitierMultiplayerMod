@@ -193,24 +193,20 @@ namespace PrimitierServer
 		{
 			var foundChunks = new List<NetworkChunk>();
 
-			foundChunks.Add(World.GetChunk(new Vector2(0, 0)));
-			return foundChunks;
 
-			int centerX = 0;
-			int centerY = 0;
+			var center = ChunkMath.WorldToChunkPos(currentPlayer.Position);
 
-			var chunkRadius = 2;
-			for (int x = centerX- chunkRadius; x < centerX + chunkRadius; x++)
+			var chunkRadius = ChunkMath.WorldToChunkRadius(radius);
+			for (float x = center.X- chunkRadius; x < center.X + chunkRadius; x++)
 			{
-				for (int y = centerY- chunkRadius; y < centerY+ chunkRadius; y++)
+				for (float y = center.Y- chunkRadius; y < center.Y+ chunkRadius; y++)
 				{
-					var position = new Vector2(centerX, centerY);
-					if (Vector2.Distance(new Vector2(x, y), position) < chunkRadius)
+					if (Vector2.Distance(new Vector2(x, y), center) < chunkRadius)
 					{
 
-						var chunk = World.GetChunk(position);
+						var chunk = World.GetChunk(center);
 						if (chunk.Owner == -1)
-							World.UpdateChunkOwner(position, currentPlayer.RuntimeId);
+							World.UpdateChunkOwner(center, currentPlayer.RuntimeId);
 
 						foundChunks.Add(chunk);
 					}
