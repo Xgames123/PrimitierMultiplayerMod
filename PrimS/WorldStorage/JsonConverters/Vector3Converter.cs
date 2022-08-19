@@ -50,8 +50,10 @@ public class Vector3Converter : JsonConverter<System.Numerics.Vector3>
     public override void Write(Utf8JsonWriter writer,
         System.Numerics.Vector3 value, JsonSerializerOptions options)
     {
+        writer.WriteStartObject();
         writer.WriteNumber("x", value.X);
         writer.WriteNumber("y", value.Y);
         writer.WriteNumber("z", value.Z);
+        writer.WriteEndObject();
     }
 }

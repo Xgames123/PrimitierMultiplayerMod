@@ -33,22 +33,124 @@ namespace PrimitierServer.WorldStorage
 
 		private static ILog s_log = LogManager.GetLogger(nameof(World));
 
-		public static WorldSettings Settings { get; private set; }
+		public static WorldSettings? Settings { get; private set; }
 
 		private static Dictionary<Vector2, NetworkChunk> Chunks = new Dictionary<Vector2, NetworkChunk>();
 		private static Dictionary<Vector2, bool> NeedsSaving = new Dictionary<Vector2, bool>();
 
-		private static JsonSerializerOptions s_options = null;
+		private static JsonSerializerOptions? s_options = null;
+
+		private static void ConfigureJsonOptionsIfNeeded()
+		{
+			if (s_options == null)
+			{
+				s_options = new JsonSerializerOptions();
+				s_options.Converters.Add(new Vector2Converter());
+				s_options.Converters.Add(new Vector3Converter());
+				s_options.Converters.Add(new QuaternionConverter());
+			}
+		}
+
+		public static void LoadFromDirectory(string dir)
+		{
+			WorldDirectory = dir;
+
+			if (!Directory.Exists(dir))
+			{
+				s_log.Info($"Creating Empty world");
+				CreateEmptyWorld();
+			}
+
+
+			ReloadWorldSettings();
+		}
+
+		public static void CreateEmptyWorld()
+		{
+			try
+			{
+				Directory.CreateDirectory(WorldDirectory);
+			}
+			catch (Exception e)
+			{
+				s_log.Fatal($"Could not create world directory at location '{WorldDirectory}'", e);
+			}
+
+			var random = new Random();
+			Settings = new WorldSettings()
+			{
+				Seed = random.Next(int.MinValue, int.MaxValue),
+				Players = new Dictionary<string, StoredPlayer>()
+			};
+
+			WriteWorldSettings();
+
+			try
+			{
+				Directory.CreateDirectory(Path.Combine(WorldDirectory, ChunkDirectoryPath));
+			}
+			catch (Exception e)
+			{
+				s_log.Fatal($"Could not create {ChunkDirectoryPath} directory at location '{WorldDirectory}'", e);
+			}
+		}
+
+		public static void WriteWorldSettings()
+		{
+			var settingsFilePath = Path.Combine(WorldDirectory, WorldSettingsPath);
+			try
+			{
+				ConfigureJsonOptionsIfNeeded();
+				File.WriteAllText(settingsFilePath, JsonSerializer.Serialize(Settings, s_options));
+			}
+			catch (Exception e)
+			{
+				s_log.Fatal($"Could not write or serialize {WorldSettingsPath}", e);
+				return;
+			}
+
+		}
+
+		public static void ReloadWorldSettings()
+		{
+			var settingsFilePath = Path.Combine(WorldDirectory, WorldSettingsPath);
+			if (File.Exists(settingsFilePath))
+			{
+				try
+				{
+					Settings = JsonSerializer.Deserialize<WorldSettings>(File.ReadAllText(settingsFilePath));
+				}
+				catch (Exception e)
+				{
+					s_log.Fatal($"Could not read or deserialize {WorldSettingsPath}", e);
+					return;
+				}
+
+			}
+			else
+			{
+				s_log.Fatal($"No {WorldSettingsPath} file exist in world {WorldDirectory}");
+
+			}
+
+		}
+
+
 
 		public static void ClearChunkCash()
+		{
+			SaveAllChunks();
+			NeedsSaving.Clear();
+			Chunks.Clear();
+			
+		}
+
+		public static void SaveAllChunks()
 		{
 			foreach (var chunk in Chunks.Keys)
 			{
 				TrySaveChunk(chunk);
 			}
-			NeedsSaving.Clear();
-			Chunks.Clear();
-			
 		}
 
 		public static bool TrySaveChunk(Vector2 position)
@@ -67,28 +169,13 @@ namespace PrimitierServer.WorldStorage
 						s_log.Error($"Could not save chunk '{chunkName}'\nInternalError: {e}");
 						return false;
 					}
-					
+
+					NeedsSaving[position] = false;
 				}
 
 			}
 			return true;
 		}
-
-
-		public static void LoadFromDirectory(string dir)
-		{
-			WorldDirectory = dir;
-
-			if (!Directory.Exists(dir))
-			{
-				s_log.Info($"Creating Empty world");
-				CreateEmptyWorld();
-			}
-
-
-			ReloadWorldSettings();
-		}
-
 
 		public static void UpdateChunkOwner(Vector2 chunkPosition, int owner)
 		{
@@ -100,8 +187,6 @@ namespace PrimitierServer.WorldStorage
 			}
 				
 		}
-
-
 
 		public static NetworkChunk GetChunk(Vector2 position)
 		{
@@ -145,13 +230,7 @@ namespace PrimitierServer.WorldStorage
 			StoredChunk chunk;
 			try
 			{
-				if(s_options == null)
-				{
-					s_options = new JsonSerializerOptions();
-					s_options.Converters.Add(new Vector2Converter());
-					s_options.Converters.Add(new Vector3Converter());
-					s_options.Converters.Add(new QuaternionConverter());
-				}
+				ConfigureJsonOptionsIfNeeded();
 
 				chunk = JsonSerializer.Deserialize<StoredChunk>(chunkJson, s_options);
 
@@ -162,78 +241,6 @@ namespace PrimitierServer.WorldStorage
 				return null;
 			}
 			return chunk;
-		}
-
-
-		public static void CreateEmptyWorld()
-		{
-			try
-			{
-				Directory.CreateDirectory(WorldDirectory);
-			}
-			catch (Exception e)
-			{
-				s_log.Fatal($"Could not create world directory at location '{WorldDirectory}'", e);
-			}
-
-			var random = new Random();
-			Settings = new WorldSettings()
-			{
-				Seed = random.Next(int.MinValue, int.MaxValue),
-				Players = new Dictionary<string, StoredPlayer>()
-			};
-
-			WriteWorldSettings();
-
-			try
-			{
-				Directory.CreateDirectory(Path.Combine(WorldDirectory, ChunkDirectoryPath));
-			}
-			catch (Exception e)
-			{
-				s_log.Fatal($"Could not create {ChunkDirectoryPath} directory at location '{WorldDirectory}'", e);
-			}
-		}
-
-
-		public static void WriteWorldSettings()
-		{
-			var settingsFilePath = Path.Combine(WorldDirectory, WorldSettingsPath);
-			try
-			{
-				File.WriteAllText(settingsFilePath, JsonSerializer.Serialize(Settings));
-			}
-			catch (Exception e)
-			{
-				s_log.Fatal($"Could not write or serialize {WorldSettingsPath}", e);
-				return;
-			}
-
-		}
-
-
-		public static void ReloadWorldSettings()
-		{
-			var settingsFilePath = Path.Combine(WorldDirectory, WorldSettingsPath);
-			if (File.Exists(settingsFilePath))
-			{
-				try
-				{
-					Settings = JsonSerializer.Deserialize<WorldSettings>(File.ReadAllText(settingsFilePath));
-				}
-				catch (Exception e)
-				{
-					s_log.Fatal($"Could not read or deserialize {WorldSettingsPath}", e);
-					return;
-				}
-
-			}
-			else
-			{
-				s_log.Fatal($"No {WorldSettingsPath} file exist in world {WorldDirectory}");
-
-			}
-
 		}
 
 

@@ -48,7 +48,9 @@ public class Vector2Converter : JsonConverter<System.Numerics.Vector2>
     public override void Write(Utf8JsonWriter writer,
         System.Numerics.Vector2 value, JsonSerializerOptions options)
     {
+        writer.WriteStartObject();
         writer.WriteNumber("x", value.X);
         writer.WriteNumber("y", value.Y);
+        writer.WriteEndObject();
     }
 }

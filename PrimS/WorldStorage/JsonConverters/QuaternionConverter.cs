@@ -54,9 +54,11 @@ public class QuaternionConverter : JsonConverter<System.Numerics.Quaternion>
     public override void Write(Utf8JsonWriter writer,
         System.Numerics.Quaternion value, JsonSerializerOptions options)
     {
+        writer.WriteStartObject();
         writer.WriteNumber("x", value.X);
         writer.WriteNumber("y", value.Y);
         writer.WriteNumber("z", value.Z);
         writer.WriteNumber("w", value.W);
+        writer.WriteEndObject();
     }
 }
