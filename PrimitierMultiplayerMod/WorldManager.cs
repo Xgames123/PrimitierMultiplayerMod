@@ -20,6 +20,7 @@ namespace PrimitierMultiplayerMod
 		public static UnityEngine.Vector3 PlayerStartPosition;
 
 		public static Dictionary<System.Numerics.Vector2, RuntimeChunk> Chunks = new Dictionary<System.Numerics.Vector2, RuntimeChunk>();
+		public static List<System.Numerics.Vector2> OwnedChunks = new List<System.Numerics.Vector2>();
 
 
 		public static RuntimeChunk GetChunk(System.Numerics.Vector2 chunkPos)
@@ -36,7 +37,7 @@ namespace PrimitierMultiplayerMod
 
 		public static void UpdateModChunks(IEnumerable<NetworkChunkPositionPair> chunks)
 		{
-
+			OwnedChunks.Clear();
 			foreach (var chunk in chunks)
 			{
 				UpdateModChunk(chunk);
@@ -78,11 +79,14 @@ namespace PrimitierMultiplayerMod
 			if (runtimeChunk == null)
 			{
 				CreateModChunk(chunkPosPair);
+				if(chunk.Owner == MultiplayerManager.Client.LocalId)
+					OwnedChunks.Add(chunkPos);
 			}
 			else
 			{
 				if (chunk.Owner == MultiplayerManager.Client.LocalId)
 				{
+					OwnedChunks.Add(chunkPos);
 					return;
 				}
 				else
