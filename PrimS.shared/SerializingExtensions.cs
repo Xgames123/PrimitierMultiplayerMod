@@ -21,6 +21,17 @@ namespace PrimitierServer.Shared
 			return new Vector3(reader.GetFloat(), reader.GetFloat(), reader.GetFloat());
 		}
 
+		public static void Put(this NetDataWriter writer, Vector2 vector2)
+		{
+			writer.Put(vector2.X);
+			writer.Put(vector2.Y);
+		}
+
+		public static Vector2 GetVector2(this NetDataReader reader)
+		{
+			return new Vector2(reader.GetFloat(), reader.GetFloat());
+		}
+
 
 		public static void PutList<T>(this NetDataWriter writer, List<T> list) where T : INetSerializable, new()
 		{

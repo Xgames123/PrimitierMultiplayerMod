@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)NetworkChunk.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Config\NetworkDebugConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Config\NetworkClientConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NetworkChunkPositionPair.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkCube.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NetworkPlayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PacketProcessorTypeRegister.cs" />

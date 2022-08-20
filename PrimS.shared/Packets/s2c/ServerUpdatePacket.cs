@@ -8,6 +8,6 @@ namespace PrimitierServer.Shared.Packets.s2c
 	{
 		public NetworkPlayer[] Players { get; set; }
 
-		public NetworkChunk[] Chunks { get; set; }
+		public NetworkChunkPositionPair[] Chunks { get; set; }
 	}
 }

@@ -189,9 +189,10 @@ namespace PrimitierServer
 
 		}
 
-		private List<NetworkChunk> FindNetworkChunksAroundPlayer(RuntimePlayer currentPlayer, int radius)
+
+		private List<NetworkChunkPositionPair> FindNetworkChunksAroundPlayer(RuntimePlayer currentPlayer, int radius)
 		{
-			var foundChunks = new List<NetworkChunk>();
+			var foundChunks = new List<NetworkChunkPositionPair>();
 
 
 			var center = ChunkMath.WorldToChunkPos(currentPlayer.Position);
@@ -201,20 +202,50 @@ namespace PrimitierServer
 			{
 				for (float y = center.Y- chunkRadius; y < center.Y+ chunkRadius; y++)
 				{
-					if (Vector2.Distance(new Vector2(x, y), center) < chunkRadius)
+					var chunkPos = new Vector2(x, y);
+					if (Vector2.Distance(chunkPos, center) < chunkRadius)
 					{
 
 						var chunk = World.GetChunk(center);
-						if (chunk.Owner == -1)
-							World.UpdateChunkOwner(center, currentPlayer.RuntimeId);
 
-						foundChunks.Add(chunk);
+						TryOwnChunk(currentPlayer, chunkPos, chunkRadius);
+
+						foundChunks.Add(new NetworkChunkPositionPair(chunk, center));
 					}
 
 				}
 			}
 
 			return foundChunks;
+		}
+
+		private void TryOwnChunk(RuntimePlayer player, Vector2 chunkPos, float ownRadius)
+		{
+			var chunk = World.GetChunk(chunkPos);
+
+			var playerChunk = ChunkMath.WorldToChunkPos(player.Position);
+
+			if (chunk.Owner == player.RuntimeId)
+				return;
+			if (chunk.Owner == -1)
+			{
+				World.UpdateChunkOwner(playerChunk, player.RuntimeId);
+				return;
+			}
+			var oldPlayer = PlayerManager.GetPlayerById(chunk.Owner);
+			if(oldPlayer == null)
+			{
+				World.UpdateChunkOwner(playerChunk, player.RuntimeId);
+				return;
+			}
+			if (Vector2.Distance(chunkPos, ChunkMath.WorldToChunkPos(oldPlayer.Position)) >= ownRadius)
+			{
+				World.UpdateChunkOwner(playerChunk, player.RuntimeId);
+				return;
+			}
+
+
+
 		}
 
 

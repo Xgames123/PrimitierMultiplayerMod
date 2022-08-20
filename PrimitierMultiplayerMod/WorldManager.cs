@@ -19,7 +19,22 @@ namespace PrimitierMultiplayerMod
 
 		public static UnityEngine.Vector3 PlayerStartPosition;
 
-		public static void UpdateModChunks(IEnumerable<NetworkChunk> chunks)
+		public static Dictionary<System.Numerics.Vector2, RuntimeChunk> Chunks = new Dictionary<System.Numerics.Vector2, RuntimeChunk>();
+
+
+		public static RuntimeChunk GetChunk(System.Numerics.Vector2 chunkPos)
+		{
+			if (Chunks.TryGetValue(chunkPos, out var chunk))
+			{
+				return chunk;
+			}
+
+			return null;
+		}
+
+
+
+		public static void UpdateModChunks(IEnumerable<NetworkChunkPositionPair> chunks)
 		{
 			foreach (var chunk in chunks)
 			{
@@ -28,13 +43,22 @@ namespace PrimitierMultiplayerMod
 
 		}
 
-		public static void UpdateModChunk(NetworkChunk chunk)
+		public static void UpdateModChunk(NetworkChunkPositionPair chunkPosPair)
 		{
+			var chunk = chunkPosPair.Chunk;
+			var chunkPos = chunkPosPair.Position;
+
 			if(chunk.ChunkType != NetworkChunkType.Normal)
 			{
 				return;
 			}
 
+			var cachedChunk = GetChunk(chunkPos);
+			if(cachedChunk == null)
+			{
+
+			}
+			
 			foreach (var cube in chunk.Cubes)
 			{
 				UpdateCube(cube);
@@ -42,15 +66,17 @@ namespace PrimitierMultiplayerMod
 		}
 		public static void DestroyModChunk(System.Numerics.Vector2 chunkPos)
 		{
-			var syncs = NetworkSync.GetSyncsInChunk(chunkPos);
-			foreach (var sync in syncs)
+			var chunk = GetChunk(chunkPos);
+			foreach (var syncId in chunk.NetworkSyncs)
 			{
-				sync.DestroyCube();
+				var sync = NetworkSync.GetById(syncId);
+				if(sync != null)
+					sync.DestroyCube();
 			}
 		}
 		public static void DestroyAllModChunks()
 		{
-			foreach (var chunk in NetworkSync.NetworkSyncChunk.Keys)
+			foreach (var chunk in Chunks.Keys)
 			{
 				DestroyModChunk(chunk);
 			}

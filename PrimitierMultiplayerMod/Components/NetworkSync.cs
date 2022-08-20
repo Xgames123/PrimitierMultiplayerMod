@@ -14,22 +14,17 @@ namespace PrimitierMultiplayerMod.Components
 	{
 		public NetworkSync(System.IntPtr ptr) :base(ptr) { }
 
-		public static Dictionary<System.Numerics.Vector2, List<uint>> NetworkSyncChunk = new Dictionary<System.Numerics.Vector2, List<uint>>();
 		public static Dictionary<uint, NetworkSync> NetworkSyncList = new Dictionary<uint, NetworkSync>();
 
-		public static List<NetworkSync> GetSyncsInChunk(System.Numerics.Vector2 chunkPos)
+		public static NetworkSync GetById(uint id)
 		{
-			
-			var outList = new List<NetworkSync>();
-			foreach (var syncId in GetChunkIdList(chunkPos))
+			if(NetworkSyncList.TryGetValue(id, out NetworkSync networkSync))
 			{
-				if(NetworkSyncList.TryGetValue(syncId, out NetworkSync sync))
-				{
-					outList.Add(sync);
-				}
+				return networkSync;
 			}
-			return outList;
+			return null;
 		}
+
 
 		public static void Register(NetworkSync sync)
 		{
@@ -54,7 +49,6 @@ namespace PrimitierMultiplayerMod.Components
 		{
 			RemoveFromChunk(_currentChunk, Id);
 			NetworkSyncList.Remove(Id);
-			PMFLog.Message("Cube destroyed");
 		}
 
 		public void DestroyCube()
@@ -63,31 +57,18 @@ namespace PrimitierMultiplayerMod.Components
 		}
 
 
-		private static List<uint> GetChunkIdList(System.Numerics.Vector2 chunk)
-		{
-			List<uint> list;
-			if (NetworkSyncChunk.TryGetValue(chunk, out List<uint> getList))
-			{
-				list = getList;
-			}
-			else
-			{
-				var newList = new List<uint>();
-				list = newList;
-				NetworkSyncChunk.Add(chunk, newList);
-			}
-			return list;
-		}
 
-		private static void AddToChunk(System.Numerics.Vector2 chunk, uint id)
+		private static void AddToChunk(System.Numerics.Vector2 chunkPos, uint id)
 		{
-			var list = GetChunkIdList(chunk);
-			list.Add(id);
+			//TODO: check if moved between chunks
+			var chunk = WorldManager.GetChunk(chunkPos);
+			chunk.NetworkSyncs.Add(id);
 		}
-		private static void RemoveFromChunk(System.Numerics.Vector2 chunk, uint id)
+		private static void RemoveFromChunk(System.Numerics.Vector2 chunkPos, uint id)
 		{
-			var list = GetChunkIdList(chunk);
-			list.Remove(id);
+			//TODO: check if moved between chunks
+			var chunk = WorldManager.GetChunk(chunkPos);
+			chunk.NetworkSyncs.Remove(id);
 		}
 
 		public void UpdateSync(NetworkCube cube)

@@ -201,8 +201,6 @@ namespace PrimitierMultiplayerMod
 				//PMFLog.Message($"NET PLAYER Position={networkPlayer.Position}; Position={networkPlayer.HeadPosition};");
 				remotePlayer.Sync(networkPlayer);
 
-
-
 			}
 
 			//PMFLog.Message("Got server update");

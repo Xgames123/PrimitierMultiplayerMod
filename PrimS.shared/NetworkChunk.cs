@@ -15,8 +15,8 @@ namespace PrimitierServer.Shared
 
 	public struct NetworkChunk : INetSerializable
 	{
-		public static NetworkChunk EmptyChunk { get; private set; } = new NetworkChunk() { ChunkType = NetworkChunkType.Empty };
-		public static NetworkChunk BrokenChunk { get; private set; } = new NetworkChunk() { ChunkType = NetworkChunkType.Broken };
+		public static NetworkChunk NewEmptyChunk() { return new NetworkChunk() { ChunkType = NetworkChunkType.Empty }; }
+		public static NetworkChunk NewBrokenChunk() { return new NetworkChunk() { ChunkType = NetworkChunkType.Broken }; }
 
 		public NetworkChunkType ChunkType;
 		

@@ -195,11 +195,11 @@ namespace PrimitierServer.WorldStorage
 			var newChunk = LoadChunk(position);
 			if (newChunk == null)
 			{
-				return NetworkChunk.BrokenChunk;
+				return NetworkChunk.NewBrokenChunk();
 			}
 			if(newChunk.Cubes.Count == 0)
 			{
-				return NetworkChunk.EmptyChunk;
+				return NetworkChunk.NewEmptyChunk();
 			}
 
 			var netChunk = newChunk.ToNetworkChunk(-1);
