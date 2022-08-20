@@ -36,12 +36,33 @@ namespace PrimitierMultiplayerMod
 
 		public static void UpdateModChunks(IEnumerable<NetworkChunkPositionPair> chunks)
 		{
+
 			foreach (var chunk in chunks)
 			{
 				UpdateModChunk(chunk);
 			}
 
+			foreach (var chunkPos in Chunks.Keys.ToArray())
+			{
+				if (!Contains(chunks, chunkPos))
+				{
+					DestroyModChunk(chunkPos);
+				}
+
+			}
+
 		}
+		private static bool Contains(IEnumerable<NetworkChunkPositionPair> container, System.Numerics.Vector2 position)
+		{
+			foreach (var item in container)
+			{
+				if (item.Position == position)
+					return true;
+
+			}
+			return false;
+		}
+
 
 		public static void UpdateModChunk(NetworkChunkPositionPair chunkPosPair)
 		{
@@ -53,17 +74,46 @@ namespace PrimitierMultiplayerMod
 				return;
 			}
 
-			var cachedChunk = GetChunk(chunkPos);
-			if(cachedChunk == null)
+			var runtimeChunk = GetChunk(chunkPos);
+			if (runtimeChunk == null)
 			{
-
+				CreateModChunk(chunkPosPair);
+			}
+			else
+			{
+				if (chunk.Owner == MultiplayerManager.Client.LocalId)
+				{
+					return;
+				}
+				else
+				{
+					foreach (var cube in chunk.Cubes)
+					{
+						UpdateCube(cube, runtimeChunk);
+					}
+				}
 			}
 			
+		
+		}
+
+		private static void CreateModChunk(NetworkChunkPositionPair chunkPair)
+		{
+			var chunk = chunkPair.Chunk;
+
+			Chunks.Add(chunkPair.Position, new RuntimeChunk() { Owner = chunk.Owner });
+
+			var runtimeChunk = GetChunk(chunkPair.Position);
+
 			foreach (var cube in chunk.Cubes)
 			{
-				UpdateCube(cube);
+				UpdateCube(cube, runtimeChunk);
 			}
+
+			
 		}
+
+
 		public static void DestroyModChunk(System.Numerics.Vector2 chunkPos)
 		{
 			var chunk = GetChunk(chunkPos);
@@ -73,6 +123,7 @@ namespace PrimitierMultiplayerMod
 				if(sync != null)
 					sync.DestroyCube();
 			}
+			Chunks.Remove(chunkPos);
 		}
 		public static void DestroyAllModChunks()
 		{
@@ -91,7 +142,7 @@ namespace PrimitierMultiplayerMod
 			NetworkSync.Register(networkSync);
 			//PMFLog.Message("Cube created");
 		}
-		public static void UpdateCube(NetworkCube cube)
+		public static void UpdateCube(NetworkCube cube, RuntimeChunk chunk)
 		{
 			//PMFLog.Message($"Id: {cube.Id} Position: {cube.Position} Rotation: {cube.Rotation} Size: {cube.Size} Substance: {cube.Substance}");
 
@@ -101,6 +152,7 @@ namespace PrimitierMultiplayerMod
 			}
 			else
 			{
+				chunk.NetworkSyncs.Add(cube.Id);
 				CreateCube(cube);
 			}
 		}
