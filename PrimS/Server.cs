@@ -179,9 +179,9 @@ namespace PrimitierServer
 				if (currentPlayer == null)
 					continue;
 
-				var players = FindNetworkPlayersAroundPlayer(currentPlayer, 5);
+				var players = FindNetworkPlayersAroundPlayer(currentPlayer, 20);
 
-				var chunks = FindNetworkChunksAroundPlayer(currentPlayer, 5);
+				var chunks = FindNetworkChunksAroundPlayer(currentPlayer, 20);
 
 				SendPacket<ServerUpdatePacket>(peer, new ServerUpdatePacket() { Players = players.ToArray(), Chunks = chunks.ToArray() }, DeliveryMethod.Unreliable);
 

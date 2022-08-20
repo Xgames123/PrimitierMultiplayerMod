@@ -13,6 +13,7 @@ namespace PrimitierServer.Shared
 			packetProcessor.RegisterNestedType<NetworkClientConfig>();
 			packetProcessor.RegisterNestedType<NetworkDebugConfig>();
 
+			packetProcessor.RegisterNestedType<NetworkChunkPositionPair>();
 			packetProcessor.RegisterNestedType<NetworkChunk>();
 			packetProcessor.RegisterNestedType<NetworkCube>();
 			packetProcessor.RegisterNestedType<NetworkPlayer>();

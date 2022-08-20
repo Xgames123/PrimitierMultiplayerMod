@@ -211,9 +211,15 @@ namespace PrimitierServer.WorldStorage
 		{
 			string? chunkJson;
 			var chunkName = $"{position.X}_{position.Y}chunk.json";
+			var chunkPath = Path.Combine(WorldDirectory, ChunkDirectoryPath, chunkName);
+			if (!File.Exists(chunkPath))
+			{
+				return new StoredChunk();
+			}
+
 			try
 			{
-				chunkJson = File.ReadAllText(Path.Combine(WorldDirectory, ChunkDirectoryPath, chunkName));
+				chunkJson = File.ReadAllText(chunkPath);
 			}
 			catch (FileNotFoundException e)
 			{

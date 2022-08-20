@@ -26,9 +26,9 @@ namespace PrimitierMultiplayerMod.Components
 		}
 
 
-		public static void Register(NetworkSync sync)
+		public static void Register(NetworkSync sync, System.Numerics.Vector2 chunkPos)
 		{
-			sync._currentChunk = ((Vector2)CubeGenerator.WorldToChunkPos(sync.transform.position)).ToNumerics();
+			sync._currentChunk = chunkPos;
 			NetworkSyncList.Add(sync.Id, sync);
 			AddToChunk(sync._currentChunk, sync.Id);
 		}
@@ -68,7 +68,13 @@ namespace PrimitierMultiplayerMod.Components
 		{
 			//TODO: check if moved between chunks
 			var chunk = WorldManager.GetChunk(chunkPos);
+			if(chunk == null)
+			{
+				
+				return;
+			}
 			chunk.NetworkSyncs.Remove(id);
+
 		}
 
 		public void UpdateSync(NetworkCube cube)

@@ -38,7 +38,9 @@ namespace PrimitierServer
 		public static float WorldToChunkRadius(float radius)
 		{
 			var chunkPosOffset = 0;
-			return radius - chunkPosOffset * ChunkTileCount * TileLength;
+
+			var chunkPosX = MathF.Floor(radius / ChunkTileCount / TileLength);
+			return chunkPosX + chunkPosOffset;
 		}
 	}
 }

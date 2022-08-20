@@ -131,12 +131,6 @@ namespace PrimitierMultiplayerMod
 				MultiplayerManager.Stop();
 				MultiplayerManager.ConnectToServer();
 			}
-			if (Input.GetKeyUp(KeyCode.F4))
-			{
-				WorldManager.UpdateCube(new PrimitierServer.Shared.NetworkCube() { Id = 2, Position = new System.Numerics.Vector3(0, 0, 0), Size = new System.Numerics.Vector3(5, 5, 5), Substance = 0, Rotation = new System.Numerics.Quaternion(0, 0, 0, 0) });
-			}
-			//ChunkManager.UpdateModChunk(new PrimitierServer.Shared.NetworkChunk() { Cubes = new System.Collections.Generic.List<PrimitierServer.Shared.NetworkCube>() { new PrimitierServer.Shared.NetworkCube() { Id = 1, Position = new System.Numerics.Vector3(0, 0, 0), Size = new System.Numerics.Vector3(5, 5, 5), Substance = 0, Rotation = new System.Numerics.Quaternion(0, 0, 0, 0) } } });
-
 			if (Input.GetKeyUp(KeyCode.F5))
 			{
 				var playerPos = Camera.main.transform.position;
