@@ -54,41 +54,39 @@ namespace PrimitierMultiplayerMod.Components
 		public void DestroyCube()
 		{
 			Destroy(gameObject);
+			//Further handling is done in OnDestroy
 		}
 
 
 
 		private static void AddToChunk(System.Numerics.Vector2 chunkPos, uint id)
 		{
-			//TODO: check if moved between chunks
 			var chunk = WorldManager.GetChunk(chunkPos);
 			chunk.NetworkSyncs.Add(id);
 		}
 		private static void RemoveFromChunk(System.Numerics.Vector2 chunkPos, uint id)
 		{
-			//TODO: check if moved between chunks
 			var chunk = WorldManager.GetChunk(chunkPos);
 			if(chunk == null)
 			{
-				
 				return;
 			}
 			chunk.NetworkSyncs.Remove(id);
 
 		}
 
-		public void UpdateSync(NetworkCube cube)
+		public void UpdateSync(NetworkCube cube, System.Numerics.Vector2 chunkPos)
 		{
 			if (!NetworkSyncList.ContainsKey(Id) || CubeBase == null)
 				return;
 
-			var newChunk = ((UnityEngine.Vector2)CubeGenerator.WorldToChunkPos(transform.position)).ToNumerics();
-			if (newChunk != _currentChunk)
+			if (chunkPos != _currentChunk)
 			{
-				AddToChunk(newChunk, Id);
+				AddToChunk(chunkPos, Id);
 				RemoveFromChunk(_currentChunk, Id);
-				_currentChunk = newChunk;
+				_currentChunk = chunkPos;
 			}
+
 
 			CubeBase.ChangeScale(cube.Size.ToUnity());
 			CubeBase.ChangeSubstance((Substance)cube.Substance);

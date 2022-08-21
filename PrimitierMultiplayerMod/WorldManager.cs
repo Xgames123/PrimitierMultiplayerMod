@@ -70,7 +70,8 @@ namespace PrimitierMultiplayerMod
 			var chunk = chunkPosPair.Chunk;
 			var chunkPos = chunkPosPair.Position;
 
-			if(chunk.ChunkType != NetworkChunkType.Normal)
+			//Generate chunk when empty and owned
+			if (chunk.ChunkType != NetworkChunkType.Normal)
 			{
 				return;
 			}
@@ -79,26 +80,53 @@ namespace PrimitierMultiplayerMod
 			if (runtimeChunk == null)
 			{
 				CreateModChunk(chunkPosPair);
-				if(chunk.Owner == MultiplayerManager.Client.LocalId)
-					OwnedChunks.Add(chunkPos);
+			}
+
+			if (chunk.Owner == MultiplayerManager.Client.LocalId)
+			{
+				//Skip chunk because we own it
+
+				OwnedChunks.Add(chunkPos);
+				return;
 			}
 			else
 			{
-				if (chunk.Owner == MultiplayerManager.Client.LocalId)
+				//Sync chunk from server
+
+				foreach (var cube in chunk.Cubes)
 				{
-					OwnedChunks.Add(chunkPos);
-					return;
+					UpdateCube(cube, chunkPos);
 				}
-				else
+
+
+				//Remove old network syncs
+				foreach (var netSyncId in Chunks[chunkPos].NetworkSyncs)
 				{
-					foreach (var cube in chunk.Cubes)
+					if(!Contains(chunk.Cubes, netSyncId))
 					{
-						UpdateCube(cube, runtimeChunk, chunkPos);
+						NetworkSync.GetById(netSyncId).DestroyCube();
+
 					}
+
 				}
+
+
 			}
 			
+			
 		
+		}
+		private static bool Contains(IEnumerable<NetworkCube> cubes, uint id)
+		{
+			foreach (var cube in cubes)
+			{
+				if (cube.Id == id)
+				{
+					return true;
+				}
+
+			}
+			return false;
 		}
 
 		private static void CreateModChunk(NetworkChunkPositionPair chunkPair)
@@ -107,14 +135,6 @@ namespace PrimitierMultiplayerMod
 
 			Chunks.Add(chunkPair.Position, new RuntimeChunk() { Owner = chunk.Owner });
 
-			var runtimeChunk = GetChunk(chunkPair.Position);
-
-			foreach (var cube in chunk.Cubes)
-			{
-				UpdateCube(cube, runtimeChunk, chunkPair.Position);
-			}
-
-			
 		}
 
 
@@ -146,18 +166,19 @@ namespace PrimitierMultiplayerMod
 			NetworkSync.Register(networkSync, chunkPos);
 			//PMFLog.Message("Cube created");
 		}
-		public static void UpdateCube(NetworkCube cube, RuntimeChunk chunk, System.Numerics.Vector2 chunkPos)
+		public static void UpdateCube(NetworkCube cube, System.Numerics.Vector2 chunkPos)
 		{
 			//PMFLog.Message($"Id: {cube.Id} Position: {cube.Position} Rotation: {cube.Rotation} Size: {cube.Size} Substance: {cube.Substance}");
 
 			if (NetworkSync.NetworkSyncList.TryGetValue(cube.Id, out var sync))
 			{
-				sync.UpdateSync(cube);
+
+				sync.UpdateSync(cube, chunkPos);
 			}
 			else
 			{
-				chunk.NetworkSyncs.Add(cube.Id);
 				CreateCube(cube, chunkPos);
+				
 			}
 		}
 
