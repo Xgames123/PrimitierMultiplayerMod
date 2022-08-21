@@ -218,6 +218,9 @@ namespace PrimitierMultiplayer.Server
 
 		private void TryOwnChunk(RuntimePlayer player, Vector2 chunkPos, float ownRadius)
 		{
+
+			//return;
+
 			var chunk = World.GetChunk(chunkPos);
 
 			var playerChunk = ChunkMath.WorldToChunkPos(player.Position);

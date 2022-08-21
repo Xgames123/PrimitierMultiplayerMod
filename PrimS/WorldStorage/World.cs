@@ -118,7 +118,7 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 			{
 				try
 				{
-					Settings = JsonSerializer.Deserialize<WorldSettings>(File.ReadAllText(settingsFilePath));
+					Settings = JsonSerializer.Deserialize<WorldSettings>(File.ReadAllText(settingsFilePath), s_options);
 				}
 				catch (Exception e)
 				{
