@@ -1,11 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
+		<Version>0.0.1</Version>
+
 		<TargetFramework>net472</TargetFramework>
 		<RootNamespace>PrimitierMultiplayerMod</RootNamespace>
 		<AssemblyName>PrimitierMultiplayerMod</AssemblyName>
+		
 		<Title>Multiplayer Mod</Title>
-
+		<Authors>XGames105</Authors>
+		
 		<Description>A mod to add multiplayer to Primitier</Description>
 		<!--Use this to set the namespace.classname of your entry point class (Mod.cs)-->
 		<!--<EntryPointClass></EntryPointClass>-->
