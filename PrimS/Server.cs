@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using log4net;
-using log4net.Core;
-using PrimitierMultiplayer.Shared.Packets;
 using PrimitierMultiplayer.Shared.Packets.c2s;
 using PrimitierMultiplayer.Shared.Packets.s2c;
 using PrimitierMultiplayer.Shared;
 using System.Numerics;
 using System.Diagnostics;
-using PrimitierMultiplayer.Mappers;
-using PrimitierMultiplayer.Shared;
+using PrimitierMultiplayer.Server.Mappers;
 using PrimitierMultiplayer.Server.WorldStorage;
 
 namespace PrimitierMultiplayer.Server

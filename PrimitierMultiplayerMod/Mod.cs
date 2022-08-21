@@ -54,8 +54,12 @@ namespace PrimitierMultiplayer.Mod
 			PMFLog.Message("You can press F1 to generate all the chunks near 0x 0y");
 			PMFLog.Message("You can press F2 to destroy the generated chunks from pressing F2");
 			PMFLog.Message("You can press F3 to reconnect to the server");
+			PMFLog.Message("You can press F4 to show/hide chunk bounds");
 			PMFLog.Message("You can press F5 for general info");
 			PMFLog.Message("You can press F6 to dump scene");
+
+
+			
 		}
 
 		public override void OnApplicationStart()
@@ -69,6 +73,7 @@ namespace PrimitierMultiplayer.Mod
 			ClassInjector.RegisterTypeInIl2Cpp<NameTag>();
 			ClassInjector.RegisterTypeInIl2Cpp<RemotePlayer>();
 			ClassInjector.RegisterTypeInIl2Cpp<NetworkSync>();
+			ClassInjector.RegisterTypeInIl2Cpp<ChunkBoundViewer>();
 			ClassInjector.RegisterTypeInIl2CppWithInterfaces<JoinGameButton>(typeof(IButton));
 
 			ModVersion = new System.Version(Info.Version);
@@ -131,6 +136,13 @@ namespace PrimitierMultiplayer.Mod
 				MultiplayerManager.Stop();
 				MultiplayerManager.ConnectToServer();
 			}
+			if (Input.GetKeyUp(KeyCode.F4))
+			{
+				if(ChunkBoundViewer.IsCreated)
+					ChunkBoundViewer.Remove();
+				else
+					ChunkBoundViewer.Create();
+			}
 			if (Input.GetKeyUp(KeyCode.F5))
 			{
 				var playerPos = Camera.main.transform.position;
@@ -140,6 +152,7 @@ namespace PrimitierMultiplayer.Mod
 				PMFLog.Message($"player pos X: {playerPos.x}, Y: {playerPos.y}, Z: {playerPos.z}");
 				PMFLog.Message($"player chunk pos X: {playerChunkPos.x}, Y: {playerChunkPos.y}");
 				PMFLog.Message($"Remote player count: {RemotePlayer.RemotePlayers.Count}");
+				PMFLog.Message($"Synced object count: {NetworkSync.NetworkSyncList.Count}");
 				PMFLog.Message($"Chunk size: {TerrainMeshGenerator.tileLength}");
 				PMFLog.Message($"Tiles per chunk: {CubeGenerator.chunkTileCount}");
 			}
@@ -159,7 +172,7 @@ namespace PrimitierMultiplayer.Mod
 				}
 
 			}
-
+			
 		}
 		
 

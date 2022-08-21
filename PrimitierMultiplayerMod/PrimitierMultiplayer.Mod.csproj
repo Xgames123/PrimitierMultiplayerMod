@@ -4,7 +4,7 @@
 		<Version>0.0.1</Version>
 
 		<TargetFramework>net472</TargetFramework>
-		<RootNamespace>PrimitierMultiplayerMod</RootNamespace>
+		<RootNamespace>PrimitierMultiplayer.Mod</RootNamespace>
 		<AssemblyName>PrimitierMultiplayerMod</AssemblyName>
 		
 		<Title>Multiplayer Mod</Title>
