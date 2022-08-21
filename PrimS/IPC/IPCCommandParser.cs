@@ -64,6 +64,7 @@ namespace PrimitierMultiplayer.Server.IPC
 					return IPCResponce.Ok(PlayerManager.GetAllPlayers());
 
 				case IPCCommandType.ReloadWorld:
+					s_log.Info("Reloading world...");
 					World.ReloadWorldSettings();
 					World.ClearChunkCash();
 					return IPCResponce.Ok();

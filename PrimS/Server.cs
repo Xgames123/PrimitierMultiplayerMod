@@ -218,6 +218,9 @@ namespace PrimitierMultiplayer.Server
 
 		private void TryOwnChunk(RuntimePlayer player, Vector2 chunkPos, float ownRadius)
 		{
+
+			//return;
+
 			var chunk = World.GetChunk(chunkPos);
 
 			var playerChunk = ChunkMath.WorldToChunkPos(player.Position);
@@ -288,6 +291,7 @@ namespace PrimitierMultiplayer.Server
 
 
 			_log.Info($"{packet.Username} joined the game");
+			_log.Debug($"{newRuntimePlayer.Position.X} {newRuntimePlayer.Position.Y} {newRuntimePlayer.Position.Z}");
 
 			var playersAlreadyInGame = new List<InitialPlayerData>();
 			foreach (var runtimePlayer in PlayerManager.Players.Values)

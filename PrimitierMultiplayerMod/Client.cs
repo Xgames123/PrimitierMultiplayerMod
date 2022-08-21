@@ -169,6 +169,8 @@ namespace PrimitierMultiplayer.Mod
 			ConfigManager.Debug = packet.Debug;
 			ConfigManager.DebugConfig = packet.DebugConfig;
 
+			var pos = packet.Position.ToUnity();
+			PMFLog.Message($"{pos.x} {pos.y} {pos.z}");
 			MultiplayerManager.EnterGame(packet.WorldSeed, packet.Position.ToUnity());
 		}
 

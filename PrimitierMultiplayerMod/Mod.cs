@@ -51,15 +51,15 @@ namespace PrimitierMultiplayer.Mod
 			if (FlyCam.Current != null)
 				MultiplayerManager.ConnectToServer();
 
-			PMFLog.Message("You can press F1 to generate all the chunks near 0x 0y");
-			PMFLog.Message("You can press F2 to destroy the generated chunks from pressing F2");
+			PMFLog.Message("You can press F2 to disconnect from the server");
 			PMFLog.Message("You can press F3 to reconnect to the server");
 			PMFLog.Message("You can press F4 to show/hide chunk bounds");
 			PMFLog.Message("You can press F5 for general info");
 			PMFLog.Message("You can press F6 to dump scene");
+			PMFLog.Message(" ");
+			PMFLog.Message("You can press F9 to generate all the chunks near 0x 0y");
+			PMFLog.Message("You can press F10 to destroy the generated chunks from pressing F9");
 
-
-			
 		}
 
 		public override void OnApplicationStart()
@@ -98,39 +98,11 @@ namespace PrimitierMultiplayer.Mod
 			MultiplayerManager.UpdateClient();
 			MainThreadRunner.RunQueuedTasks();
 			
-
-			if (Input.GetKeyUp(KeyCode.F1))
-			{
-				PMFLog.Message("Generating chunks");
-				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(-1, -1));
-				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(0, -1));
-				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(1, -1));
-
-				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(-1, 0));
-				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(0, 0));
-				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(1, 0));
-
-				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(-1, 1));
-				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(0, 1));
-				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(1, 1));
-			}
 			if (Input.GetKeyUp(KeyCode.F2))
 			{
-				PMFLog.Message("Destroying chunks");
-				var chunks = new Il2CppSystem.Collections.Generic.List<Vector2Int>();
-				chunks.Add(new Vector2Int(-1, -1));
-				chunks.Add(new Vector2Int(0, -1));
-				chunks.Add(new Vector2Int(1, -1));
-
-				chunks.Add(new Vector2Int(-1, 0));
-				chunks.Add(new Vector2Int(0, 0));
-				chunks.Add(new Vector2Int(1, 0));
-
-				chunks.Add(new Vector2Int(-1, 1));
-				chunks.Add(new Vector2Int(0, 1));
-				chunks.Add(new Vector2Int(1, 1));
-				WorldManager.DestroyPrimitierChunks(chunks);
+				MultiplayerManager.Stop();
 			}
+
 			if (Input.GetKeyUp(KeyCode.F3))
 			{
 				MultiplayerManager.Stop();
@@ -172,7 +144,39 @@ namespace PrimitierMultiplayer.Mod
 				}
 
 			}
-			
+
+			if (Input.GetKeyUp(KeyCode.F9))
+			{
+				PMFLog.Message("Generating chunks");
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(-1, -1));
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(0, -1));
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(1, -1));
+
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(-1, 0));
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(0, 0));
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(1, 0));
+
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(-1, 1));
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(0, 1));
+				WorldManager.GenerateNewPrimitierChunk(new Vector2Int(1, 1));
+			}
+			if (Input.GetKeyUp(KeyCode.F10))
+			{
+				PMFLog.Message("Destroying chunks");
+				var chunks = new Il2CppSystem.Collections.Generic.List<Vector2Int>();
+				chunks.Add(new Vector2Int(-1, -1));
+				chunks.Add(new Vector2Int(0, -1));
+				chunks.Add(new Vector2Int(1, -1));
+
+				chunks.Add(new Vector2Int(-1, 0));
+				chunks.Add(new Vector2Int(0, 0));
+				chunks.Add(new Vector2Int(1, 0));
+
+				chunks.Add(new Vector2Int(-1, 1));
+				chunks.Add(new Vector2Int(0, 1));
+				chunks.Add(new Vector2Int(1, 1));
+				WorldManager.DestroyPrimitierChunks(chunks);
+			}
 		}
 		
 

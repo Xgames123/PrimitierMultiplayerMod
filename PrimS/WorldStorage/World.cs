@@ -113,12 +113,13 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 
 		public static void ReloadWorldSettings()
 		{
+			ConfigureJsonOptionsIfNeeded();
 			var settingsFilePath = Path.Combine(WorldDirectory, WorldSettingsPath);
 			if (File.Exists(settingsFilePath))
 			{
 				try
 				{
-					Settings = JsonSerializer.Deserialize<WorldSettings>(File.ReadAllText(settingsFilePath));
+					Settings = JsonSerializer.Deserialize<WorldSettings>(File.ReadAllText(settingsFilePath), s_options);
 				}
 				catch (Exception e)
 				{

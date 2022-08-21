@@ -147,11 +147,13 @@ namespace PrimitierMultiplayer.Mod
 				if(sync != null)
 					sync.DestroyCube();
 			}
+
 			Chunks.Remove(chunkPos);
 		}
 		public static void DestroyAllModChunks()
 		{
-			foreach (var chunk in Chunks.Keys)
+
+			foreach (var chunk in Chunks.Keys.ToArray())
 			{
 				DestroyModChunk(chunk);
 			}
