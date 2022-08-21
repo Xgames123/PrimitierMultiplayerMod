@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrimitierServer.IPC
+namespace PrimitierMultiplayer.Server.IPC
 {
 	public class IPCStringListener : IDisposable
 	{

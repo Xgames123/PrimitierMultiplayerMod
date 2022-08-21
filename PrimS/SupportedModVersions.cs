@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrimitierServer
+namespace PrimitierMultiplayer.Server
 {
 	public class SupportedVersions
 	{
@@ -17,9 +17,7 @@ namespace PrimitierServer
 		public static bool CheckModVersion(Version modVersion)
 		{
 			if (modVersion < LowestSupportedModVersion)
-			{
 				return false;
-			}
 
 			return true;
 		}

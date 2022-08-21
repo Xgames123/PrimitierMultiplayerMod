@@ -9,7 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace PrimitierMultiplayerMod
+namespace PrimitierMultiplayer.Mod
 {
 	public enum ChatColor
 	{

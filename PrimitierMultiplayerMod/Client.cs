@@ -6,16 +6,16 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using PrimitierServer.Shared.Packets.s2c;
-using PrimitierServer.Shared.Packets.c2s;
-using PrimitierServer.Shared;
+using PrimitierMultiplayer.Shared.Packets.s2c;
+using PrimitierMultiplayer.Shared.Packets.c2s;
+using PrimitierMultiplayer.Shared;
 using UnityEngine;
 using System.Reflection;
 using PrimitierModdingFramework;
-using PrimitierMultiplayerMod.Components;
-using PrimitierServer.Shared.Packets;
+using PrimitierMultiplayer.Mod.Components;
+using PrimitierMultiplayer.Shared.Packets;
 
-namespace PrimitierMultiplayerMod
+namespace PrimitierMultiplayer.Mod
 {
 	public class Client
 	{

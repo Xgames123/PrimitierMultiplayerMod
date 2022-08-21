@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using LiteNetLib.Utils;
 
-namespace PrimitierServer.Shared.Config
+namespace PrimitierMultiplayer.Shared.Config
 {
 	public struct NetworkDebugConfig : INetSerializable
 	{

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PrimitierServer.IPC
+namespace PrimitierMultiplayer.Server.IPC
 {
 
 	public enum IPCCommandType
@@ -33,7 +33,7 @@ namespace PrimitierServer.IPC
 		public object? Data { get; set; }
 
 		private static IPCResponce c_invalidCommand = new IPCResponce() { Type = IPCResponceType.InvalidCommand, Data = null };
-	
+
 
 		public static IPCResponce Ok(object? data)
 		{
@@ -51,7 +51,7 @@ namespace PrimitierServer.IPC
 		{
 			return new IPCResponce() { Type = IPCResponceType.Error, Data = message };
 		}
-		
+
 		public static IPCResponce InvalidCommand()
 		{
 			return c_invalidCommand;

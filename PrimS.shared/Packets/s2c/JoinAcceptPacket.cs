@@ -1,11 +1,11 @@
 ﻿using LiteNetLib.Utils;
-using PrimitierServer.Shared.Config;
+using PrimitierMultiplayer.Shared.Config;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 
-namespace PrimitierServer.Shared.Packets.s2c
+namespace PrimitierMultiplayer.Shared.Packets.s2c
 {
 	public class JoinAcceptPacket 
 	{

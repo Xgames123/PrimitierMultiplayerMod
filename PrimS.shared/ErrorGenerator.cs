@@ -1,11 +1,11 @@
 ﻿using LiteNetLib;
 using LiteNetLib.Utils;
-using PrimitierServer.Shared.Packets;
+using PrimitierMultiplayer.Shared.Packets;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PrimitierServer.Shared
+namespace PrimitierMultiplayer.Shared
 {
 	public static class ErrorGenerator
 	{

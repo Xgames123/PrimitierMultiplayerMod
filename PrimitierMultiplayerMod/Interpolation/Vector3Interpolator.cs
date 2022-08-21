@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrimitierMultiplayerMod.Interpolation
+namespace PrimitierMultiplayer.Mod.Interpolation
 {
 	public class Vector3Interpolator<T> where T : Interpolator, new()
 	{

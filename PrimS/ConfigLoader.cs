@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using log4net;
 
-namespace PrimitierServer
+namespace PrimitierMultiplayer.Server
 {
 	public class ConfigFile
 	{
@@ -41,7 +41,7 @@ namespace PrimitierServer
 
 	public static class ConfigLoader
 	{
-		
+
 
 		private static ILog c_log = LogManager.GetLogger(nameof(ConfigLoader));
 		private const string c_ConfigFileName = "primsconfig.json";
@@ -50,7 +50,7 @@ namespace PrimitierServer
 		public static ConfigFile? Config = null;
 		public static event Action<ConfigFile?>? OnConfigReload;
 
-		
+
 
 		public static bool Load()
 		{
@@ -59,7 +59,7 @@ namespace PrimitierServer
 				s_options = new JsonSerializerOptions();
 				s_options.ReadCommentHandling = JsonCommentHandling.Skip;
 			}
-				
+
 
 			ConfigFile? newConfig;
 			try
@@ -72,14 +72,14 @@ namespace PrimitierServer
 				c_log.Error("Could not load config", e);
 				return false;
 			}
-			if(newConfig == null)
+			if (newConfig == null)
 			{
 				c_log.Error("loaded config was null");
 				return false;
 			}
 
 			newConfig = ValidateConfig(newConfig);
-			
+
 
 			OnConfigReload?.Invoke(newConfig);
 			Config = newConfig;
@@ -89,10 +89,8 @@ namespace PrimitierServer
 		private static ConfigFile ValidateConfig(ConfigFile config)
 		{
 			if (config.Debug != null && config.Debug.Debug == false)
-			{
 				config.Debug = null;
-			}
-			if(config.UpdateDelay < 50)
+			if (config.UpdateDelay < 50)
 			{
 				c_log.Warn("UpdateDelay was smaller than 50 ms. The client can not handle so many packets");
 				config.UpdateDelay = 50;

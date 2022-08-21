@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
-namespace PrimitierMultiplayerMod
+namespace PrimitierMultiplayer.Mod
 {
 	public class NameTag : MonoBehaviour
 	{

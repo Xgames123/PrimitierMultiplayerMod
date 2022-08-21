@@ -1,6 +1,6 @@
 ﻿using MelonLoader;
 using PrimitierModdingFramework;
-using PrimitierMultiplayerMod.Components;
+using PrimitierMultiplayer.Mod.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
-namespace PrimitierMultiplayerMod
+namespace PrimitierMultiplayer.Mod
 {
 	public static class MultiplayerManager
 	{

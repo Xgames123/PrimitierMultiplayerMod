@@ -1,7 +1,7 @@
 ﻿using MelonLoader;
 using System;
 
-namespace PrimitierMultiplayerMod
+namespace PrimitierMultiplayer.Mod
 {
 	public static class PlayerInfo
 	{

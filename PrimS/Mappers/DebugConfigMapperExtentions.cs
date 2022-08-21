@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PrimitierServer.Shared;
-using PrimitierServer.Shared.Config;
+using PrimitierMultiplayer.Shared;
+using PrimitierMultiplayer.Shared.Config;
 
-namespace PrimitierServer.Mappers
+namespace PrimitierMultiplayer.Server.Mappers
 {
 	public static class DebugConfigMapperExtentions
 	{

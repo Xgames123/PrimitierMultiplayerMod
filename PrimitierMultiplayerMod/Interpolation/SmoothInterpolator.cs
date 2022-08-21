@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace PrimitierMultiplayerMod.Interpolation
+namespace PrimitierMultiplayer.Mod.Interpolation
 {
 	public class SmoothInterpolator : Interpolator
 	{

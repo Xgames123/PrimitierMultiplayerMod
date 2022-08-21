@@ -4,10 +4,11 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using log4net;
-using PrimitierServer.Shared;
-using PrimitierServer.WorldStorage;
+using PrimitierMultiplayer.Server;
+using PrimitierMultiplayer.Server.WorldStorage;
+using PrimitierMultiplayer.Shared;
 
-namespace PrimitierServer.IPC
+namespace PrimitierMultiplayer.Server.IPC
 {
 
 
@@ -58,7 +59,7 @@ namespace PrimitierServer.IPC
 						return IPCResponce.Ok();
 					else
 						return IPCResponce.Error("Could not load config file");
-					
+
 				case IPCCommandType.ListPlayers:
 					return IPCResponce.Ok(PlayerManager.GetAllPlayers());
 

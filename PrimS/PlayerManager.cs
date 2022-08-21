@@ -1,5 +1,5 @@
 ﻿using log4net;
-using PrimitierServer.WorldStorage;
+using PrimitierMultiplayer.Server.WorldStorage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrimitierServer
+namespace PrimitierMultiplayer.Server
 {
 	public static class PlayerManager
 	{
@@ -58,7 +58,7 @@ namespace PrimitierServer
 			World.WriteWorldSettings();
 		}
 
-		
+
 		public static StoredPlayer? GetStoredPlayer(string staticId)
 		{
 			return World.Settings.Players.GetValueOrDefault(staticId);
@@ -81,7 +81,7 @@ namespace PrimitierServer
 				player.Hp = storedPlayer.Hp;
 			}
 
-			
+
 
 			Players.Add(runtimeId, player);
 			return player;

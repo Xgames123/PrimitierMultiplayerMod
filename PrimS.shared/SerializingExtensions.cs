@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 
-namespace PrimitierServer.Shared
+namespace PrimitierMultiplayer.Shared
 {
 	public static class SerializingExtensions
 	{

@@ -1,6 +1,6 @@
 ﻿using PrimitierModdingFramework;
 using PrimitierModdingFramework.SubstanceModding;
-using PrimitierServer.Shared;
+using PrimitierMultiplayer.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace PrimitierMultiplayerMod.Components
+namespace PrimitierMultiplayer.Mod.Components
 {
 	public class NetworkSync : MonoBehaviour
 	{

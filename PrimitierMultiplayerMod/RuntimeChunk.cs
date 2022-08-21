@@ -1,11 +1,11 @@
-﻿using PrimitierMultiplayerMod.Components;
+﻿using PrimitierMultiplayer.Mod.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrimitierMultiplayerMod
+namespace PrimitierMultiplayer.Mod
 {
 	public class RuntimeChunk
 	{

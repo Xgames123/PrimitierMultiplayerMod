@@ -8,10 +8,10 @@ using MelonLoader;
 using System.Net;
 using LiteNetLib;
 using PrimitierModdingFramework.SubstanceModding;
-using PrimitierMultiplayerMod.Components;
+using PrimitierMultiplayer.Mod.Components;
 using System.Linq;
 
-namespace PrimitierMultiplayerMod
+namespace PrimitierMultiplayer.Mod
 {
 
 	public class Mod : PrimitierMod
@@ -26,7 +26,7 @@ namespace PrimitierMultiplayerMod
 			PlayerInfo.Load();
 			UpdatePacketSender.Setup();
 
-			
+
 			Chat = Chat.Setup();
 
 			JoinGameButton.Create();

@@ -1,11 +1,11 @@
-﻿using PrimitierServer.Shared;
+﻿using PrimitierMultiplayer.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrimitierServer.Mappers
+namespace PrimitierMultiplayer.Server.Mappers
 {
 	public static class PlayerMapperExtentions
 	{

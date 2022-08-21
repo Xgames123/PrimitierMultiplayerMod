@@ -1,6 +1,6 @@
 ﻿using PrimitierModdingFramework;
-using PrimitierMultiplayerMod.Components;
-using PrimitierServer.Shared;
+using PrimitierMultiplayer.Mod.Components;
+using PrimitierMultiplayer.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace PrimitierMultiplayerMod
+namespace PrimitierMultiplayer.Mod
 {
 	public static class WorldManager
 	{

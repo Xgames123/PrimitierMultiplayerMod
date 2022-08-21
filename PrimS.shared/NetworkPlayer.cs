@@ -5,7 +5,7 @@ using System.Text;
 using LiteNetLib;
 using LiteNetLib.Utils;
 
-namespace PrimitierServer.Shared
+namespace PrimitierMultiplayer.Shared
 {
 	public struct NetworkPlayer : INetSerializable
 	{

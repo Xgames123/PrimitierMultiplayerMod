@@ -1,7 +1,7 @@
 ﻿using log4net;
-using PrimitierServer;
-using PrimitierServer.IPC;
-using PrimitierServer.WorldStorage;
+using PrimitierMultiplayer;
+using PrimitierMultiplayer.Server.IPC;
+using PrimitierMultiplayer.Server.WorldStorage;
 using System;
 using System.IO;
 using System.Threading;

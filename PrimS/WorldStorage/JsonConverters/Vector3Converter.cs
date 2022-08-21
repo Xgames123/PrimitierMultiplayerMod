@@ -2,58 +2,63 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-public class Vector3Converter : JsonConverter<System.Numerics.Vector3>
+namespace PrimitierMultiplayer.Server
 {
-    public override System.Numerics.Vector3 Read(ref Utf8JsonReader reader,
-        Type typeToConvert, JsonSerializerOptions options)
+
+    public class Vector3Converter : JsonConverter<System.Numerics.Vector3>
     {
-        if (reader.TokenType != JsonTokenType.StartObject)
+        public override System.Numerics.Vector3 Read(ref Utf8JsonReader reader,
+            Type typeToConvert, JsonSerializerOptions options)
         {
-            throw new JsonException();
-        }
-
-        System.Numerics.Vector3 result = new System.Numerics.Vector3();
-
-        while (reader.Read())
-        {
-            if (reader.TokenType == JsonTokenType.EndObject)
-            {
-                return result;
-            }
-
-            if (reader.TokenType != JsonTokenType.PropertyName)
+            if (reader.TokenType != JsonTokenType.StartObject)
             {
                 throw new JsonException();
             }
 
-            var propName = reader.GetString();
-            reader.Read();
-            switch (propName)
+            System.Numerics.Vector3 result = new System.Numerics.Vector3();
+
+            while (reader.Read())
             {
-                case "x":
-                    result.X = (float)reader.GetDouble();
-                    break;
+                if (reader.TokenType == JsonTokenType.EndObject)
+                {
+                    return result;
+                }
 
-                case "y":
-                    result.Y = (float)reader.GetDouble();
-                    break;
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    throw new JsonException();
+                }
 
-                case "z":
-                    result.Z = (float)reader.GetDouble();
-                    break;
+                var propName = reader.GetString();
+                reader.Read();
+                switch (propName)
+                {
+                    case "x":
+                        result.X = (float)reader.GetDouble();
+                        break;
+
+                    case "y":
+                        result.Y = (float)reader.GetDouble();
+                        break;
+
+                    case "z":
+                        result.Z = (float)reader.GetDouble();
+                        break;
+                }
             }
+
+            throw new JsonException();
         }
 
-        throw new JsonException();
-    }
+        public override void Write(Utf8JsonWriter writer,
+            System.Numerics.Vector3 value, JsonSerializerOptions options)
+        {
+            writer.WriteStartObject();
+            writer.WriteNumber("x", value.X);
+            writer.WriteNumber("y", value.Y);
+            writer.WriteNumber("z", value.Z);
+            writer.WriteEndObject();
 
-    public override void Write(Utf8JsonWriter writer,
-        System.Numerics.Vector3 value, JsonSerializerOptions options)
-    {
-        writer.WriteStartObject();
-        writer.WriteNumber("x", value.X);
-        writer.WriteNumber("y", value.Y);
-        writer.WriteNumber("z", value.Z);
-        writer.WriteEndObject();
+        }
     }
 }

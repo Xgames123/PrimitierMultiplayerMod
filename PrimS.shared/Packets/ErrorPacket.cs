@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PrimitierServer.Shared.Packets
+namespace PrimitierMultiplayer.Shared.Packets
 {
 	public class ErrorPacket
 	{

@@ -8,10 +8,10 @@ using log4net;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Numerics;
-using PrimitierServer.Shared;
-using PrimitierServer.Mappers;
+using PrimitierMultiplayer.Shared;
+using PrimitierMultiplayer.Server.Mappers;
 
-namespace PrimitierServer.WorldStorage
+namespace PrimitierMultiplayer.Server.WorldStorage
 {
 
 
@@ -142,7 +142,7 @@ namespace PrimitierServer.WorldStorage
 			SaveAllChunks();
 			NeedsSaving.Clear();
 			Chunks.Clear();
-			
+
 		}
 
 		public static void SaveAllChunks()
@@ -164,7 +164,8 @@ namespace PrimitierServer.WorldStorage
 					{
 						var json = JsonSerializer.Serialize(Chunks[position], s_options);
 						File.WriteAllText(Path.Combine(WorldDirectory, ChunkDirectoryPath, chunkName), json);
-					}catch(Exception e)
+					}
+					catch (Exception e)
 					{
 						s_log.Error($"Could not save chunk '{chunkName}'\nInternalError: {e}");
 						return false;
@@ -185,7 +186,7 @@ namespace PrimitierServer.WorldStorage
 				Chunks[chunkPosition] = chunk;
 				return;
 			}
-				
+
 		}
 
 		public static NetworkChunk GetChunk(Vector2 position)
@@ -194,13 +195,9 @@ namespace PrimitierServer.WorldStorage
 				return chunk;
 			var newChunk = LoadChunk(position);
 			if (newChunk == null)
-			{
 				return NetworkChunk.NewBrokenChunk();
-			}
-			if(newChunk.Cubes.Count == 0)
-			{
+			if (newChunk.Cubes.Count == 0)
 				return NetworkChunk.NewEmptyChunk();
-			}
 
 			var netChunk = newChunk.ToNetworkChunk(-1);
 			Chunks.Add(position, netChunk);
@@ -213,9 +210,7 @@ namespace PrimitierServer.WorldStorage
 			var chunkName = $"{position.X}_{position.Y}chunk.json";
 			var chunkPath = Path.Combine(WorldDirectory, ChunkDirectoryPath, chunkName);
 			if (!File.Exists(chunkPath))
-			{
 				return new StoredChunk();
-			}
 
 			try
 			{

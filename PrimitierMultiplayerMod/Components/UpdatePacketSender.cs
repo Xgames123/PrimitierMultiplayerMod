@@ -1,5 +1,5 @@
 ﻿using PrimitierModdingFramework;
-using PrimitierServer.Shared.Packets.c2s;
+using PrimitierMultiplayer.Shared.Packets.c2s;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace PrimitierMultiplayerMod.Components
+namespace PrimitierMultiplayer.Mod.Components
 {
 	public class UpdatePacketSender : MonoBehaviour
 	{

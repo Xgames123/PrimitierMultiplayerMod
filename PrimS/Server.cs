@@ -7,17 +7,17 @@ using LiteNetLib;
 using LiteNetLib.Utils;
 using log4net;
 using log4net.Core;
-using PrimitierServer.Shared.Packets;
-using PrimitierServer.Shared.Packets.c2s;
-using PrimitierServer.Shared.Packets.s2c;
-using PrimitierServer.Shared;
+using PrimitierMultiplayer.Shared.Packets;
+using PrimitierMultiplayer.Shared.Packets.c2s;
+using PrimitierMultiplayer.Shared.Packets.s2c;
+using PrimitierMultiplayer.Shared;
 using System.Numerics;
 using System.Diagnostics;
-using PrimitierServer.Mappers;
-using PrimitierServer.WorldStorage;
-using PrimitierServer.Shared;
+using PrimitierMultiplayer.Mappers;
+using PrimitierMultiplayer.Shared;
+using PrimitierMultiplayer.Server.WorldStorage;
 
-namespace PrimitierServer
+namespace PrimitierMultiplayer.Server
 {
 	public class Server
 	{
@@ -81,16 +81,16 @@ namespace PrimitierServer
 		private void SendPacketToAll<T>(T packet, DeliveryMethod deliveryMethod) where T : class, new()
 		{
 			_writer.Reset();
-			_packetProcessor.Write<T>(_writer, packet);
+			_packetProcessor.Write(_writer, packet);
 			NetManager.SendToAll(_writer, deliveryMethod);
 		}
 
 
 		private void SendPacket<T>(NetPeer peer, T packet, DeliveryMethod deliveryMethod) where T : class, new()
 		{
-			
+
 			_writer.Reset();
-			_packetProcessor.Write<T>(_writer, packet);
+			_packetProcessor.Write(_writer, packet);
 			peer.Send(_writer, deliveryMethod);
 		}
 
@@ -162,7 +162,7 @@ namespace PrimitierServer
 			if (ConfigLoader.Config == null)
 				return;
 
-			if(UpdateStopwatch.ElapsedMilliseconds >= ConfigLoader.Config.UpdateDelay)
+			if (UpdateStopwatch.ElapsedMilliseconds >= ConfigLoader.Config.UpdateDelay)
 			{
 				UpdateStopwatch.Restart();
 
@@ -183,7 +183,7 @@ namespace PrimitierServer
 
 				var chunks = FindNetworkChunksAroundPlayer(currentPlayer, 20);
 
-				SendPacket<ServerUpdatePacket>(peer, new ServerUpdatePacket() { Players = players.ToArray(), Chunks = chunks.ToArray() }, DeliveryMethod.Unreliable);
+				SendPacket(peer, new ServerUpdatePacket() { Players = players.ToArray(), Chunks = chunks.ToArray() }, DeliveryMethod.Unreliable);
 
 			}
 
@@ -198,9 +198,9 @@ namespace PrimitierServer
 			var center = ChunkMath.WorldToChunkPos(currentPlayer.Position);
 
 			var chunkRadius = ChunkMath.WorldToChunkRadius(radius);
-			for (float x = center.X- chunkRadius; x < center.X + chunkRadius; x++)
+			for (float x = center.X - chunkRadius; x < center.X + chunkRadius; x++)
 			{
-				for (float y = center.Y- chunkRadius; y < center.Y+ chunkRadius; y++)
+				for (float y = center.Y - chunkRadius; y < center.Y + chunkRadius; y++)
 				{
 					var chunkPos = new Vector2(x, y);
 					if (Vector2.Distance(chunkPos, center) < chunkRadius)
@@ -233,7 +233,7 @@ namespace PrimitierServer
 				return;
 			}
 			var oldPlayer = PlayerManager.GetPlayerById(chunk.Owner);
-			if(oldPlayer == null)
+			if (oldPlayer == null)
 			{
 				World.UpdateChunkOwner(playerChunk, player.RuntimeId);
 				return;
@@ -262,14 +262,12 @@ namespace PrimitierServer
 
 				}
 
-				
+
 
 				var dist = Vector3.Distance(player.Position, currentPlayer.Position);
 
 				if (dist <= radius)
-				{
 					foundPlayers.Add(player.ToNetworkPlayer());
-				}
 
 			}
 			return foundPlayers;
@@ -286,7 +284,7 @@ namespace PrimitierServer
 
 		}
 
-		
+
 		private void OnJoinRequest(JoinRequestPacket packet, NetPeer peer)
 		{
 			var newRuntimePlayer = PlayerManager.CreateNewPlayer(packet.Username, peer.Id, packet.StaticPlayerId);
@@ -304,19 +302,19 @@ namespace PrimitierServer
 			}
 
 
-			SendPacket(peer, new JoinAcceptPacket() 
-			{ 
-				Id = peer.Id, 
+			SendPacket(peer, new JoinAcceptPacket()
+			{
+				Id = peer.Id,
 				Username = newRuntimePlayer.Username,
-				Position = newRuntimePlayer.Position, 
-				WorldSeed = World.Settings.Seed, 
-				PlayersAlreadyInGame = playersAlreadyInGame, 
-				
+				Position = newRuntimePlayer.Position,
+				WorldSeed = World.Settings.Seed,
+				PlayersAlreadyInGame = playersAlreadyInGame,
+
 				ClientConfig = ConfigLoader.Config.Client.ToNetworkClientConfig(),
 
 				Debug = ConfigLoader.Config.Debug != null,
-				DebugConfig = ConfigLoader.Config.Debug.ToNetworkDebugConfig(), 
-				
+				DebugConfig = ConfigLoader.Config.Debug.ToNetworkDebugConfig(),
+
 			}, DeliveryMethod.ReliableOrdered);
 
 			var initialPlayerData = newRuntimePlayer.ToInitialPlayerData();

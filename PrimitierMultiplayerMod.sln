@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimitierMultiplayerMod", "PrimitierMultiplayerMod\PrimitierMultiplayerMod.csproj", "{641884AC-5B59-43C3-A166-FDE4BAD6E574}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimitierMultiplayer.Mod", "PrimitierMultiplayerMod\PrimitierMultiplayer.Mod.csproj", "{641884AC-5B59-43C3-A166-FDE4BAD6E574}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimitierServer", "PrimS\PrimitierServer.csproj", "{CB87E300-D425-48F9-9553-A4D2E449F9A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimitierMultiplayer.Server", "PrimS\PrimitierMultiplayer.Server.csproj", "{CB87E300-D425-48F9-9553-A4D2E449F9A2}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared", "PrimS.shared\Shared.shproj", "{4D1FE002-BDF1-444B-80C8-F9A1063AC330}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PrimitierMultiplayer.Shared", "PrimS.shared\PrimitierMultiplayer.Shared.shproj", "{4D1FE002-BDF1-444B-80C8-F9A1063AC330}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiteNetLib", "LiteNetLib\LiteNetLib\LiteNetLib.csproj", "{AC04F262-117A-47B7-8DBA-013D2C37690E}"
 EndProject

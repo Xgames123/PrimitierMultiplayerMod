@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace PrimitierMultiplayerMod.Patches
+namespace PrimitierMultiplayer.Mod.Patches
 {
 	[HarmonyPatch(typeof(CubeGenerator), nameof(CubeGenerator.GenerateChunk))]
 	public class CubeGenerator_GenerateChunk

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrimitierMultiplayerMod.Patches
+namespace PrimitierMultiplayer.Mod.Patches
 {
 	[HarmonyPatch(typeof(CubeGenerator), nameof(CubeGenerator.GenerateNewChunk))]
 	public class CubeGenerator_GenerateNewChunkPatch

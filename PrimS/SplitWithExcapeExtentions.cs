@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrimitierServer
+namespace PrimitierMultiplayer.Server
 {
 	public static class SplitWithExcapeExtentions
 	{
 
-		public static string[] SplitWithEscape(this string inputStr, char delimiter, char escape, bool removeEmptyEntries=true)
+		public static string[] SplitWithEscape(this string inputStr, char delimiter, char escape, bool removeEmptyEntries = true)
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			bool skip = false;
-			
-			List<string> split = new List<string>();
+
+			var split = new List<string>();
 
 			foreach (char character in inputStr)
 			{
@@ -24,19 +24,17 @@ namespace PrimitierServer
 					continue;
 				}
 
-				if(character == escape)
+				if (character == escape)
 				{
 					skip = true;
 					continue;
 				}
 
-				if(character == delimiter)
+				if (character == delimiter)
 				{
 					var str = sb.ToString();
 					if (!string.IsNullOrWhiteSpace(str))
-					{
 						split.Add(str);
-					}
 					sb.Clear();
 
 				}

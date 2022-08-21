@@ -9,7 +9,7 @@ using TMPro;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 
-namespace PrimitierMultiplayerMod.Components
+namespace PrimitierMultiplayer.Mod.Components
 {
 	public class JoinGameButton : MonoBehaviour
 	{

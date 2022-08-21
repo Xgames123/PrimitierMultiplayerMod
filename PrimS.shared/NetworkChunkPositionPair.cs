@@ -4,7 +4,7 @@ using System.Text;
 using System.Numerics;
 using LiteNetLib.Utils;
 
-namespace PrimitierServer.Shared
+namespace PrimitierMultiplayer.Shared
 {
 	public struct NetworkChunkPositionPair : INetSerializable
 	{

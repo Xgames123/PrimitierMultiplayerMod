@@ -1,10 +1,10 @@
 ﻿using LiteNetLib.Utils;
-using PrimitierServer.Shared.Config;
+using PrimitierMultiplayer.Shared.Config;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PrimitierServer.Shared
+namespace PrimitierMultiplayer.Shared
 {
 	public static class PacketProcessorTypeRegister
 	{
