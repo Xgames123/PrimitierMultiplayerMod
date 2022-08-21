@@ -54,6 +54,7 @@ namespace PrimitierMultiplayer.Mod
 
 
 			PMFHelper.CameraRig.position = Vector3.zero;
+			Camera.main.transform.position = Vector3.zero;
 			TerrainMeshGenerator.areaPosOffset = Vector2Int.zero;
 
 			WorldManager.WorldSeed = seed;

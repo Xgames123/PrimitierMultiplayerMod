@@ -82,10 +82,10 @@ namespace PrimitierMultiplayer.Mod
 				CreateModChunk(chunkPosPair);
 			}
 
-			if (chunk.Owner == MultiplayerManager.Client.LocalId)
+			if (chunk.Owner == MultiplayerManager.Client.LocalId && runtimeChunk != null)
 			{
 				//Skip chunk because we own it
-
+				
 				OwnedChunks.Add(chunkPos);
 				return;
 			}

@@ -37,6 +37,7 @@ namespace PrimitierMultiplayer.Mod
 				PMFLog.Error("Terrain generator settings are changed. Trying to reset settings");
 				TerrainMeshGenerator.tileLength = 4;
 				CubeGenerator.chunkTileCount = 4;
+				
 			}
 
 		}
@@ -127,6 +128,7 @@ namespace PrimitierMultiplayer.Mod
 				PMFLog.Message($"Synced object count: {NetworkSync.NetworkSyncList.Count}");
 				PMFLog.Message($"Chunk size: {TerrainMeshGenerator.tileLength}");
 				PMFLog.Message($"Tiles per chunk: {CubeGenerator.chunkTileCount}");
+				PMFLog.Message($"areaPosOffset: {TerrainMeshGenerator.areaPosOffset}");
 			}
 			if (Input.GetKeyUp(KeyCode.F6))
 			{
