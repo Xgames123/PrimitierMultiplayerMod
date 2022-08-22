@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PrimitierMultiplayer.Shared
 {
-	public static class SerializingExtensions
+	public static class SystemNumericsSerializingExtensions
 	{
 
 		public static void Put(this NetDataWriter writer, Vector3 vector3)

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Numerics;
 using LiteNetLib.Utils;
+using PrimitierServer.Shared;
 
-namespace PrimitierMultiplayer.Shared
+namespace PrimitierMultiplayer.Shared.Models
 {
-	public struct NetworkChunkPositionPair : INetSerializable
+	public struct NetworkChunkPositionPair : INetworkModel
 	{
 		public NetworkChunk Chunk;
 		public Vector2 Position;

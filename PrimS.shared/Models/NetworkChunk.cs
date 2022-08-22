@@ -1,9 +1,10 @@
 ﻿using LiteNetLib.Utils;
+using PrimitierServer.Shared;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PrimitierMultiplayer.Shared
+namespace PrimitierMultiplayer.Shared.Models
 {
 	public enum NetworkChunkType
 	{
@@ -13,7 +14,7 @@ namespace PrimitierMultiplayer.Shared
 
 	}
 
-	public struct NetworkChunk : INetSerializable
+	public struct NetworkChunk : INetworkModel
 	{
 		public static NetworkChunk NewEmptyChunk() { return new NetworkChunk() { ChunkType = NetworkChunkType.Empty }; }
 		public static NetworkChunk NewBrokenChunk() { return new NetworkChunk() { ChunkType = NetworkChunkType.Broken }; }

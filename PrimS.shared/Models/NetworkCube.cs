@@ -1,11 +1,12 @@
 ﻿using LiteNetLib.Utils;
+using PrimitierServer.Shared;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PrimitierMultiplayer.Shared
+namespace PrimitierMultiplayer.Shared.Models
 {
-	public struct NetworkCube : INetSerializable
+	public struct NetworkCube : INetworkModel
 	{
 		public uint Id;
 		public System.Numerics.Vector3 Position;

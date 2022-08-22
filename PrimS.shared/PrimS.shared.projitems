@@ -11,24 +11,26 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ErrorCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ErrorGenerator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)InitialPlayerData.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NetworkChunk.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)INetworkModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\InitialPlayerData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkChunk.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Config\NetworkDebugConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Config\NetworkClientConfig.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NetworkChunkPositionPair.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NetworkCube.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NetworkPlayer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkChunkPositionPair.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkCube.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkPlayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PacketProcessorTypeRegister.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\c2s\PlayerUpdatePacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\PlayerJoinedPacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\PlayerLeavePacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\ServerUpdatePacket.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SerializingExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SystemNumericsSerializingExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\c2s\JoinRequestPacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\ErrorPacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\JoinAcceptPacket.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Config\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Models\" />
   </ItemGroup>
 </Project>

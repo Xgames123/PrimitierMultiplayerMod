@@ -4,10 +4,11 @@ using System.Numerics;
 using System.Text;
 using LiteNetLib;
 using LiteNetLib.Utils;
+using PrimitierServer.Shared;
 
-namespace PrimitierMultiplayer.Shared
+namespace PrimitierMultiplayer.Shared.Models
 {
-	public struct NetworkPlayer : INetSerializable
+	public struct NetworkPlayer : INetworkModel
 	{
 		public int Id;
 		public Vector3 Position;

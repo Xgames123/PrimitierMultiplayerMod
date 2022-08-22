@@ -1,12 +1,13 @@
 ﻿using LiteNetLib.Utils;
+using PrimitierServer.Shared;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 
-namespace PrimitierMultiplayer.Shared
+namespace PrimitierMultiplayer.Shared.Models
 {
-	public struct InitialPlayerData : INetSerializable
+	public struct InitialPlayerData : INetworkModel
 	{
 		public int Id { get; set; }
 		public string Username { get; set; }
