@@ -1,14 +1,19 @@
 ﻿using LiteNetLib.Utils;
-using PrimitierMultiplayer.Shared.Config;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
+using PrimitierMultiplayer.Shared.Models;
+using PrimitierMultiplayer.Shared.Models.Config;
 
 namespace PrimitierMultiplayer.Shared
 {
 	public static class PacketProcessorTypeRegister
 	{
-		public static void RegisterNetworkTypes(ref NetPacketProcessor packetProcessor)
+
+
+
+		public static void RegisterNetworkModels(ref NetPacketProcessor packetProcessor)
 		{
 			packetProcessor.RegisterNestedType<NetworkClientConfig>();
 			packetProcessor.RegisterNestedType<NetworkDebugConfig>();

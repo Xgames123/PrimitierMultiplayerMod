@@ -13,6 +13,7 @@ using System.Numerics;
 using System.Diagnostics;
 using PrimitierMultiplayer.Server.Mappers;
 using PrimitierMultiplayer.Server.WorldStorage;
+using PrimitierMultiplayer.Shared.Models;
 
 namespace PrimitierMultiplayer.Server
 {
@@ -46,7 +47,7 @@ namespace PrimitierMultiplayer.Server
 
 			_writer = new NetDataWriter();
 			_packetProcessor = new NetPacketProcessor();
-			PacketProcessorTypeRegister.RegisterNetworkTypes(ref _packetProcessor);
+			PacketProcessorTypeRegister.RegisterNetworkModels(ref _packetProcessor);
 
 			_packetProcessor.SubscribeReusable<JoinRequestPacket, NetPeer>(OnJoinRequest);
 			_packetProcessor.SubscribeReusable<PlayerUpdatePacket, NetPeer>(OnPlayerUpdate);
@@ -75,21 +76,7 @@ namespace PrimitierMultiplayer.Server
 
 		}
 
-		private void SendPacketToAll<T>(T packet, DeliveryMethod deliveryMethod) where T : class, new()
-		{
-			_writer.Reset();
-			_packetProcessor.Write(_writer, packet);
-			NetManager.SendToAll(_writer, deliveryMethod);
-		}
-
-
-		private void SendPacket<T>(NetPeer peer, T packet, DeliveryMethod deliveryMethod) where T : class, new()
-		{
-
-			_writer.Reset();
-			_packetProcessor.Write(_writer, packet);
-			peer.Send(_writer, deliveryMethod);
-		}
+		
 
 
 		private void NetworkErrorEvent(System.Net.IPEndPoint endPoint, System.Net.Sockets.SocketError socketError)

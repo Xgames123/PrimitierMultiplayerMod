@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using LiteNetLib.Utils;
+using PrimitierMultiplayer.Shared;
+using PrimitierServer.Shared;
 
-namespace PrimitierMultiplayer.Shared.Config
+namespace PrimitierMultiplayer.Shared.Models.Config
 {
-	public struct NetworkClientConfig : INetSerializable
+	public struct NetworkClientConfig : INetworkModel
 	{
 		public int IdleUpdateDelay;
 		public int ActiveUpdateDelay;

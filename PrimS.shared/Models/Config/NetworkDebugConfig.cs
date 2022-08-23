@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using LiteNetLib.Utils;
+using PrimitierServer.Shared;
 
-namespace PrimitierMultiplayer.Shared.Config
+namespace PrimitierMultiplayer.Shared.Models.Config
 {
-	public struct NetworkDebugConfig : INetSerializable
+	public struct NetworkDebugConfig : INetworkModel
 	{
 		public bool ShowLocalPlayer;
 

@@ -57,7 +57,7 @@ namespace PrimitierMultiplayer.Mod
 				Disconnect();
 
 			_packetProcessor = new NetPacketProcessor();
-			PacketProcessorTypeRegister.RegisterNetworkTypes(ref _packetProcessor);
+			PacketProcessorTypeRegister.RegisterNetworkModels(ref _packetProcessor);
 
 			_packetProcessor.SubscribeReusable<JoinAcceptPacket>(OnJoinAcceptPacket);
 			_packetProcessor.SubscribeReusable<PlayerJoinedPacket>(OnPlayerJoinedPacket);

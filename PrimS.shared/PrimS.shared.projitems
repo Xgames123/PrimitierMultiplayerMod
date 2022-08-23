@@ -6,7 +6,7 @@
     <SharedGUID>4d1fe002-bdf1-444b-80c8-f9a1063ac330</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>PrimitierServer.Shared</Import_RootNamespace>
+    <Import_RootNamespace>PrimitierMultiplayer.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ErrorCode.cs" />
@@ -14,11 +14,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)INetworkModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\InitialPlayerData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkChunk.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Config\NetworkDebugConfig.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Config\NetworkClientConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Config\NetworkDebugConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Config\NetworkClientConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkChunkPositionPair.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkCube.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkPlayer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PacketHandeling\PacketHandeler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PacketProcessorTypeRegister.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\c2s\PlayerUpdatePacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\PlayerJoinedPacket.cs" />
@@ -30,7 +31,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\JoinAcceptPacket.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Config\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Models\Config\" />
     <Folder Include="$(MSBuildThisFileDirectory)Models\" />
   </ItemGroup>
 </Project>
