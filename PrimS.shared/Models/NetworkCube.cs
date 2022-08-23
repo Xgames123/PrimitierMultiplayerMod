@@ -1,5 +1,5 @@
 ﻿using LiteNetLib.Utils;
-using PrimitierServer.Shared;
+using PrimitierMultiplayer.Shared;
 using System;
 using System.Collections.Generic;
 using System.Text;

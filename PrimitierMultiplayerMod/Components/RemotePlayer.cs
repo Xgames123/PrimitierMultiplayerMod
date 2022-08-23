@@ -1,6 +1,7 @@
 ﻿using PrimitierModdingFramework;
 using PrimitierMultiplayer.Mod.Interpolation;
 using PrimitierMultiplayer.Shared;
+using PrimitierMultiplayer.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,6 +79,14 @@ namespace PrimitierMultiplayer.Mod.Components
 			{
 				DeletePlayer(player);
 			}
+		}
+
+		public static void Create(InitialPlayerData initialPlayerData, bool addJoinedMessageToChat=true)
+		{
+			if(addJoinedMessageToChat)
+				Mod.Chat.AddServerMessage($"{initialPlayerData.Username} has Joined the game");
+
+			Create(initialPlayerData.Id, initialPlayerData.Username, initialPlayerData.Position.ToUnity());
 		}
 
 

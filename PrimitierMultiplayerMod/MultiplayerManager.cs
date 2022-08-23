@@ -19,6 +19,8 @@ namespace PrimitierMultiplayer.Mod
 		public static MelonPreferences_Entry<string> ServerAddress = null;
 		public static MelonPreferences_Entry<int> ServerPort = null;
 
+		public static int LocalId = -1;
+
 		public static bool IsInMultiplayerMode = false;
 
 		public static void ConnectToServer()
@@ -75,6 +77,7 @@ namespace PrimitierMultiplayer.Mod
 
 		public static void ExitGame()
 		{
+			Mod.Chat.Clear();
 			IsInMultiplayerMode = false;
 		}
 

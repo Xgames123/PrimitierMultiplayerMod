@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Numerics;
 using LiteNetLib.Utils;
-using PrimitierServer.Shared;
 
 namespace PrimitierMultiplayer.Shared.Models
 {

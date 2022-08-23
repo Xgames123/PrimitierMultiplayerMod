@@ -14,6 +14,8 @@ using System.Diagnostics;
 using PrimitierMultiplayer.Server.Mappers;
 using PrimitierMultiplayer.Server.WorldStorage;
 using PrimitierMultiplayer.Shared.Models;
+using PrimitierMultiplayer.Shared.PacketHandling;
+using System.Reflection;
 
 namespace PrimitierMultiplayer.Server
 {
@@ -48,9 +50,7 @@ namespace PrimitierMultiplayer.Server
 			_writer = new NetDataWriter();
 			_packetProcessor = new NetPacketProcessor();
 			PacketProcessorTypeRegister.RegisterNetworkModels(ref _packetProcessor);
-
-			_packetProcessor.SubscribeReusable<JoinRequestPacket, NetPeer>(OnJoinRequest);
-			_packetProcessor.SubscribeReusable<PlayerUpdatePacket, NetPeer>(OnPlayerUpdate);
+			PacketHandlerRegister.AddPacketHandlers(Assembly.GetExecutingAssembly(), ref _writer, ref _packetProcessor, ref NetManager);
 
 			ConfigLoader.OnConfigReload += OnConfigReload;
 			OnConfigReload(ConfigLoader.Config);
@@ -154,6 +154,19 @@ namespace PrimitierMultiplayer.Server
 			}
 
 		}
+		private void SendPacket<T>(NetPeer peer, T packet, DeliveryMethod deliveryMethod) where T : class, new()
+		{
+			_writer.Reset();
+			_packetProcessor.Write<T>(_writer, packet);
+			peer.Send(_writer, deliveryMethod);
+		}
+		private void SendPacketToAll<T>(T packet, DeliveryMethod deliveryMethod) where T : class, new()
+		{
+			_writer.Reset();
+			_packetProcessor.Write<T>(_writer, packet);
+			NetManager.SendToAll(_writer, deliveryMethod);
+		}
+
 		private void SendUpdatePackets()
 		{
 			foreach (var peer in NetManager.ConnectedPeerList)
@@ -192,7 +205,7 @@ namespace PrimitierMultiplayer.Server
 
 						var chunk = World.GetChunk(center);
 
-						TryOwnChunk(currentPlayer, chunkPos, chunkRadius);
+						World.TryOwnChunk(currentPlayer, chunkPos, chunkRadius);
 
 						foundChunks.Add(new NetworkChunkPositionPair(chunk, center));
 					}
@@ -202,39 +215,6 @@ namespace PrimitierMultiplayer.Server
 
 			return foundChunks;
 		}
-
-		private void TryOwnChunk(RuntimePlayer player, Vector2 chunkPos, float ownRadius)
-		{
-
-			//return;
-
-			var chunk = World.GetChunk(chunkPos);
-
-			var playerChunk = ChunkMath.WorldToChunkPos(player.Position);
-
-			if (chunk.Owner == player.RuntimeId)
-				return;
-			if (chunk.Owner == -1)
-			{
-				World.UpdateChunkOwner(playerChunk, player.RuntimeId);
-				return;
-			}
-			var oldPlayer = PlayerManager.GetPlayerById(chunk.Owner);
-			if (oldPlayer == null)
-			{
-				World.UpdateChunkOwner(playerChunk, player.RuntimeId);
-				return;
-			}
-			if (Vector2.Distance(chunkPos, ChunkMath.WorldToChunkPos(oldPlayer.Position)) >= ownRadius)
-			{
-				World.UpdateChunkOwner(playerChunk, player.RuntimeId);
-				return;
-			}
-
-
-
-		}
-
 
 		private List<NetworkPlayer> FindNetworkPlayersAroundPlayer(RuntimePlayer currentPlayer, int radius)
 		{
@@ -261,7 +241,6 @@ namespace PrimitierMultiplayer.Server
 		}
 
 
-
 		public void Stop()
 		{
 
@@ -272,59 +251,7 @@ namespace PrimitierMultiplayer.Server
 		}
 
 
-		private void OnJoinRequest(JoinRequestPacket packet, NetPeer peer)
-		{
-			var newRuntimePlayer = PlayerManager.CreateNewPlayer(packet.Username, peer.Id, packet.StaticPlayerId);
 
-
-			_log.Info($"{packet.Username} joined the game");
-			_log.Debug($"{newRuntimePlayer.Position.X} {newRuntimePlayer.Position.Y} {newRuntimePlayer.Position.Z}");
-
-			var playersAlreadyInGame = new List<InitialPlayerData>();
-			foreach (var runtimePlayer in PlayerManager.Players.Values)
-			{
-				if (runtimePlayer.RuntimeId == peer.Id)
-					continue;
-
-				playersAlreadyInGame.Add(runtimePlayer.ToInitialPlayerData());
-			}
-
-
-			SendPacket(peer, new JoinAcceptPacket()
-			{
-				Id = peer.Id,
-				Username = newRuntimePlayer.Username,
-				Position = newRuntimePlayer.Position,
-				WorldSeed = World.Settings.Seed,
-				PlayersAlreadyInGame = playersAlreadyInGame,
-
-				ClientConfig = ConfigLoader.Config.Client.ToNetworkClientConfig(),
-
-				Debug = ConfigLoader.Config.Debug != null,
-				DebugConfig = ConfigLoader.Config.Debug.ToNetworkDebugConfig(),
-
-			}, DeliveryMethod.ReliableOrdered);
-
-			var initialPlayerData = newRuntimePlayer.ToInitialPlayerData();
-			SendPacketToAll(new PlayerJoinedPacket() { initialPlayerData = initialPlayerData }, DeliveryMethod.ReliableOrdered);
-		}
-
-		private void OnPlayerUpdate(PlayerUpdatePacket packet, NetPeer peer)
-		{
-			var player = PlayerManager.GetPlayerById(peer.Id);
-			if (player == null)
-			{
-				_log.Error("Got update form non joined player");
-				return;
-			}
-
-			//_log.Debug($"PLAYER UPDATE Position={packet.Position}; HeadPosition={packet.HeadPosition}; RHandPosition={packet.RHandPosition}; LHandPosition={packet.LHandPosition};");
-
-			player.Position = packet.Position;
-			player.HeadPosition = packet.HeadPosition;
-			player.RHandPosition = packet.RHandPosition;
-			player.LHandPosition = packet.LHandPosition;
-		}
 
 
 

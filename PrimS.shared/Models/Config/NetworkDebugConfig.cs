@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using LiteNetLib.Utils;
-using PrimitierServer.Shared;
+using PrimitierMultiplayer.Shared;
 
 namespace PrimitierMultiplayer.Shared.Models.Config
 {

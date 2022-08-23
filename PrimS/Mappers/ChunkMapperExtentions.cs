@@ -1,5 +1,6 @@
 ﻿using PrimitierMultiplayer.Server.WorldStorage;
 using PrimitierMultiplayer.Shared;
+using PrimitierMultiplayer.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

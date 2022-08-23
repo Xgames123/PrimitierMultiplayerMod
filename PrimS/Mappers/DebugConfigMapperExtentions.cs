@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PrimitierMultiplayer.Shared;
-using PrimitierMultiplayer.Shared.Config;
+using PrimitierMultiplayer.Shared.Models.Config;
 
 namespace PrimitierMultiplayer.Server.Mappers
 {

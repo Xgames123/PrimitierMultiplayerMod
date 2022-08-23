@@ -4,7 +4,6 @@ using System.Numerics;
 using System.Text;
 using LiteNetLib;
 using LiteNetLib.Utils;
-using PrimitierServer.Shared;
 
 namespace PrimitierMultiplayer.Shared.Models
 {

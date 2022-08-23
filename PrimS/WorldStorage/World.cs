@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Numerics;
 using PrimitierMultiplayer.Shared;
 using PrimitierMultiplayer.Server.Mappers;
+using PrimitierMultiplayer.Shared.Models;
 
 namespace PrimitierMultiplayer.Server.WorldStorage
 {
@@ -152,6 +153,36 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 			{
 				TrySaveChunk(chunk);
 			}
+		}
+
+		public static void TryOwnChunk(RuntimePlayer player, Vector2 chunkPos, float ownRadius)
+		{
+
+			var chunk = World.GetChunk(chunkPos);
+
+			var playerChunk = ChunkMath.WorldToChunkPos(player.Position);
+
+			if (chunk.Owner == player.RuntimeId)
+				return;
+			if (chunk.Owner == -1)
+			{
+				World.UpdateChunkOwner(playerChunk, player.RuntimeId);
+				return;
+			}
+			var oldPlayer = PlayerManager.GetPlayerById(chunk.Owner);
+			if (oldPlayer == null)
+			{
+				World.UpdateChunkOwner(playerChunk, player.RuntimeId);
+				return;
+			}
+			if (Vector2.Distance(chunkPos, ChunkMath.WorldToChunkPos(oldPlayer.Position)) >= ownRadius)
+			{
+				World.UpdateChunkOwner(playerChunk, player.RuntimeId);
+				return;
+			}
+
+
+
 		}
 
 		public static bool TrySaveChunk(Vector2 position)

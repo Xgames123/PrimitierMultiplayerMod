@@ -28,6 +28,8 @@ namespace PrimitierMultiplayer.Mod
 
 		private List<string> Lines = new List<string>();
 
+		
+
 		public static Chat Setup()
 		{
 
@@ -69,6 +71,12 @@ namespace PrimitierMultiplayer.Mod
 		{
 		}
 
+		public void Clear()
+		{
+			Lines.Clear();
+			Text.text = "";
+			UpdateText();
+		}
 
 		public void AddServerMessage(string message)
 		{

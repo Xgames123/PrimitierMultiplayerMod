@@ -19,7 +19,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkChunkPositionPair.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkCube.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkPlayer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PacketHandeling\PacketHandeler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PacketHandling\PacketHandeler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PacketHandling\PacketHandlerRegister.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PacketProcessorTypeRegister.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\c2s\PlayerUpdatePacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\PlayerJoinedPacket.cs" />

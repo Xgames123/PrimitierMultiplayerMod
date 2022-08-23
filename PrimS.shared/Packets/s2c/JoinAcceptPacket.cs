@@ -1,5 +1,6 @@
 ﻿using LiteNetLib.Utils;
-using PrimitierMultiplayer.Shared.Config;
+using PrimitierMultiplayer.Shared.Models;
+using PrimitierMultiplayer.Shared.Models.Config;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
