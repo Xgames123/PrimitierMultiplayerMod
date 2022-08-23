@@ -15,6 +15,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\LiteNetLib\LiteNetLib\LiteNetLib.csproj" />
 	</ItemGroup>
-	<Import Project="PrimS.shared\PrimS.shared.projitems" Label="Shared" />
+	<Import Project="PrimitierMultiplayer.Shared\PrimitierMultiplayer.Shared.projitems" Label="Shared" />
 	
 </Project>

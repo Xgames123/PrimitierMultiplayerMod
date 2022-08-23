@@ -30,6 +30,5 @@
     <Folder Include="Properties\" />
   </ItemGroup>
 
-
-  <Import Project="../internal.shared.targets" />
+  <Import Project="../Internal.Shared.targets" />
 </Project>
