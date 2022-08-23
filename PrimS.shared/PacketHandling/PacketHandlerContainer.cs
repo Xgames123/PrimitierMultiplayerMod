@@ -7,7 +7,7 @@ using System.Text;
 
 namespace PrimitierMultiplayer.Shared.PacketHandling
 {
-	public class PacketHandlerRegister
+	public class PacketHandlerContainer
 	{
 		public NetManager NetManager;
 		public NetPacketProcessor NetPacketProcessor;
@@ -16,13 +16,13 @@ namespace PrimitierMultiplayer.Shared.PacketHandling
 		private List<PacketHandler> PacketHandlers = new List<PacketHandler>();
 
 
-		public PacketHandlerRegister(ref NetManager netManager)
+		public PacketHandlerContainer(ref NetManager netManager)
 		{
 			NetManager = netManager;
 			NetPacketProcessor = new NetPacketProcessor();
 			Writer = new NetDataWriter();
 		}
-		public PacketHandlerRegister(ref NetManager netManager, ref NetPacketProcessor netPacketProcessor, ref NetDataWriter writer)
+		public PacketHandlerContainer(ref NetManager netManager, ref NetPacketProcessor netPacketProcessor, ref NetDataWriter writer)
 		{
 			NetManager = netManager;
 			NetPacketProcessor = netPacketProcessor;
@@ -50,7 +50,7 @@ namespace PrimitierMultiplayer.Shared.PacketHandling
 
 		public void ReadAllPackets(NetDataReader reader, NetPeer peer)
 		{
-			NetPacketProcessor.ReadAllPackets(reader);
+			NetPacketProcessor.ReadAllPackets(reader, peer);
 		}
 
 

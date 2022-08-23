@@ -28,7 +28,7 @@ namespace PrimitierMultiplayer.Mod
 
 
 		public NetPeer Server { get; private set; } = null;
-		public PacketHandlerRegister PacketHandlerRegister;
+		public PacketHandlerContainer PacketHandlerContainer;
 
 		private NetPacketProcessor _packetProcessor;
 		private NetDataWriter _writer;
@@ -58,10 +58,10 @@ namespace PrimitierMultiplayer.Mod
 				Disconnect();
 
 
-			PacketHandlerRegister = new PacketHandlerRegister(ref NetManager, ref _packetProcessor, ref _writer);
+			PacketHandlerContainer = new PacketHandlerContainer(ref NetManager, ref _packetProcessor, ref _writer);
 			PacketProcessorTypeRegister.RegisterNetworkModels(ref _packetProcessor);
 
-			PacketHandlerRegister.AddPacketHandlers(Assembly.GetExecutingAssembly(), ref _writer, ref _packetProcessor, ref NetManager);
+			PacketHandlerContainer.AddPacketHandlers(Assembly.GetExecutingAssembly(), ref _writer, ref _packetProcessor, ref NetManager);
 
 
 			Mod.Chat.AddSystemMessage("Connecting to the server");
@@ -129,7 +129,7 @@ namespace PrimitierMultiplayer.Mod
 
 		private void NetworkReceiveEvent(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
 		{
-			PacketHandlerRegister.ReadAllPackets(reader, peer);
+			PacketHandlerContainer.ReadAllPackets(reader, peer);
 		}
 
 

@@ -1,4 +1,5 @@
 ﻿using LiteNetLib;
+using PrimitierMultiplayer.Mod.Components;
 using PrimitierMultiplayer.Shared.PacketHandling;
 using PrimitierMultiplayer.Shared.Packets.s2c;
 using System;

@@ -23,6 +23,7 @@ namespace PrimitierMultiplayer.Server
 	{
 		public EventBasedNetListener Listener;
 		public NetManager NetManager;
+		public PacketHandlerContainer PacketHandlerContainer;
 
 		public bool IsStarted { get; private set; } = false;
 
@@ -49,8 +50,9 @@ namespace PrimitierMultiplayer.Server
 
 			_writer = new NetDataWriter();
 			_packetProcessor = new NetPacketProcessor();
+			PacketHandlerContainer = new PacketHandlerContainer(ref NetManager, ref _packetProcessor, ref _writer);
 			PacketProcessorTypeRegister.RegisterNetworkModels(ref _packetProcessor);
-			PacketHandlerRegister.AddPacketHandlers(Assembly.GetExecutingAssembly(), ref _writer, ref _packetProcessor, ref NetManager);
+			PacketHandlerContainer.AddPacketHandlers(Assembly.GetExecutingAssembly(), ref _writer, ref _packetProcessor, ref NetManager);
 
 			ConfigLoader.OnConfigReload += OnConfigReload;
 			OnConfigReload(ConfigLoader.Config);
@@ -58,7 +60,7 @@ namespace PrimitierMultiplayer.Server
 
 		private void NetworkReceiveEvent(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
 		{
-			_packetProcessor.ReadAllPackets(reader, peer);
+			PacketHandlerContainer.ReadAllPackets(reader, peer);
 		}
 
 		private void OnConfigReload(ConfigFile? config)
