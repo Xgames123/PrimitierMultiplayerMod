@@ -44,7 +44,7 @@ namespace PrimitierMultiplayer.Shared.PacketHandling
 
 		public override void Setup(ref NetDataWriter writer, ref NetPacketProcessor packetProcessor, ref NetManager netManager)
 		{
-			base.Setup(ref writer, ref packetProcessor, ref NetManager);
+			base.Setup(ref writer, ref packetProcessor, ref netManager);
 			packetProcessor.SubscribeReusable<T, NetPeer>(HandelPacket);
 		}
 

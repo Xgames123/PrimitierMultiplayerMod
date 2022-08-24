@@ -43,6 +43,7 @@ namespace PrimitierMultiplayer.Mod
 			{
 				AutoRecycle = true,
 			};
+			_packetProcessor = new NetPacketProcessor();
 
 			Listener.NetworkReceiveEvent += NetworkReceiveEvent;
 			Listener.NetworkErrorEvent += NetworkErrorEvent;
@@ -61,7 +62,7 @@ namespace PrimitierMultiplayer.Mod
 			PacketHandlerContainer = new PacketHandlerContainer(ref NetManager, ref _packetProcessor, ref _writer);
 			PacketProcessorTypeRegister.RegisterNetworkModels(ref _packetProcessor);
 
-			PacketHandlerContainer.AddPacketHandlers(Assembly.GetExecutingAssembly(), ref _writer, ref _packetProcessor, ref NetManager);
+			PacketHandlerContainer.AddPacketHandlers(Assembly.GetExecutingAssembly());
 
 
 			Mod.Chat.AddSystemMessage("Connecting to the server");

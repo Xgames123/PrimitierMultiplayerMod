@@ -30,17 +30,18 @@ namespace PrimitierMultiplayer.Shared.PacketHandling
 		}
 
 
-		public void AddPacketHandlers(Assembly assembly, ref NetDataWriter writer, ref NetPacketProcessor packetProcessor, ref NetManager netManager)
+		public void AddPacketHandlers(Assembly assembly)
 		{
 
+			var packetHandlerType = typeof(PacketHandler);
 			foreach (var type in assembly.GetExportedTypes())
 			{
-				if (!type.IsGenericType && type.IsAssignableFrom(typeof(PacketHandler)))
+				if (!type.IsAbstract && !type.IsGenericType && packetHandlerType.IsAssignableFrom(type))
 				{
 					var packetHandler = (PacketHandler)Activator.CreateInstance(type);
 					if (packetHandler == null)
 						continue;
-					packetHandler.Setup(ref writer, ref packetProcessor, ref netManager);
+					packetHandler.Setup(ref Writer, ref NetPacketProcessor, ref NetManager);
 					PacketHandlers.Add(packetHandler);
 				}
 
