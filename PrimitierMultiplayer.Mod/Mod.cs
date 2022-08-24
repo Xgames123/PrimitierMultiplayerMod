@@ -128,7 +128,7 @@ namespace PrimitierMultiplayer.Mod
 				PMFLog.Message($"Synced object count: {NetworkSync.NetworkSyncList.Count}");
 				PMFLog.Message($"Chunk size: {TerrainMeshGenerator.tileLength}");
 				PMFLog.Message($"Tiles per chunk: {CubeGenerator.chunkTileCount}");
-				PMFLog.Message($"areaPosOffset: {TerrainMeshGenerator.areaPosOffset}");
+				PMFLog.Message($"areaPosOffset: X: {TerrainMeshGenerator.areaPosOffset.x}, Y: {TerrainMeshGenerator.areaPosOffset.y}");
 			}
 			if (Input.GetKeyUp(KeyCode.F6))
 			{

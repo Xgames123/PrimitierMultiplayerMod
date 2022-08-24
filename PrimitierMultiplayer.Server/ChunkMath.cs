@@ -11,7 +11,7 @@ namespace PrimitierMultiplayer.Server
 	{
 		public const int TileLength = 4;
 		public const int ChunkTileCount = 4;
-		public static readonly Vector2 WorldOriginOffset = Vector2.Zero;
+		public static Vector2 WorldOriginOffset = Vector2.Zero;
 
 		public static Vector2 WorldToChunkPos(Vector3 pos)
 		{
