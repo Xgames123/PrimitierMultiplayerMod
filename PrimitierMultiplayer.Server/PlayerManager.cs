@@ -46,7 +46,7 @@ namespace PrimitierMultiplayer.Server
 			if (Players.Count == 0)
 			{
 				s_log.Info("Clearing chunk cash");
-				World.ClearChunkCash();
+				World.ClearChunkCache();
 			}
 
 		}

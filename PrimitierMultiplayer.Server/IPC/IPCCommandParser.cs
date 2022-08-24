@@ -66,7 +66,7 @@ namespace PrimitierMultiplayer.Server.IPC
 				case IPCCommandType.ReloadWorld:
 					s_log.Info("Reloading world...");
 					World.ReloadWorldSettings();
-					World.ClearChunkCash();
+					World.ClearChunkCache();
 					return IPCResponce.Ok();
 
 				default:

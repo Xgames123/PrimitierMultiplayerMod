@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using log4net;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using System.Numerics;
-using PrimitierMultiplayer.Shared;
+﻿using log4net;
 using PrimitierMultiplayer.Server.Mappers;
 using PrimitierMultiplayer.Shared.Models;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Numerics;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PrimitierMultiplayer.Server.WorldStorage
 {
@@ -36,8 +33,8 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 
 		public static WorldSettings? Settings { get; private set; }
 
-		private static Dictionary<Vector2, NetworkChunk> Chunks = new Dictionary<Vector2, NetworkChunk>();
-		private static Dictionary<Vector2, bool> NeedsSaving = new Dictionary<Vector2, bool>();
+		private static Dictionary<Vector2, NetworkChunk> ChunkCache = new Dictionary<Vector2, NetworkChunk>();
+		private static List<Vector2> NeedsSaving = new List<Vector2>();
 
 		private static JsonSerializerOptions? s_options = null;
 
@@ -61,7 +58,7 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 				s_log.Info($"Creating Empty world");
 				CreateEmptyWorld();
 			}
-
+			
 
 			ReloadWorldSettings();
 		}
@@ -139,26 +136,27 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 
 
 
-		public static void ClearChunkCash()
+		public static void ClearChunkCache()
 		{
 			SaveAllChunks();
 			NeedsSaving.Clear();
-			Chunks.Clear();
+			ChunkCache.Clear();
 
 		}
 
 		public static void SaveAllChunks()
 		{
-			foreach (var chunk in Chunks.Keys)
+			foreach (var chunk in ChunkCache.Keys)
 			{
 				TrySaveChunk(chunk);
 			}
 		}
 
+
 		public static void TryOwnChunk(RuntimePlayer player, Vector2 chunkPos, float ownRadius)
 		{
 
-			var chunk = World.GetChunk(chunkPos);
+			var chunk = GetChunk(chunkPos);
 
 			var playerChunk = ChunkMath.WorldToChunkPos(player.Position);
 
@@ -166,18 +164,18 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 				return;
 			if (chunk.Owner == -1)
 			{
-				World.UpdateChunkOwner(playerChunk, player.RuntimeId);
+				UpdateChunkOwner(playerChunk, player.RuntimeId);
 				return;
 			}
 			var oldPlayer = PlayerManager.GetPlayerById(chunk.Owner);
 			if (oldPlayer == null)
 			{
-				World.UpdateChunkOwner(playerChunk, player.RuntimeId);
+				UpdateChunkOwner(playerChunk, player.RuntimeId);
 				return;
 			}
 			if (Vector2.Distance(chunkPos, ChunkMath.WorldToChunkPos(oldPlayer.Position)) >= ownRadius)
 			{
-				World.UpdateChunkOwner(playerChunk, player.RuntimeId);
+				UpdateChunkOwner(playerChunk, player.RuntimeId);
 				return;
 			}
 
@@ -188,54 +186,87 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 		public static bool TrySaveChunk(Vector2 position)
 		{
 			var chunkName = $"{position.X}_{position.Y}chunk.json";
-			if (NeedsSaving.TryGetValue(position, out var needsSaving))
+			var nSIndex = NeedsSaving.IndexOf(position);
+			if (nSIndex != -1)
 			{
-				if (needsSaving)
+				try
 				{
-					try
-					{
-						var json = JsonSerializer.Serialize(Chunks[position], s_options);
-						File.WriteAllText(Path.Combine(WorldDirectory, ChunkDirectoryPath, chunkName), json);
-					}
-					catch (Exception e)
-					{
-						s_log.Error($"Could not save chunk '{chunkName}'\nInternalError: {e}");
-						return false;
-					}
-
-					NeedsSaving[position] = false;
+					var json = JsonSerializer.Serialize(ChunkCache[position], s_options);
+					File.WriteAllText(Path.Combine(WorldDirectory, ChunkDirectoryPath, chunkName), json);
+				}
+				catch (Exception e)
+				{
+					s_log.Error($"Could not save chunk '{chunkName}'\nInternalError: {e}");
+					return false;
 				}
 
+				NeedsSaving.RemoveAt(nSIndex);
 			}
+
+			
 			return true;
 		}
 
 		public static void UpdateChunkOwner(Vector2 chunkPosition, int owner)
 		{
-			if (Chunks.TryGetValue(chunkPosition, out var chunk))
+			if (ChunkCache.TryGetValue(chunkPosition, out var chunk))
 			{
 				chunk.Owner = owner;
-				Chunks[chunkPosition] = chunk;
+				ChunkCache[chunkPosition] = chunk;
 				return;
 			}
 
 		}
 
-		public static NetworkChunk GetChunk(Vector2 position)
+		public static NetworkChunk GetChunk(Vector2 position, bool loadIfDoesntExist=true)
 		{
-			if (Chunks.TryGetValue(position, out var chunk))
+			if (ChunkCache.TryGetValue(position, out var chunk))
 				return chunk;
-			var newChunk = LoadChunk(position);
-			if (newChunk == null)
-				return NetworkChunk.NewBrokenChunk();
-			if (newChunk.Cubes.Count == 0)
-				return NetworkChunk.NewEmptyChunk();
+			
+			if (loadIfDoesntExist)
+			{
+				var newChunk = LoadChunk(position);
+				if (newChunk == null)
+					return NetworkChunk.NewBrokenChunk();
+				if (newChunk.Cubes.Count == 0)
+					return NetworkChunk.NewEmptyChunk();
 
-			var netChunk = newChunk.ToNetworkChunk(-1);
-			Chunks.Add(position, netChunk);
-			NeedsSaving.Add(position, false);
-			return netChunk;
+				var netChunk = newChunk.ToNetworkChunk(-1);
+				ChunkCache.Add(position, netChunk);
+
+#if DEBUG
+				if (NeedsSaving.Contains(position))
+				{
+					throw new Exception("Chunk was not fully deleted");
+				}
+#endif
+
+				return netChunk;
+			}
+			else
+			{
+				return NetworkChunk.NewBrokenChunk();
+			}
+			
 		}
+		public static void WriteChunk(Vector2 position, NetworkChunk chunk)
+		{
+			var oldChunk = GetChunk(position, false);
+
+
+			if(oldChunk.ChunkType == NetworkChunkType.Broken)
+			{
+				ChunkCache.Add(position, chunk);
+				NeedsSaving.Add(position);
+			}
+			else
+			{
+				ChunkCache[position] = chunk;
+				NeedsSaving.Add(position);
+			}
+
+		}
+
 		private static StoredChunk? LoadChunk(Vector2 position)
 		{
 			string? chunkJson;

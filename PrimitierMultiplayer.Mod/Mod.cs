@@ -24,7 +24,6 @@ namespace PrimitierMultiplayer.Mod
 			base.OnSceneWasLoaded(buildIndex, sceneName);
 
 			PlayerInfo.Load();
-			UpdatePacketSender.Setup();
 
 
 			Chat = Chat.Setup();
@@ -69,11 +68,10 @@ namespace PrimitierMultiplayer.Mod
 			
 			PMFSystem.EnableSystem<PMFHelper>();
 
-			ClassInjector.RegisterTypeInIl2Cpp<UpdatePacketSender>();
 			ClassInjector.RegisterTypeInIl2Cpp<Chat>();
 			ClassInjector.RegisterTypeInIl2Cpp<NameTag>();
 			ClassInjector.RegisterTypeInIl2Cpp<RemotePlayer>();
-			ClassInjector.RegisterTypeInIl2Cpp<NetworkSync>();
+			ClassInjector.RegisterTypeInIl2Cpp<CubeSync>();
 			ClassInjector.RegisterTypeInIl2Cpp<ChunkBoundViewer>();
 			ClassInjector.RegisterTypeInIl2CppWithInterfaces<JoinGameButton>(typeof(IButton));
 
@@ -125,7 +123,7 @@ namespace PrimitierMultiplayer.Mod
 				PMFLog.Message($"player pos X: {playerPos.x}, Y: {playerPos.y}, Z: {playerPos.z}");
 				PMFLog.Message($"player chunk pos X: {playerChunkPos.x}, Y: {playerChunkPos.y}");
 				PMFLog.Message($"Remote player count: {RemotePlayer.RemotePlayers.Count}");
-				PMFLog.Message($"Synced object count: {NetworkSync.NetworkSyncList.Count}");
+				PMFLog.Message($"Synced object count: {CubeSync.CubeSyncList.Count}");
 				PMFLog.Message($"Chunk size: {TerrainMeshGenerator.tileLength}");
 				PMFLog.Message($"Tiles per chunk: {CubeGenerator.chunkTileCount}");
 				PMFLog.Message($"areaPosOffset: X: {TerrainMeshGenerator.areaPosOffset.x}, Y: {TerrainMeshGenerator.areaPosOffset.y}");

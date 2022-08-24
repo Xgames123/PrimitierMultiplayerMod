@@ -1,5 +1,6 @@
 ﻿using LiteNetLib;
 using log4net;
+using PrimitierMultiplayer.Server.WorldStorage;
 using PrimitierMultiplayer.Shared.PacketHandling;
 using PrimitierMultiplayer.Shared.Packets.c2s;
 using System;
@@ -29,6 +30,15 @@ namespace PrimitierMultiplayer.Server.PacketHandelers
 			player.HeadPosition = packet.HeadPosition;
 			player.RHandPosition = packet.RHandPosition;
 			player.LHandPosition = packet.LHandPosition;
+
+			foreach (var chunkPosPair in packet.Chunks)
+			{
+				var cachedChunk = World.GetChunk(chunkPosPair.Position);
+				if (cachedChunk.Owner != peer.Id)
+					continue;
+
+				World.WriteChunk(chunkPosPair.Position, chunkPosPair.Chunk);
+			}
 
 		}
 	}

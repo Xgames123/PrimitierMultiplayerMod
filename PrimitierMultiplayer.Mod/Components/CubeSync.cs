@@ -11,26 +11,26 @@ using UnityEngine;
 
 namespace PrimitierMultiplayer.Mod.Components
 {
-	public class NetworkSync : MonoBehaviour
+	public class CubeSync : MonoBehaviour
 	{
-		public NetworkSync(System.IntPtr ptr) :base(ptr) { }
+		public CubeSync(System.IntPtr ptr) :base(ptr) { }
 
-		public static Dictionary<uint, NetworkSync> NetworkSyncList = new Dictionary<uint, NetworkSync>();
+		public static Dictionary<uint, CubeSync> CubeSyncList = new Dictionary<uint, CubeSync>();
 
-		public static NetworkSync GetById(uint id)
+		public static CubeSync GetById(uint id)
 		{
-			if(NetworkSyncList.TryGetValue(id, out NetworkSync networkSync))
+			if(CubeSyncList.TryGetValue(id, out CubeSync cubeSync))
 			{
-				return networkSync;
+				return cubeSync;
 			}
 			return null;
 		}
 
 
-		public static void Register(NetworkSync sync, System.Numerics.Vector2 chunkPos)
+		public static void Register(CubeSync sync, System.Numerics.Vector2 chunkPos)
 		{
 			sync._currentChunk = chunkPos;
-			NetworkSyncList.Add(sync.Id, sync);
+			CubeSyncList.Add(sync.Id, sync);
 			AddToChunk(sync._currentChunk, sync.Id);
 		}
 
@@ -49,7 +49,7 @@ namespace PrimitierMultiplayer.Mod.Components
 		public void OnDestroy()
 		{
 			RemoveFromChunk(_currentChunk, Id);
-			NetworkSyncList.Remove(Id);
+			CubeSyncList.Remove(Id);
 		}
 
 		public void DestroyCube()
@@ -76,9 +76,27 @@ namespace PrimitierMultiplayer.Mod.Components
 
 		}
 
+
+		public NetworkCube ToNetworkCube()
+		{
+			return new NetworkCube()
+			{
+				Id = Id,
+				Position= CubeBase.transform.position.ToNumerics(),
+				Rotation= CubeBase.transform.rotation.ToNumerics(),
+				Size = CubeBase.transform.localScale.ToNumerics(),
+				Velosity = CubeBase.rb.velocity.ToNumerics(),
+				AngularVelocity = CubeBase.rb.angularVelocity.ToNumerics(),
+				Substance = (int)CubeBase.substance
+
+			};
+
+		}
+
+
 		public void UpdateSync(NetworkCube cube, System.Numerics.Vector2 chunkPos)
 		{
-			if (!NetworkSyncList.ContainsKey(Id) || CubeBase == null)
+			if (!CubeSyncList.ContainsKey(Id) || CubeBase == null)
 				return;
 
 			if (chunkPos != _currentChunk)
@@ -88,13 +106,13 @@ namespace PrimitierMultiplayer.Mod.Components
 				_currentChunk = chunkPos;
 			}
 
-
-			CubeBase.ChangeScale(cube.Size.ToUnity());
-			CubeBase.ChangeSubstance((Substance)cube.Substance);
 			CubeBase.transform.position = cube.Position.ToUnity();
 			CubeBase.transform.rotation = cube.Rotation.ToUnity();
+			CubeBase.ChangeScale(cube.Size.ToUnity());
 			CubeBase.rb.velocity = cube.Velosity.ToUnity();
 			CubeBase.rb.angularVelocity = cube.AngularVelocity.ToUnity();
+			CubeBase.ChangeSubstance((Substance)cube.Substance);
+			
 		}
 
 		

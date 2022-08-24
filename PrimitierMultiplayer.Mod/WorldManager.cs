@@ -105,7 +105,7 @@ namespace PrimitierMultiplayer.Mod
 				{
 					if(!Contains(chunk.Cubes, netSyncId))
 					{
-						NetworkSync.GetById(netSyncId).DestroyCube();
+						CubeSync.GetById(netSyncId).DestroyCube();
 
 					}
 
@@ -144,7 +144,7 @@ namespace PrimitierMultiplayer.Mod
 			var chunk = GetChunk(chunkPos);
 			foreach (var syncId in chunk.NetworkSyncs)
 			{
-				var sync = NetworkSync.GetById(syncId);
+				var sync = CubeSync.GetById(syncId);
 				if(sync != null)
 					sync.DestroyCube();
 			}
@@ -164,16 +164,16 @@ namespace PrimitierMultiplayer.Mod
 		public static void CreateCube(NetworkCube cube, System.Numerics.Vector2 chunkPos)
 		{
 			var primCube = CubeGenerator.GenerateCube(cube.Position.ToUnity(), cube.Size.ToUnity(), (Substance)cube.Substance);
-			var networkSync = primCube.AddComponent<NetworkSync>();
+			var networkSync = primCube.AddComponent<CubeSync>();
 			networkSync.Id = cube.Id;
-			NetworkSync.Register(networkSync, chunkPos);
+			CubeSync.Register(networkSync, chunkPos);
 			//PMFLog.Message("Cube created");
 		}
 		public static void UpdateCube(NetworkCube cube, System.Numerics.Vector2 chunkPos)
 		{
 			//PMFLog.Message($"Id: {cube.Id} Position: {cube.Position} Rotation: {cube.Rotation} Size: {cube.Size} Substance: {cube.Substance}");
 
-			if (NetworkSync.NetworkSyncList.TryGetValue(cube.Id, out var sync))
+			if (CubeSync.CubeSyncList.TryGetValue(cube.Id, out var sync))
 			{
 
 				sync.UpdateSync(cube, chunkPos);

@@ -16,6 +16,8 @@ using PrimitierMultiplayer.Mod.Components;
 using PrimitierMultiplayer.Shared.Packets;
 using PrimitierMultiplayer.Shared.Models;
 using PrimitierMultiplayer.Shared.PacketHandling;
+using System.Diagnostics;
+using PrimitierMultiplayer.Mod.Mappers;
 
 namespace PrimitierMultiplayer.Mod
 {
@@ -32,6 +34,8 @@ namespace PrimitierMultiplayer.Mod
 
 		private NetPacketProcessor _packetProcessor;
 		private NetDataWriter _writer;
+
+		private Stopwatch _updateStopwatch = Stopwatch.StartNew();
 
 		public Client()
 		{
@@ -89,6 +93,42 @@ namespace PrimitierMultiplayer.Mod
 				return;
 
 			NetManager.PollEvents();
+
+			var updateDelay = ConfigManager.ClientConfig.ActiveUpdateDelay;
+			//TODO: use idel update delay when client is idel
+			if (_updateStopwatch.ElapsedMilliseconds >= updateDelay)
+			{
+				_updateStopwatch.Restart();
+				SendUpdatePackets();
+			}
+		}
+		private void SendUpdatePackets()
+		{
+
+			NetworkChunkPositionPair[] chunks = new NetworkChunkPositionPair[WorldManager.OwnedChunks.Count];
+
+			for (int i = 0; i < WorldManager.OwnedChunks.Count; i++)
+			{
+				var ownedChunkPos = WorldManager.OwnedChunks[i];
+				var ownedChunk = WorldManager.GetChunk(ownedChunkPos);
+
+				chunks[i] = new NetworkChunkPositionPair(ownedChunk.ToNetworkChunk(), ownedChunkPos);
+			}
+
+
+			var packet = new PlayerUpdatePacket()
+			{
+				Position = PMFHelper.CameraRig.transform.position.ToNumerics(),
+				HeadPosition = Camera.main.transform.position.ToNumerics(),
+				LHandPosition = PMFHelper.LHand.transform.position.ToNumerics(),
+				RHandPosition = PMFHelper.RHand.transform.position.ToNumerics(),
+
+				Chunks = chunks,
+			};
+
+
+			SendPacket(packet, DeliveryMethod.Unreliable);
+
 		}
 
 		public void Stop()
