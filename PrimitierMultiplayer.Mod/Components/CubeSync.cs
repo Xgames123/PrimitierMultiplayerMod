@@ -76,9 +76,19 @@ namespace PrimitierMultiplayer.Mod.Components
 
 		}
 
+		public bool IsValid()
+		{
+			if (CubeSyncList.ContainsKey(Id) && CubeBase != null)
+				return true;
+
+			return false;
+		}
 
 		public NetworkCube ToNetworkCube()
 		{
+			if (!IsValid())
+				return default;
+
 			return new NetworkCube()
 			{
 				Id = Id,
@@ -96,7 +106,7 @@ namespace PrimitierMultiplayer.Mod.Components
 
 		public void UpdateSync(NetworkCube cube, System.Numerics.Vector2 chunkPos)
 		{
-			if (!CubeSyncList.ContainsKey(Id) || CubeBase == null)
+			if (!IsValid())
 				return;
 
 			if (chunkPos != _currentChunk)

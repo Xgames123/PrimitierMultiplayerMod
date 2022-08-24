@@ -94,13 +94,17 @@ namespace PrimitierMultiplayer.Mod
 
 			NetManager.PollEvents();
 
-			var updateDelay = ConfigManager.ClientConfig.ActiveUpdateDelay;
-			//TODO: use idel update delay when client is idel
-			if (_updateStopwatch.ElapsedMilliseconds >= updateDelay)
+			if (MultiplayerManager.IsInMultiplayerMode && Server != null)
 			{
-				_updateStopwatch.Restart();
-				SendUpdatePackets();
+				var updateDelay = ConfigManager.ClientConfig.ActiveUpdateDelay;
+				//TODO: use idel update delay when client is idel
+				if (_updateStopwatch.ElapsedMilliseconds >= updateDelay)
+				{
+					_updateStopwatch.Restart();
+					SendUpdatePackets();
+				}
 			}
+
 		}
 		private void SendUpdatePackets()
 		{
@@ -139,6 +143,9 @@ namespace PrimitierMultiplayer.Mod
 
 		public void SendPacket<T>(T packet, DeliveryMethod deliveryMethod) where T : class, new()
 		{
+			if (Server == null)
+				throw new Exception("you tried to send a packet while not being connected to the server");
+
 			_writer.Reset();
 			_packetProcessor.Write<T>(_writer, packet);
 			Server.Send(_writer, deliveryMethod);
