@@ -25,7 +25,7 @@ namespace PrimitierMultiplayer.Server
 
 		public string WorldDirectory { get; set; } = "World";
 		public int MaxChunkCacheSize { get; set; } = 4_000;
-		public int ViewRadius { get; set; } = 4;
+		public int ViewRadius { get; set; } = 1;
 
 		public DebugConfig? Debug { get; set; }
 	}

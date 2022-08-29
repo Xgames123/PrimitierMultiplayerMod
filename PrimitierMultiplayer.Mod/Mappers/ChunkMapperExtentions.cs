@@ -13,6 +13,9 @@ namespace PrimitierMultiplayer.Mod.Mappers
 
 		public static NetworkChunk ToNetworkChunk(this RuntimeChunk runtimeChunk)
 		{
+			if (runtimeChunk == null)
+				return NetworkChunk.NewBrokenChunk();
+
 			if (runtimeChunk.NetworkSyncs.Count == 0)
 				return NetworkChunk.NewEmptyChunk();
 

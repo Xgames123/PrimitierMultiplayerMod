@@ -2,6 +2,7 @@
 using PrimitierModdingFramework.SubstanceModding;
 using PrimitierMultiplayer.Shared;
 using PrimitierMultiplayer.Shared.Models;
+using PrimitierMultiplayer.Shared.Packets.c2s2c;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace PrimitierMultiplayer.Mod.Components
 		{
 			sync._currentChunk = chunkPos;
 			CubeSyncList.Add(sync.Id, sync);
-			AddToChunk(sync._currentChunk, sync.Id);
+			sync.AddToChunk(sync._currentChunk);
 		}
 
 
@@ -48,7 +49,7 @@ namespace PrimitierMultiplayer.Mod.Components
 		}
 		public void OnDestroy()
 		{
-			RemoveFromChunk(_currentChunk, Id);
+			RemoveFromChunk(_currentChunk);
 			CubeSyncList.Remove(Id);
 		}
 
@@ -60,19 +61,20 @@ namespace PrimitierMultiplayer.Mod.Components
 
 
 
-		private static void AddToChunk(System.Numerics.Vector2 chunkPos, uint id)
+		private RuntimeChunk AddToChunk(System.Numerics.Vector2 chunkPos)
 		{
 			var chunk = WorldManager.GetChunk(chunkPos);
-			chunk.NetworkSyncs.Add(id);
+			chunk.NetworkSyncs.Add(Id);
+			return chunk;
 		}
-		private static void RemoveFromChunk(System.Numerics.Vector2 chunkPos, uint id)
+		private void RemoveFromChunk(System.Numerics.Vector2 chunkPos)
 		{
 			var chunk = WorldManager.GetChunk(chunkPos);
 			if(chunk == null)
 			{
 				return;
 			}
-			chunk.NetworkSyncs.Remove(id);
+			chunk.NetworkSyncs.Remove(Id);
 
 		}
 
@@ -111,8 +113,19 @@ namespace PrimitierMultiplayer.Mod.Components
 
 			if (chunkPos != _currentChunk)
 			{
-				AddToChunk(chunkPos, Id);
-				RemoveFromChunk(_currentChunk, Id);
+				var newChunk = AddToChunk(chunkPos);
+				RemoveFromChunk(_currentChunk);
+				
+				if(newChunk.Owner != MultiplayerManager.LocalId)
+				{
+					DestroyCube();
+					MultiplayerManager.Client.SendPacket(new CubeChunkChangePacket()
+					{
+						OldChunk = chunkPos,
+						NewChunk = _currentChunk,
+						Cube = ToNetworkCube()
+					}, LiteNetLib.DeliveryMethod.ReliableOrdered);
+				}
 				_currentChunk = chunkPos;
 			}
 
@@ -123,6 +136,8 @@ namespace PrimitierMultiplayer.Mod.Components
 			CubeBase.rb.angularVelocity = cube.AngularVelocity.ToUnity();
 			CubeBase.ChangeSubstance((Substance)cube.Substance);
 			
+			
+
 		}
 
 		

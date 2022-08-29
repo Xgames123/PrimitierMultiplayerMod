@@ -173,7 +173,6 @@ namespace PrimitierMultiplayer.Mod
 
 			if (CubeSync.CubeSyncList.TryGetValue(cube.Id, out var sync))
 			{
-
 				sync.UpdateSync(cube, chunkPos);
 			}
 			else
