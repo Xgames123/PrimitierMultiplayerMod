@@ -10,6 +10,7 @@ using LiteNetLib;
 using PrimitierModdingFramework.SubstanceModding;
 using PrimitierMultiplayer.Mod.Components;
 using System.Linq;
+using PrimitierMultiplayer.Shared;
 
 namespace PrimitierMultiplayer.Mod
 {
@@ -116,14 +117,14 @@ namespace PrimitierMultiplayer.Mod
 			}
 			if (Input.GetKeyUp(KeyCode.F5))
 			{
-				var playerPos = Camera.main.transform.position;
-				var playerChunkPos = CubeGenerator.WorldToChunkPos(playerPos);
+				var playerPos = Camera.main.transform.position.ToNumerics();
+				var playerChunkPos = ChunkMath.WorldToChunkPos(playerPos);
 
 				PMFLog.Message("");
 				PMFLog.Message("GENERAL DATA:");
 				PMFLog.Message($"	World seed: {TerrainGenerator.worldSeed}");
-				PMFLog.Message($"	Player pos X: {playerPos.x}, Y: {playerPos.y}, Z: {playerPos.z}");
-				PMFLog.Message($"	Player chunk pos X: {playerChunkPos.x}, Y: {playerChunkPos.y}");
+				PMFLog.Message($"	Player pos X: {playerPos.X}, Y: {playerPos.Y}, Z: {playerPos.Z}");
+				PMFLog.Message($"	Player chunk pos X: {playerChunkPos.X}, Y: {playerChunkPos.Y}");
 				PMFLog.Message($"	Remote player count: {RemotePlayer.RemotePlayers.Count}");
 				PMFLog.Message($"	Synced object count: {CubeSync.CubeSyncList.Count}");
 				PMFLog.Message($"	Chunk size: {TerrainMeshGenerator.tileLength}");

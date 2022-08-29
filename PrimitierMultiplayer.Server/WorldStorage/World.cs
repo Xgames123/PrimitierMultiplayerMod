@@ -1,5 +1,6 @@
 ﻿using log4net;
 using PrimitierMultiplayer.Server.Mappers;
+using PrimitierMultiplayer.Shared;
 using PrimitierMultiplayer.Shared.Models;
 using System;
 using System.Collections.Generic;

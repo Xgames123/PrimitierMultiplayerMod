@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using PrimitierModdingFramework;
+using PrimitierMultiplayer.Shared;
 
 namespace PrimitierMultiplayer.Mod
 {
@@ -19,7 +20,7 @@ namespace PrimitierMultiplayer.Mod
 		{
 			
 			var playerPos = Camera.main.transform.position;
-			transform.position = CubeGenerator.ChunkToWorldPos(CubeGenerator.WorldToChunkPos(playerPos));
+			transform.position = ChunkMath.ChunkToWorldPos(ChunkMath.WorldToChunkPos(playerPos.ToNumerics())).ToUnity();
 
 		}
 

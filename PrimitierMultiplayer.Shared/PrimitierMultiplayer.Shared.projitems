@@ -9,9 +9,11 @@
     <Import_RootNamespace>PrimitierMultiplayer.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ChunkMath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ErrorCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ErrorGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)INetworkModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MathF.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Extentions\NetworkChunkPositionPairEnumerable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\InitialPlayerData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkChunk.cs" />

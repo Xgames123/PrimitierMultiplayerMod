@@ -1,4 +1,5 @@
 ﻿using PrimitierMultiplayer.Mod.Components;
+using PrimitierMultiplayer.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,23 @@ namespace PrimitierMultiplayer.Mod
 
 		public List<uint> NetworkSyncs = new List<uint>();
 
+		public NetworkChunk UpdateToServer()
+		{
+
+			if (NetworkSyncs.Count == 0)
+				return NetworkChunk.NewEmptyChunk();
+
+			var CubeList = new List<NetworkCube>(NetworkSyncs.Count);
+			foreach (var syncId in NetworkSyncs.ToArray())
+			{
+				var sync = CubeSync.GetById(syncId);
+				CubeList.Add(sync.UpdateToServer());
+
+
+			}
+
+
+			return new NetworkChunk() { Owner = Owner, ChunkType = NetworkChunkType.Normal, Cubes = CubeList };
+		}
 	}
 }

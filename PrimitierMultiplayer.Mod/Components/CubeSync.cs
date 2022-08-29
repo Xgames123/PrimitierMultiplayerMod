@@ -1,6 +1,7 @@
 ﻿using LiteNetLib;
 using PrimitierModdingFramework;
 using PrimitierModdingFramework.SubstanceModding;
+using PrimitierMultiplayer;
 using PrimitierMultiplayer.Shared;
 using PrimitierMultiplayer.Shared.Models;
 using PrimitierMultiplayer.Shared.Packets.c2s2c;
@@ -65,6 +66,10 @@ namespace PrimitierMultiplayer.Mod.Components
 		private RuntimeChunk AddToChunk(System.Numerics.Vector2 chunkPos)
 		{
 			var chunk = WorldManager.GetChunk(chunkPos);
+			if(chunk == null)
+			{
+				return null;
+			}
 			chunk.NetworkSyncs.Add(Id);
 			return chunk;
 		}
@@ -87,16 +92,16 @@ namespace PrimitierMultiplayer.Mod.Components
 			return false;
 		}
 
-		public NetworkCube ToNetworkCube()
+		public NetworkCube UpdateToServer()
 		{
 			if (!IsValid())
 				return default;
 
-			return new NetworkCube()
+			var netCube = new NetworkCube()
 			{
 				Id = Id,
-				Position= CubeBase.transform.position.ToNumerics(),
-				Rotation= CubeBase.transform.rotation.ToNumerics(),
+				Position = CubeBase.transform.position.ToNumerics(),
+				Rotation = CubeBase.transform.rotation.ToNumerics(),
 				Size = CubeBase.transform.localScale.ToNumerics(),
 				Velosity = CubeBase.rb.velocity.ToNumerics(),
 				AngularVelocity = CubeBase.rb.angularVelocity.ToNumerics(),
@@ -104,30 +109,42 @@ namespace PrimitierMultiplayer.Mod.Components
 
 			};
 
-		}
 
-
-		public void UpdateSync(NetworkCube cube, System.Numerics.Vector2 chunkPos)
-		{
-			if (!IsValid())
-				return;
-
+			var chunkPos = ChunkMath.WorldToChunkPos(transform.position.ToNumerics());
 			if (chunkPos != _currentChunk)
 			{
 				var newChunk = AddToChunk(chunkPos);
 				RemoveFromChunk(_currentChunk);
-				
-				
-				if(newChunk.Owner != MultiplayerManager.LocalId)
+				if (newChunk == null || newChunk.Owner != MultiplayerManager.LocalId)
 				{
 					DestroyCube();
 					MultiplayerManager.Client.SendPacket(new CubeChunkChangePacket()
 					{
 						OldChunk = chunkPos,
 						NewChunk = _currentChunk,
-						Cube = ToNetworkCube()
+						Cube = netCube,
 					}, DeliveryMethod.ReliableOrdered);
 				}
+				_currentChunk = chunkPos;
+			}
+
+			return netCube;
+
+
+
+		}
+
+
+		public void UpdateFromServer(NetworkCube cube, System.Numerics.Vector2 chunkPos)
+		{
+			if (!IsValid())
+				return;
+
+			if (chunkPos != _currentChunk)
+			{
+				AddToChunk(chunkPos);
+				RemoveFromChunk(_currentChunk);
+				
 				_currentChunk = chunkPos;
 			}
 

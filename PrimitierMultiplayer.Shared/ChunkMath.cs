@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 
-namespace PrimitierMultiplayer.Server
+namespace PrimitierMultiplayer.Shared
 {
 	public static class ChunkMath
 	{
@@ -19,7 +19,7 @@ namespace PrimitierMultiplayer.Server
 			//This is always 0 because WorldOriginOffset is zero
 			//var chunkPosOffset = WorldOriginOffset * TerrainGenerator.areaTileCount / ChunkTileCount;
 			var chunkPosOffset = Vector2.Zero;
-
+			
 			var chunkPosX = MathF.Floor(pos.X / ChunkTileCount / TileLength);
 			var chunkPosY = MathF.Floor(pos.Z / ChunkTileCount / TileLength);
 			return new Vector2(chunkPosX, chunkPosY) + chunkPosOffset;

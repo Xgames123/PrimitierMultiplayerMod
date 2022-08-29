@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<Version>0.0.1</Version>
-
+		<DefineConstants>UNITY_MATH</DefineConstants>
 		<TargetFramework>net472</TargetFramework>
 		<RootNamespace>PrimitierMultiplayer.Mod</RootNamespace>
 		<AssemblyName>PrimitierMultiplayerMod</AssemblyName>
@@ -17,6 +17,9 @@
 	<ItemGroup>
 		<PackageReference Include="XGames105.PMF" Version="0.5.1" />
 		<PackageReference Include="XGames105.PMF.Msbuild" Version="0.5.1" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Mappers\" />
 	</ItemGroup>
 
 	<PropertyGroup>

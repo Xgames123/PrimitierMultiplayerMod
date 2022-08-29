@@ -17,7 +17,7 @@ using PrimitierMultiplayer.Shared.Packets;
 using PrimitierMultiplayer.Shared.Models;
 using PrimitierMultiplayer.Shared.PacketHandling;
 using System.Diagnostics;
-using PrimitierMultiplayer.Mod.Mappers;
+
 
 namespace PrimitierMultiplayer.Mod
 {
@@ -116,7 +116,7 @@ namespace PrimitierMultiplayer.Mod
 				var ownedChunkPos = WorldManager.OwnedChunks[i];
 				var ownedChunk = WorldManager.GetChunk(ownedChunkPos);
 
-				chunks[i] = new NetworkChunkPositionPair(ownedChunk.ToNetworkChunk(), ownedChunkPos);
+				chunks[i] = new NetworkChunkPositionPair(ownedChunk.UpdateToServer(), ownedChunkPos);
 			}
 
 
