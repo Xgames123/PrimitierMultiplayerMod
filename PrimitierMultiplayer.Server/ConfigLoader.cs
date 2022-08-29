@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using LiteNetLib;
 using log4net;
 
 namespace PrimitierMultiplayer.Server
@@ -13,16 +14,18 @@ namespace PrimitierMultiplayer.Server
 	{
 		public string ListenIp { get; set; } = "localhost";
 		public int ListenPort { get; set; } = 9543;
-
-		public int MaxPlayers { get; set; } = 10;
-		public string WorldDirectory { get; set; } = "World";
-		public int UpdateDelay { get; set; } = 10;
-
 		public string? IPCDirectory = null;
 
-		public int MaxChunkCacheSize = 4_000;
+		public int MaxPlayers { get; set; } = 10;
+		public int UpdateDelay { get; set; } = 10;
+		
 
 		public ClientConfig Client { get; set; } = new ClientConfig();
+
+
+		public string WorldDirectory { get; set; } = "World";
+		public int MaxChunkCacheSize { get; set; } = 4_000;
+		public int ViewRadius { get; set; } = 4;
 
 		public DebugConfig? Debug { get; set; }
 	}
@@ -99,6 +102,8 @@ namespace PrimitierMultiplayer.Server
 				c_log.Warn("UpdateDelay was smaller than 50 ms. The client can not handle so many packets");
 				config.UpdateDelay = 50;
 			}
+
+			
 			return config;
 		}
 

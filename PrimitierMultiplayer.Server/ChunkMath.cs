@@ -42,5 +42,10 @@ namespace PrimitierMultiplayer.Server
 			var chunkPosX = MathF.Floor(radius / ChunkTileCount / TileLength);
 			return chunkPosX + chunkPosOffset;
 		}
+
+		public static float ChunkToWorldRadius(int chunkRadius)
+		{
+			return chunkRadius * ChunkTileCount * TileLength;
+		}
 	}
 }

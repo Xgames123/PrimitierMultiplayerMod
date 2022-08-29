@@ -178,9 +178,9 @@ namespace PrimitierMultiplayer.Server
 				if (currentPlayer == null)
 					continue;
 
-				var players = FindNetworkPlayersAroundPlayer(currentPlayer, 20);
+				var players = FindNetworkPlayersAroundPlayer(currentPlayer, ConfigLoader.Config.ViewRadius);
 
-				var chunks = FindNetworkChunksAroundPlayer(currentPlayer, 20);
+				var chunks = FindNetworkChunksAroundPlayer(currentPlayer, ConfigLoader.Config.ViewRadius);
 
 				SendPacket(peer, new ServerUpdatePacket() { Players = players.ToArray(), Chunks = chunks.ToArray() }, DeliveryMethod.Unreliable);
 
@@ -189,14 +189,13 @@ namespace PrimitierMultiplayer.Server
 		}
 
 
-		private List<NetworkChunkPositionPair> FindNetworkChunksAroundPlayer(RuntimePlayer currentPlayer, int radius)
+		private List<NetworkChunkPositionPair> FindNetworkChunksAroundPlayer(RuntimePlayer currentPlayer, int chunkRadius)
 		{
 			var foundChunks = new List<NetworkChunkPositionPair>();
 
 
 			var center = ChunkMath.WorldToChunkPos(currentPlayer.Position);
 
-			var chunkRadius = ChunkMath.WorldToChunkRadius(radius);
 			for (float x = center.X - chunkRadius; x < center.X + chunkRadius; x++)
 			{
 				for (float y = center.Y - chunkRadius; y < center.Y + chunkRadius; y++)
@@ -218,10 +217,13 @@ namespace PrimitierMultiplayer.Server
 			return foundChunks;
 		}
 
-		private List<NetworkPlayer> FindNetworkPlayersAroundPlayer(RuntimePlayer currentPlayer, int radius)
+		private List<NetworkPlayer> FindNetworkPlayersAroundPlayer(RuntimePlayer currentPlayer, int chunkRadius)
 		{
 			var foundPlayers = new List<NetworkPlayer>();
 			var players = PlayerManager.Players.Values;
+
+			var radius = ChunkMath.ChunkToWorldRadius(chunkRadius);
+
 			foreach (var player in players)
 			{
 				if (ConfigLoader.Config.Debug == null || ConfigLoader.Config.Debug.ShowLocalPlayer == false)

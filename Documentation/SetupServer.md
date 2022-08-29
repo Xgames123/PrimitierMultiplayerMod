@@ -19,24 +19,33 @@
 
 
 ## Configure the server
-Settings for the server are stored in primsconfig.json
+Settings for the server are stored in a file with the name primsconfig.json
+
+Note: You don't have to set every property this is just to show you witch properties there are
 ```json
 {
 
 	"ListenPort": 9543, //Port to listen on
 	"ListenIp": "0.0.0.0", //Ip address to use for the server
-
-	"MaxPlayers": 10, //Maximum players that can be in the world
-	"WorldDirectory": "World", //The path to the directory to store world data into
-	"UpdateDelay": 100, //Amount of milliseconds between server updates (When the server sends a packet to all connected clients)
+	
 	"IPCDirectory": null, //Directory to put the files to communicate with the running instance of the server (Best to put it in a virtual file system)
 
+	"MaxPlayers": 10, //Maximum players that can be in the world
+	"UpdateDelay": 100, //Amount of milliseconds between server updates (When the server sends a packet to all connected clients)
+	
+	
 	//Configurations for the clients that connect
 	"Client": {
 		"IdleUpdateDelay": 1000, //Amount of milliseconds between client updates when the client is idle (when the client is too far away from other players to be seen)
 		"ActiveUpdateDelay": 20 //Amount of milliseconds between client updates when the client can be seen by other players
 	},
-
+	
+	
+	"WorldDirectory": "World", //The path to the directory to store world data into
+	"MaxChunkCacheSize": 4000, //The maximum amount of chunks that can be cached (If the cache size exceeds this value it will clear the entire cache so don't set this too small)
+	"ViewRadius": 4, //The amount of chunks every player can see
+	
+	
 	//You should probably remove this section
 	//Configurations for debugging the mod and server
 	"Debug": {
