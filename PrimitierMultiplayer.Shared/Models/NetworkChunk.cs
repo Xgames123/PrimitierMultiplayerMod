@@ -8,14 +8,13 @@ namespace PrimitierMultiplayer.Shared.Models
 	public enum NetworkChunkType
 	{
 		Normal,
-		Empty,
 		Broken,
 
 	}
 
 	public struct NetworkChunk : INetworkModel
 	{
-		public static NetworkChunk NewEmptyChunk() { return new NetworkChunk() { ChunkType = NetworkChunkType.Empty }; }
+		public static NetworkChunk NewEmptyChunk() { return new NetworkChunk() { ChunkType = NetworkChunkType.Normal, Cubes = new List<NetworkCube>() }; }
 		public static NetworkChunk NewBrokenChunk() { return new NetworkChunk() { ChunkType = NetworkChunkType.Broken }; }
 
 		public NetworkChunkType ChunkType;
@@ -27,7 +26,7 @@ namespace PrimitierMultiplayer.Shared.Models
 		public void Serialize(NetDataWriter writer)
 		{
 			writer.Put((byte)ChunkType);
-			if (ChunkType == NetworkChunkType.Broken || ChunkType == NetworkChunkType.Empty)
+			if (ChunkType == NetworkChunkType.Broken)
 				return;
 
 			writer.PutList(Cubes);

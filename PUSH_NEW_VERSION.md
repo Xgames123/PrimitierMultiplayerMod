@@ -1,6 +1,6 @@
 ## Steps to publish a new release (so I don't forget)
 1) merge main into dev
-2) Check version number on mod and server
+2) Check version number on mod, server and psctool
 3) Update readme
 
 6) merge dev into main

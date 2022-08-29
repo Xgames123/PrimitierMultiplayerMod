@@ -2,6 +2,7 @@
 using PrimitierMultiplayer.Mod.Components;
 using PrimitierMultiplayer.Shared;
 using PrimitierMultiplayer.Shared.Models;
+using PrimitierMultiplayer.Shared.Models.Extentions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,12 @@ namespace PrimitierMultiplayer.Mod
 
 			return null;
 		}
-
+		public static bool IsOwned(System.Numerics.Vector2 chunkPos)
+		{
+			if (OwnedChunks.Contains(chunkPos))
+				return true;
+			return false;
+		}
 
 
 		public static void UpdateModChunks(IEnumerable<NetworkChunkPositionPair> chunks)
@@ -46,7 +52,7 @@ namespace PrimitierMultiplayer.Mod
 
 			foreach (var chunkPos in Chunks.Keys.ToArray())
 			{
-				if (!Contains(chunks, chunkPos))
+				if (!chunks.Contains(chunkPos))
 				{
 					DestroyModChunk(chunkPos);
 				}
@@ -54,16 +60,7 @@ namespace PrimitierMultiplayer.Mod
 			}
 
 		}
-		private static bool Contains(IEnumerable<NetworkChunkPositionPair> container, System.Numerics.Vector2 position)
-		{
-			foreach (var item in container)
-			{
-				if (item.Position == position)
-					return true;
-
-			}
-			return false;
-		}
+		
 
 
 		public static void UpdateModChunk(NetworkChunkPositionPair chunkPosPair)

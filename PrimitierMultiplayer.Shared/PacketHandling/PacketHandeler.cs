@@ -27,6 +27,12 @@ namespace PrimitierMultiplayer.Shared.PacketHandling
 			peer.Send(Writer, deliveryMethod);
 		}
 
+		protected void SendPacket<T>(int peerId, T packet, DeliveryMethod deliveryMethod) where T : class, new()
+		{
+			
+			SendPacket(NetManager.GetPeerById(peerId), packet, deliveryMethod);
+		}
+
 
 		public virtual void Setup(ref NetDataWriter writer, ref NetPacketProcessor packetProcessor, ref NetManager netManager)
 		{

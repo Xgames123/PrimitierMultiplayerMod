@@ -4,6 +4,7 @@ using PrimitierMultiplayer.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Text.Json;
 using System.Threading;
@@ -280,7 +281,36 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 			}
 			
 		}
-		public static void WriteChunk(Vector2 position, NetworkChunk chunk)
+
+
+		public static bool WriteCube(Vector2 chunkPos, NetworkCube cube, bool overwrite=true)
+		{
+			var oldChunk = GetChunk(chunkPos);
+			if(oldChunk.ChunkType == NetworkChunkType.Broken)
+			{
+				return false;
+			}
+			oldChunk.ChunkType = NetworkChunkType.Normal;
+			if (overwrite)
+			{
+				for (int i = 0; i < oldChunk.Cubes.Count; i++)
+				{
+					if (oldChunk.Cubes[i].Id == cube.Id)
+					{
+						oldChunk.Cubes[i] = cube;
+						return true;
+					}
+
+				}
+
+			}
+			oldChunk.Cubes.Add(cube);
+			return true;
+
+		}
+
+
+		public static bool WriteChunk(Vector2 position, NetworkChunk chunk)
 		{
 			var oldChunk = GetChunk(position, false);
 
@@ -289,11 +319,13 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 			{
 				ChunkCache.Add(position, chunk);
 				NeedsSaving.Add(position);
+				return true;
 			}
 			else
 			{
 				ChunkCache[position] = chunk;
 				NeedsSaving.Add(position);
+				return true;
 			}
 
 		}

@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ErrorCode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ErrorGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)INetworkModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Extentions\NetworkChunkPositionPairEnumerable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\InitialPlayerData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkChunk.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Config\NetworkDebugConfig.cs" />
@@ -22,6 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PacketHandling\PacketHandeler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PacketHandling\PacketHandlerContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PacketProcessorTypeRegister.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Packets\c2s2c\CubeChunkChangePacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\c2s\PlayerUpdatePacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\PlayerJoinedPacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\PlayerLeavePacket.cs" />
@@ -33,6 +35,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Models\Config\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Models\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Packets\c2s2c\" />
   </ItemGroup>
 </Project>
