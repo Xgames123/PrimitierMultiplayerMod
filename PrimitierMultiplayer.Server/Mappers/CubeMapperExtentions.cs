@@ -15,5 +15,10 @@ namespace PrimitierMultiplayer.Server.Mappers
 		{
 			return new NetworkCube() { Id = storedCube.Id, Position = storedCube.Position, Rotation = storedCube.Rotation, Size = storedCube.Size, Substance = storedCube.Substance };
 		}
+
+		public static StoredCube ToStoredCube(this NetworkCube networkCube)
+		{
+			return new StoredCube() { Id = networkCube.Id, Position = networkCube.Position, Rotation = networkCube.Rotation, Size = networkCube.Size, Substance = networkCube.Substance };
+		}
 	}
 }

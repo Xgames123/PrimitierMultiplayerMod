@@ -27,7 +27,7 @@ namespace PrimitierMultiplayer.Shared.Models
 			writer.Put(Substance);
 		}
 
-		void INetSerializable.Deserialize(NetDataReader reader)
+		public void Deserialize(NetDataReader reader)
 		{
 			Id = reader.GetUInt();
 			Position = reader.GetVector3();
