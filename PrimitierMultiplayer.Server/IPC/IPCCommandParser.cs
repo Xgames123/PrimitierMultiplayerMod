@@ -46,9 +46,11 @@ namespace PrimitierMultiplayer.Server.IPC
 
 		private static IPCResponce? RunCmd(IPCCommand? cmd)
 		{
-			s_log.InfoFormat("Got IPC Command {cmd}", cmd);
 			if (cmd == null)
 				return null;
+
+			s_log.InfoFormat("Got IPC Command {0}", cmd.Type.ToString());
+			
 
 			switch (cmd.Type)
 			{
@@ -68,7 +70,7 @@ namespace PrimitierMultiplayer.Server.IPC
 
 				case IPCCommandType.ReloadWorld:
 					s_log.Info("Reloading world...");
-					World.ReloadWorldSettings();
+					World.LoadWorldSettings();
 					World.ClearChunkCache();
 					return IPCResponce.Ok();
 

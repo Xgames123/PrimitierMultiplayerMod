@@ -13,7 +13,7 @@ namespace PrimitierMultiplayer.Server.Mappers
 
 		public static NetworkDebugConfig ToNetworkDebugConfig(this DebugConfig debugConfig)
 		{
-			return new NetworkDebugConfig() { ShowLocalPlayer = debugConfig.ShowLocalPlayer };
+			return new NetworkDebugConfig() { ShowLocalPlayer = debugConfig.ShowLocalPlayer, ShowChunkBounds = debugConfig.ShowChunkBounds };
 		}
 
 	}

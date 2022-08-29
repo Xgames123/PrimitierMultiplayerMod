@@ -43,6 +43,7 @@ Settings for the server are stored in primsconfig.json
 		"Debug": false, //If false disable all other settings in this section
 
 		"ShowLocalPlayer": false //If true makes the server send the local player back to itself
+		"ShowChunkBounds": false //If true shows the chunk bounds on every player (Can also be toggled by pressing F4)
 	}
 }
 ```

@@ -69,6 +69,7 @@ public static class Program
 		while (true)
 		{
 			server.Update();
+			World.ClearChunkCacheIfMaxSizeExceeded();
 			if (stoppingServer)
 			{
 				break;

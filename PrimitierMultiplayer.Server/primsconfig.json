@@ -6,6 +6,7 @@
 
   "Debug": {
     "Debug": true,
-    "ShowLocalPlayer": true
+    "ShowLocalPlayer": true,
+	  "ShowChunkBounds": true
   }
 }

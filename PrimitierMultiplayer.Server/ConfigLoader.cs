@@ -17,7 +17,10 @@ namespace PrimitierMultiplayer.Server
 		public int MaxPlayers { get; set; } = 10;
 		public string WorldDirectory { get; set; } = "World";
 		public int UpdateDelay { get; set; } = 10;
+
 		public string? IPCDirectory = null;
+
+		public int MaxChunkCacheSize = 4_000;
 
 		public ClientConfig Client { get; set; } = new ClientConfig();
 
@@ -28,6 +31,7 @@ namespace PrimitierMultiplayer.Server
 	{
 		public bool ShowLocalPlayer { get; set; } = false;
 		public bool Debug { get; set; } = false;
+		public bool ShowChunkBounds { get; set; } = false;
 	}
 
 

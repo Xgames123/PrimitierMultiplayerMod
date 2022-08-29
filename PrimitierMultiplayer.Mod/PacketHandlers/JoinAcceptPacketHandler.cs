@@ -30,6 +30,11 @@ namespace PrimitierMultiplayer.Mod.PacketHandlers
 			ConfigManager.DebugConfig = packet.DebugConfig;
 
 			MultiplayerManager.EnterGame(packet.WorldSeed, packet.Position.ToUnity());
+			if (packet.DebugConfig.ShowChunkBounds)
+			{
+				if(!ChunkBoundViewer.IsCreated)
+					ChunkBoundViewer.Create();
+			}
 		}
 	}
 }

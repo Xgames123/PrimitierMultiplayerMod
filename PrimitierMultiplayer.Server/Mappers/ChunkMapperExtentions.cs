@@ -15,6 +15,14 @@ namespace PrimitierMultiplayer.Server.Mappers
 		{
 			return new NetworkChunk() { ChunkType = NetworkChunkType.Normal, Owner = owner, Cubes = storedChunk.Cubes.ConvertAll((storedCube) => storedCube.ToNetworkCube()) };
 		}
+		public static StoredChunk? ToStoredChunk(this NetworkChunk networkChunk, bool returnNullForBrokenChunks=false)
+		{
+			if(returnNullForBrokenChunks && networkChunk.ChunkType == NetworkChunkType.Broken)
+			{
+				return null;
+			}
 
+			return new StoredChunk() { Cubes = networkChunk.Cubes.ConvertAll((netCube) => netCube.ToStoredCube()) };
+		}
 	}
 }

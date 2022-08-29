@@ -119,14 +119,16 @@ namespace PrimitierMultiplayer.Mod
 				var playerPos = Camera.main.transform.position;
 				var playerChunkPos = CubeGenerator.WorldToChunkPos(playerPos);
 
-				PMFLog.Message($"world seed: {TerrainGenerator.worldSeed}");
-				PMFLog.Message($"player pos X: {playerPos.x}, Y: {playerPos.y}, Z: {playerPos.z}");
-				PMFLog.Message($"player chunk pos X: {playerChunkPos.x}, Y: {playerChunkPos.y}");
-				PMFLog.Message($"Remote player count: {RemotePlayer.RemotePlayers.Count}");
-				PMFLog.Message($"Synced object count: {CubeSync.CubeSyncList.Count}");
-				PMFLog.Message($"Chunk size: {TerrainMeshGenerator.tileLength}");
-				PMFLog.Message($"Tiles per chunk: {CubeGenerator.chunkTileCount}");
-				PMFLog.Message($"areaPosOffset: X: {TerrainMeshGenerator.areaPosOffset.x}, Y: {TerrainMeshGenerator.areaPosOffset.y}");
+				PMFLog.Message("");
+				PMFLog.Message("GENERAL DATA:");
+				PMFLog.Message($"	World seed: {TerrainGenerator.worldSeed}");
+				PMFLog.Message($"	Player pos X: {playerPos.x}, Y: {playerPos.y}, Z: {playerPos.z}");
+				PMFLog.Message($"	Player chunk pos X: {playerChunkPos.x}, Y: {playerChunkPos.y}");
+				PMFLog.Message($"	Remote player count: {RemotePlayer.RemotePlayers.Count}");
+				PMFLog.Message($"	Synced object count: {CubeSync.CubeSyncList.Count}");
+				PMFLog.Message($"	Chunk size: {TerrainMeshGenerator.tileLength}");
+				PMFLog.Message($"	Tiles per chunk: {CubeGenerator.chunkTileCount}");
+				PMFLog.Message($"	AreaPosOffset: X: {TerrainMeshGenerator.areaPosOffset.x}, Y: {TerrainMeshGenerator.areaPosOffset.y}");
 			}
 			if (Input.GetKeyUp(KeyCode.F6))
 			{

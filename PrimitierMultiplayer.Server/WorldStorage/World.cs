@@ -60,7 +60,7 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 			}
 			
 
-			ReloadWorldSettings();
+			LoadWorldSettings();
 		}
 
 		public static void CreateEmptyWorld()
@@ -109,7 +109,8 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 
 		}
 
-		public static void ReloadWorldSettings()
+
+		public static void LoadWorldSettings()
 		{
 			ConfigureJsonOptionsIfNeeded();
 			var settingsFilePath = Path.Combine(WorldDirectory, WorldSettingsPath);
@@ -134,6 +135,19 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 
 		}
 
+		public static void ClearChunkCacheIfMaxSizeExceeded()
+		{
+			if (ConfigLoader.Config == null)
+				return;
+
+			if(ConfigLoader.Config.MaxChunkCacheSize < ChunkCache.Count)
+			{
+				s_log.Info($"Clearing chunk cache because max size ({ConfigLoader.Config.MaxChunkCacheSize}) is exceeded");
+				ClearChunkCache();
+			}
+			
+
+		}
 
 
 		public static void ClearChunkCache()
@@ -191,7 +205,14 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 			{
 				try
 				{
-					var json = JsonSerializer.Serialize(ChunkCache[position], s_options);
+					var storedChunk = ChunkCache[position].ToStoredChunk(true);
+					if(storedChunk == null)
+					{
+						s_log.Info($"Corrupted chunk at X: {position.X}, Y: {position.Y}");
+						NeedsSaving.RemoveAt(nSIndex);
+						return false;
+					}
+					var json = JsonSerializer.Serialize(storedChunk, s_options);
 					File.WriteAllText(Path.Combine(WorldDirectory, ChunkDirectoryPath, chunkName), json);
 				}
 				catch (Exception e)
@@ -226,12 +247,22 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 			if (loadIfDoesntExist)
 			{
 				var newChunk = LoadChunk(position);
+				var netChunk = NetworkChunk.NewBrokenChunk();
 				if (newChunk == null)
-					return NetworkChunk.NewBrokenChunk();
+				{
+					netChunk = NetworkChunk.NewBrokenChunk();
+					ChunkCache.Add(position, netChunk);
+					return netChunk;
+				}
+					
 				if (newChunk.Cubes.Count == 0)
-					return NetworkChunk.NewEmptyChunk();
+				{
+					netChunk = NetworkChunk.NewEmptyChunk();
+					ChunkCache.Add(position, netChunk);
+					return netChunk;
+				}
 
-				var netChunk = newChunk.ToNetworkChunk(-1);
+				netChunk = newChunk.ToNetworkChunk(-1);
 				ChunkCache.Add(position, netChunk);
 
 #if DEBUG
@@ -269,6 +300,10 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 
 		private static StoredChunk? LoadChunk(Vector2 position)
 		{
+#if DEBUG
+			s_log.Debug($"Loading {position.X}_{position.Y}chunk.json");
+#endif
+
 			string? chunkJson;
 			var chunkName = $"{position.X}_{position.Y}chunk.json";
 			var chunkPath = Path.Combine(WorldDirectory, ChunkDirectoryPath, chunkName);

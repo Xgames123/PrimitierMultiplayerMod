@@ -26,7 +26,9 @@ namespace PrimitierMultiplayer.Server.PacketHandelers
 
 
 			_log.Info($"{packet.Username} joined the game");
-			_log.Debug($"{newRuntimePlayer.Position.X} {newRuntimePlayer.Position.Y} {newRuntimePlayer.Position.Z}");
+#if DEBUG
+			_log.Debug($"Spawning player at position X: {newRuntimePlayer.Position.X} Y: {newRuntimePlayer.Position.Y} Z: {newRuntimePlayer.Position.Z}");
+#endif
 
 			var playersAlreadyInGame = new List<InitialPlayerData>();
 			foreach (var runtimePlayer in PlayerManager.Players.Values)
