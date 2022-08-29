@@ -1,4 +1,5 @@
-﻿using PrimitierModdingFramework;
+﻿using LiteNetLib;
+using PrimitierModdingFramework;
 using PrimitierModdingFramework.SubstanceModding;
 using PrimitierMultiplayer.Shared;
 using PrimitierMultiplayer.Shared.Models;
@@ -116,6 +117,7 @@ namespace PrimitierMultiplayer.Mod.Components
 				var newChunk = AddToChunk(chunkPos);
 				RemoveFromChunk(_currentChunk);
 				
+				
 				if(newChunk.Owner != MultiplayerManager.LocalId)
 				{
 					DestroyCube();
@@ -124,7 +126,7 @@ namespace PrimitierMultiplayer.Mod.Components
 						OldChunk = chunkPos,
 						NewChunk = _currentChunk,
 						Cube = ToNetworkCube()
-					}, LiteNetLib.DeliveryMethod.ReliableOrdered);
+					}, DeliveryMethod.ReliableOrdered);
 				}
 				_currentChunk = chunkPos;
 			}
