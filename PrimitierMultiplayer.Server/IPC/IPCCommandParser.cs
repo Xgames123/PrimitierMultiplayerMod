@@ -46,6 +46,7 @@ namespace PrimitierMultiplayer.Server.IPC
 
 		private static IPCResponce? RunCmd(IPCCommand? cmd)
 		{
+			s_log.InfoFormat("Got IPC Command {cmd}", cmd);
 			if (cmd == null)
 				return null;
 
@@ -55,18 +56,25 @@ namespace PrimitierMultiplayer.Server.IPC
 					return IPCResponce.InvalidCommand();
 
 				case IPCCommandType.ReloadConfig:
+					s_log.Info("Reloading config...");
 					if (ConfigLoader.Load())
 						return IPCResponce.Ok();
 					else
 						return IPCResponce.Error("Could not load config file");
 
 				case IPCCommandType.ListPlayers:
+					s_log.Info("Listing players...");
 					return IPCResponce.Ok(PlayerManager.GetAllPlayers());
 
 				case IPCCommandType.ReloadWorld:
 					s_log.Info("Reloading world...");
 					World.ReloadWorldSettings();
 					World.ClearChunkCache();
+					return IPCResponce.Ok();
+
+				case IPCCommandType.SaveWorld:
+					s_log.Info("Saving world...");
+					World.SaveAllChunks();
 					return IPCResponce.Ok();
 
 				default:

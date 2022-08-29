@@ -11,6 +11,7 @@ namespace PrimitierMultiplayer.Server.IPC
 		ReloadConfig,
 		ListPlayers,
 		ReloadWorld,
+		SaveWorld,
 		ClearChunkCache,
 	}
 
