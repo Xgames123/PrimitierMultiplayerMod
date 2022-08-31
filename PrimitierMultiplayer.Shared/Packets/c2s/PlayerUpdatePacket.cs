@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PrimitierMultiplayer.Shared.Packets.c2s
 {
-	public class PlayerUpdatePacket
+	public class PlayerUpdatePacket : Packet
 	{
 		public Vector3 Position { get; set; }
 		public Vector3 HeadPosition { get; set; }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PrimitierMultiplayer.Shared.Packets.c2s2c
 {
-	public class CubeChunkChangePacket
+	public class CubeChunkChangePacket : Packet
 	{
 		public NetworkCube Cube { get; set; }
 		public Vector2 OldChunk { get; set; }

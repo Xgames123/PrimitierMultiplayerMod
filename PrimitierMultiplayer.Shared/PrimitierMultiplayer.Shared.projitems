@@ -22,6 +22,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkChunkPositionPair.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkCube.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkPlayer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Packet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PacketBatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PacketHandling\PacketHandeler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PacketHandling\PacketHandlerContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PacketProcessorTypeRegister.cs" />

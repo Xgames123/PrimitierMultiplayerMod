@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PrimitierMultiplayer.Shared.Packets.s2c
 {
-	public class ServerUpdatePacket
+	public class ServerUpdatePacket : Packet
 	{
 		public NetworkPlayer[] Players { get; set; }
 

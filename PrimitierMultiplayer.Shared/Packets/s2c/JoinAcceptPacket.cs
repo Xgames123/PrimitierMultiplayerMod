@@ -8,7 +8,7 @@ using System.Text;
 
 namespace PrimitierMultiplayer.Shared.Packets.s2c
 {
-	public class JoinAcceptPacket 
+	public class JoinAcceptPacket : Packet
 	{
 		public int Id { get; set; }
 

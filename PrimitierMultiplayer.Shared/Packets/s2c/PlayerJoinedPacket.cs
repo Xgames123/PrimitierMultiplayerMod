@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PrimitierMultiplayer.Shared.Packets.s2c
 {
-	public class PlayerJoinedPacket
+	public class PlayerJoinedPacket : Packet
 	{
 		public InitialPlayerData initialPlayerData { get; set; }
 
