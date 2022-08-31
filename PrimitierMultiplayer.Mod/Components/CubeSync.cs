@@ -66,13 +66,7 @@ namespace PrimitierMultiplayer.Mod.Components
 
 
 
-		/// <summary>
-		/// Returns true when it needs to move the object between chunks of different owners
-		/// </summary>
-		/// <param name="chunkPos"></param>
-		/// <param name="newChunk"></param>
-		/// <param name="oldChunk"></param>
-		/// <returns></returns>
+
 		private bool TryRecalculateCurrentChunk(System.Numerics.Vector2 chunkPos, bool destroyCubeOnFail=true)
 		{
 
@@ -81,6 +75,7 @@ namespace PrimitierMultiplayer.Mod.Components
 				var newChunk = WorldManager.GetChunk(chunkPos);
 				var oldChunk = WorldManager.GetChunk(_currentChunk);
 				_currentChunk = chunkPos;
+
 
 				if (newChunk.Owner != MultiplayerManager.LocalId)
 				{
@@ -126,7 +121,7 @@ namespace PrimitierMultiplayer.Mod.Components
 			};
 
 			var chunkPos = ChunkMath.WorldToChunkPos(transform.position.ToNumerics());
-			if (TryRecalculateCurrentChunk(chunkPos))
+			if (!TryRecalculateCurrentChunk(chunkPos))
 			{
 				PMFLog.Message($"Moving object Id:{Id} to chunk X: {chunkPos.X}, Y: {chunkPos.Y} from X: {_currentChunk.X}, Y: {_currentChunk.Y}");
 				MultiplayerManager.Client.SendPacket(new CubeChunkChangePacket()
@@ -135,7 +130,6 @@ namespace PrimitierMultiplayer.Mod.Components
 					NewChunk = chunkPos,
 					Cube = netCube,
 				}, DeliveryMethod.ReliableOrdered);
-				DestroyCube();
 			}
 
 
@@ -151,7 +145,7 @@ namespace PrimitierMultiplayer.Mod.Components
 			if (!IsValid())
 				return;
 
-			TryRecalculateCurrentChunk(chunkPos);
+			TryRecalculateCurrentChunk(chunkPos, false);
 
 			CubeBase.transform.position = cube.Position.ToUnity();
 			CubeBase.transform.rotation = cube.Rotation.ToUnity();

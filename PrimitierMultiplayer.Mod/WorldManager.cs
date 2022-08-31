@@ -69,7 +69,7 @@ namespace PrimitierMultiplayer.Mod
 			var chunkPos = chunkPosPair.Position;
 
 			//Generate chunk when empty and owned
-			if (chunk.ChunkType != NetworkChunkType.Normal)
+			if (chunk.ChunkType == NetworkChunkType.Broken || chunk.Cubes.Count == 0)
 			{
 				return;
 			}

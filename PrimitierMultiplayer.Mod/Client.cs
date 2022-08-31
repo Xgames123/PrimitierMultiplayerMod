@@ -116,7 +116,9 @@ namespace PrimitierMultiplayer.Mod
 				var ownedChunkPos = WorldManager.OwnedChunks[i];
 				var ownedChunk = WorldManager.GetChunk(ownedChunkPos);
 
-				chunks[i] = new NetworkChunkPositionPair(ownedChunk.UpdateToServer(), ownedChunkPos);
+				var netChunk = ownedChunk.UpdateToServer();
+
+				chunks[i] = new NetworkChunkPositionPair(netChunk, ownedChunkPos);
 			}
 
 

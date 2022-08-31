@@ -24,7 +24,8 @@ namespace PrimitierMultiplayer.Mod
 			foreach (var syncId in NetworkSyncs.ToArray())
 			{
 				var sync = CubeSync.GetById(syncId);
-				CubeList.Add(sync.UpdateToServer());
+				var netcube = sync.UpdateToServer();
+				CubeList.Add(netcube);
 
 
 			}
