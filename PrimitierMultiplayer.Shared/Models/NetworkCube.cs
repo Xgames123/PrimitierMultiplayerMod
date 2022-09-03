@@ -15,6 +15,7 @@ namespace PrimitierMultiplayer.Shared.Models
 		public System.Numerics.Vector3 Velosity;
 		public System.Numerics.Vector3 AngularVelocity;
 		public int Substance;
+		public bool IsInWrongChunk;
 
 		public void Serialize(NetDataWriter writer)
 		{
@@ -25,6 +26,7 @@ namespace PrimitierMultiplayer.Shared.Models
 			writer.Put(AngularVelocity);
 			writer.Put(Size);
 			writer.Put(Substance);
+			writer.Put(IsInWrongChunk);
 		}
 
 		public void Deserialize(NetDataReader reader)
@@ -36,6 +38,7 @@ namespace PrimitierMultiplayer.Shared.Models
 			AngularVelocity = reader.GetVector3();
 			Size = reader.GetVector3();
 			Substance = reader.GetInt();
+			IsInWrongChunk = reader.GetBool();
 		}
 	}
 }

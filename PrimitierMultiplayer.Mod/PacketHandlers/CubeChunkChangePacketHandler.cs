@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PrimitierMultiplayer.Shared.Packets.c2s2c;
 using LiteNetLib;
+using PrimitierMultiplayer.Shared.Packets.s2c;
 using PrimitierMultiplayer.Mod.Components;
+using PrimitierMultiplayer.Shared;
 
 namespace PrimitierMultiplayer.Mod.PacketHandlers
 {
@@ -14,10 +15,10 @@ namespace PrimitierMultiplayer.Mod.PacketHandlers
 	{
 		public override void HandelPacket(CubeChunkChangePacket packet, NetPeer peer)
 		{
-			if (!WorldManager.IsOwned(packet.NewChunk))
+			if (!WorldManager.IsOwned(ChunkMath.WorldToChunkPos(packet.Cube.Position)))
 				return;
 
-			WorldManager.UpdateCube(packet.Cube, packet.NewChunk);
+			WorldManager.UpdateCube(packet.Cube);
 		}
 	}
 }

@@ -35,7 +35,7 @@ namespace PrimitierMultiplayer.Shared
 		}
 
 
-		public static float WorldToChunkRadius(float radius)
+		public static float WorldToChunkFloat(float radius)
 		{
 			var chunkPosOffset = 0;
 
@@ -47,5 +47,7 @@ namespace PrimitierMultiplayer.Shared
 		{
 			return chunkRadius * ChunkTileCount * TileLength;
 		}
+
+
 	}
 }

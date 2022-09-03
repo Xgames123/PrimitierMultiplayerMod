@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PrimitierMultiplayer.Shared.Packets.s2c;
 
 namespace PrimitierMultiplayer.Server.PacketHandelers
 {
@@ -37,7 +38,26 @@ namespace PrimitierMultiplayer.Server.PacketHandelers
 				if (cachedChunk.Owner != peer.Id)
 					continue;
 
-				World.WriteChunk(chunkPosPair.Position, chunkPosPair.Chunk);
+				if (chunkPosPair.Chunk.ChunkType == Shared.Models.NetworkChunkType.Normal)
+				{
+					foreach (var cube in chunkPosPair.Chunk.Cubes)
+					{
+						if (cube.IsInWrongChunk)
+						{
+							World.WriteCube(cube);
+							SendPacket(peer, new CubeChunkChangePacket()
+							{
+								Cube = cube,
+								OldChunk = chunkPosPair.Position
+
+							}, DeliveryMethod.ReliableOrdered);
+						}
+
+					}
+				}
+
+
+				World.WriteChunk(chunkPosPair);
 			}
 
 		}

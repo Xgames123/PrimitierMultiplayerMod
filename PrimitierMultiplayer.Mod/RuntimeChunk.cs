@@ -25,8 +25,9 @@ namespace PrimitierMultiplayer.Mod
 			{
 				var sync = CubeSync.GetById(syncId);
 				var netcube = sync.UpdateToServer();
+				if (netcube.Id == default)
+					continue;
 				CubeList.Add(netcube);
-
 
 			}
 

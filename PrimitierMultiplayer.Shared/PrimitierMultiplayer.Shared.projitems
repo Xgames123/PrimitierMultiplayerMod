@@ -26,7 +26,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PacketHandling\PacketHandeler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PacketHandling\PacketHandlerContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PacketProcessorTypeRegister.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Packets\c2s2c\CubeChunkChangePacket.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\CubeChunkChangePacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\c2s\PlayerUpdatePacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\PlayerJoinedPacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\PlayerLeavePacket.cs" />

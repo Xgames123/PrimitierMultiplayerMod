@@ -283,6 +283,10 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 			
 		}
 
+		public static bool WriteCube(NetworkCube cube, bool overwrite = true)
+		{
+			return WriteCube(ChunkMath.WorldToChunkPos(cube.Position), cube, overwrite);
+		}
 
 		public static bool WriteCube(Vector2 chunkPos, NetworkCube cube, bool overwrite=true)
 		{
@@ -310,6 +314,10 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 
 		}
 
+		public static bool WriteChunk(NetworkChunkPositionPair chunkPosPair)
+		{
+			return WriteChunk(chunkPosPair.Position, chunkPosPair.Chunk);
+		}
 
 		public static bool WriteChunk(Vector2 position, NetworkChunk chunk)
 		{
@@ -320,12 +328,13 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 			{
 				ChunkCache.Add(position, chunk);
 				NeedsSaving.Add(position);
-				return true;
+				return false;
 			}
 			else
 			{
 				ChunkCache[position] = chunk;
-				NeedsSaving.Add(position);
+				if(!NeedsSaving.Contains(position))
+					NeedsSaving.Add(position);
 				return true;
 			}
 
