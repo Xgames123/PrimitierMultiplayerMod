@@ -2,11 +2,13 @@
 
   "ListenIp": "localhost",
 
-  "UpdateDelay":400,
+  "UpdateDelay": 400,
+
+  "ViewRadius": 0,
 
   "Debug": {
     "Debug": true,
     "ShowLocalPlayer": true,
-	  "ShowChunkBounds": true
+    "ShowChunkBounds": true
   }
 }

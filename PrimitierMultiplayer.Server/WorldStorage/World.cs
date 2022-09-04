@@ -199,6 +199,8 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 
 		}
 
+
+
 		public static bool TrySaveChunk(Vector2 position)
 		{
 			var chunkName = $"{position.X}_{position.Y}chunk.json";
@@ -230,7 +232,7 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 			return true;
 		}
 
-		public static void UpdateChunkOwner(Vector2 chunkPosition, int owner)
+		private static void UpdateChunkOwner(Vector2 chunkPosition, int owner)
 		{
 			if (ChunkCache.TryGetValue(chunkPosition, out var chunk))
 			{

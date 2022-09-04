@@ -196,6 +196,16 @@ namespace PrimitierMultiplayer.Server
 
 			var center = ChunkMath.WorldToChunkPos(currentPlayer.Position);
 
+			if(chunkRadius == 0)
+			{
+				var chunk = World.GetChunk(center);
+				World.TryOwnChunk(currentPlayer, center, chunkRadius);
+				foundChunks.Add(new NetworkChunkPositionPair(chunk, center));
+				
+				return foundChunks;
+			}
+
+
 			for (float x = center.X - chunkRadius; x < center.X + chunkRadius; x++)
 			{
 				for (float y = center.Y - chunkRadius; y < center.Y + chunkRadius; y++)
@@ -204,7 +214,7 @@ namespace PrimitierMultiplayer.Server
 					if (Vector2.Distance(chunkPos, center) < chunkRadius)
 					{
 
-						var chunk = World.GetChunk(center);
+						var chunk = World.GetChunk(chunkPos);
 
 						World.TryOwnChunk(currentPlayer, chunkPos, chunkRadius);
 

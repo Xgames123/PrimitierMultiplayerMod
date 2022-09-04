@@ -8,6 +8,7 @@ using LiteNetLib;
 using PrimitierMultiplayer.Shared.Packets.s2c;
 using PrimitierMultiplayer.Mod.Components;
 using PrimitierMultiplayer.Shared;
+using PrimitierModdingFramework;
 
 namespace PrimitierMultiplayer.Mod.PacketHandlers
 {
@@ -16,7 +17,11 @@ namespace PrimitierMultiplayer.Mod.PacketHandlers
 		public override void HandelPacket(CubeChunkChangePacket packet, NetPeer peer)
 		{
 			if (!WorldManager.IsOwned(ChunkMath.WorldToChunkPos(packet.Cube.Position)))
+			{
+				PMFLog.Warning("Got CubeChunkChangePacket for a chunk not owned by this client (Ignoring packet)");
 				return;
+			}
+				
 
 			WorldManager.UpdateCube(packet.Cube);
 		}

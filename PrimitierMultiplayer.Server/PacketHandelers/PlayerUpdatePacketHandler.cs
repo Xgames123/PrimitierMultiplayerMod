@@ -34,9 +34,11 @@ namespace PrimitierMultiplayer.Server.PacketHandelers
 
 			foreach (var chunkPosPair in packet.Chunks)
 			{
-				var cachedChunk = World.GetChunk(chunkPosPair.Position);
-				if (cachedChunk.Owner != peer.Id)
-					continue;
+				//TODO: cachedChunk.Owner value is outdated
+
+				//var cachedChunk = World.GetChunk(chunkPosPair.Position);
+				//if (cachedChunk.Owner != peer.Id)
+				//	continue;
 
 				if (chunkPosPair.Chunk.ChunkType == Shared.Models.NetworkChunkType.Normal)
 				{

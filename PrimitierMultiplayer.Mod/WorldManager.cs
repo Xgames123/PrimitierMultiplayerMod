@@ -44,7 +44,6 @@ namespace PrimitierMultiplayer.Mod
 
 		public static void UpdateModChunks(IEnumerable<NetworkChunkPositionPair> chunks)
 		{
-			OwnedChunks.Clear();
 			foreach (var chunk in chunks)
 			{
 				UpdateModChunk(chunk);
@@ -68,6 +67,8 @@ namespace PrimitierMultiplayer.Mod
 			var chunk = chunkPosPair.Chunk;
 			var chunkPos = chunkPosPair.Position;
 
+			OwnedChunks.Remove(chunkPos);
+
 			//Generate chunk when empty and owned
 			if (chunk.ChunkType == NetworkChunkType.Broken || chunk.Cubes.Count == 0)
 			{
@@ -77,10 +78,11 @@ namespace PrimitierMultiplayer.Mod
 			var runtimeChunk = GetChunk(chunkPos);
 			if (runtimeChunk == null)
 			{
-				CreateModChunk(chunkPosPair);
+				runtimeChunk = CreateModChunk(chunkPosPair);
 			}
 
-			if (chunk.Owner == MultiplayerManager.LocalId && runtimeChunk != null)
+
+			if (chunk.Owner == MultiplayerManager.LocalId)
 			{
 				//Skip chunk because we own it
 				
@@ -98,7 +100,7 @@ namespace PrimitierMultiplayer.Mod
 
 
 				//Remove old network syncs
-				foreach (var netSyncId in Chunks[chunkPos].NetworkSyncs)
+				foreach (var netSyncId in GetChunk(chunkPos).NetworkSyncs)
 				{
 					if(!Contains(chunk.Cubes, netSyncId))
 					{
@@ -127,12 +129,14 @@ namespace PrimitierMultiplayer.Mod
 			return false;
 		}
 
-		private static void CreateModChunk(NetworkChunkPositionPair chunkPair)
+		private static RuntimeChunk CreateModChunk(NetworkChunkPositionPair chunkPair)
 		{
 			var chunk = chunkPair.Chunk;
 
-			Chunks.Add(chunkPair.Position, new RuntimeChunk() { Owner = chunk.Owner });
+			var runtimeChunk = new RuntimeChunk() { Owner = chunk.Owner };
+			Chunks.Add(chunkPair.Position, runtimeChunk);
 
+			return runtimeChunk;
 		}
 
 

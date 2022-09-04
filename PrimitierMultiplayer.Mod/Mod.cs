@@ -130,7 +130,22 @@ namespace PrimitierMultiplayer.Mod
 				PMFLog.Message($"	Chunk size: {TerrainMeshGenerator.tileLength}");
 				PMFLog.Message($"	Tiles per chunk: {CubeGenerator.chunkTileCount}");
 				PMFLog.Message($"	AreaPosOffset: X: {TerrainMeshGenerator.areaPosOffset.x}, Y: {TerrainMeshGenerator.areaPosOffset.y}");
+				PMFLog.Message($"");
+				PMFLog.Message($"	OWNED CHUNKS:");
+				foreach (var chunkPos in WorldManager.Chunks.Keys)
+				{
+					var chunk = WorldManager.GetChunk(chunkPos);
+					PMFLog.Message($"		X: {chunkPos.X}, Y: {chunkPos.Y} Owned: {chunk.Owner == MultiplayerManager.LocalId}");
+					
+					foreach (var netSync in chunk.NetworkSyncs)
+					{
+						PMFLog.Message($"			Id: {netSync}");
+					}
+					
+				}
 			}
+
+
 			if (Input.GetKeyUp(KeyCode.F6))
 			{
 				HierarchyXmlDumper.DumpSceneToFile();

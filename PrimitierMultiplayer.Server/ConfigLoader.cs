@@ -103,6 +103,21 @@ namespace PrimitierMultiplayer.Server
 				config.UpdateDelay = 50;
 			}
 
+			if(config.ViewRadius <= 0)
+			{
+				if (config.Debug == null)
+				{
+					c_log.Error("ViewRadius can not be less than or equal to 0");
+					config.ViewRadius = 1;
+				}
+				else
+				{
+					c_log.Warn("ViewRadius is less than or equal to 0 (This is only allowed in debug mode)");
+				}
+					
+			}
+
+
 			
 			return config;
 		}

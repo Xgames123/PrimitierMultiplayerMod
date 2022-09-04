@@ -76,6 +76,8 @@ namespace PrimitierMultiplayer.Mod
 
 			var textGo = new GameObject("Text");
 			textGo.transform.parent = chunkBoundViewerGo.transform;
+			textGo.transform.rotation = Quaternion.Euler(0, 180, 0);
+			textGo.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
 			chunkBoundViewer._text = textGo.AddComponent<TextMeshPro>();
 			chunkBoundViewer._text.color = Color.red;
 
