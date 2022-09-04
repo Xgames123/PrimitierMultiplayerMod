@@ -31,10 +31,15 @@ namespace PrimitierMultiplayer.Mod.Components
 
 		public static void Register(CubeSync sync)
 		{
-			sync.RecalculateChunkPosition(true);
 			CubeSyncList.Add(sync.Id, sync);
+			
 		}
 
+		private void FixedUpdate()
+		{
+			RecalculateChunkPosition();
+			
+		}
 
 		public uint Id;
 
@@ -64,22 +69,31 @@ namespace PrimitierMultiplayer.Mod.Components
 		}
 
 
-		private void RecalculateChunkPosition(bool force=false)
+		private void RecalculateChunkPosition()
 		{
+			
 			var chunkPos = ChunkMath.WorldToChunkPos(transform.position.ToNumerics());
+			var chunk = WorldManager.GetChunk(chunkPos);
+			if (chunk == null)
+				DestroyCube();
 
-			if (_currentChunk != chunkPos || force)
+			if (chunk.Owner != MultiplayerManager.LocalId)
 			{
-				var chunk = WorldManager.GetChunk(chunkPos);
-				if (chunk == null || chunk.Owner != MultiplayerManager.LocalId)
-				{
-					IsInWrongChunk = true;
-					return;
-				}
+				IsInWrongChunk = true;
+				return;
+			}
+			IsInWrongChunk = false;
+			if (!chunk.NetworkSyncs.Contains(Id))
+			{
+				var oldChunk = WorldManager.GetChunk(_currentChunk);
+				if (oldChunk != null)
+					oldChunk.NetworkSyncs.Remove(Id);
 
-				IsInWrongChunk = false;
+				chunk.NetworkSyncs.Add(Id);
 				_currentChunk = chunkPos;
 			}
+
+
 
 		}
 
@@ -97,7 +111,6 @@ namespace PrimitierMultiplayer.Mod.Components
 			if (!IsValid())
 				return default;
 
-			RecalculateChunkPosition();
 			if (IsInWrongChunk)
 			{
 				DestroyCube();
@@ -133,8 +146,6 @@ namespace PrimitierMultiplayer.Mod.Components
 			CubeBase.rb.velocity = cube.Velosity.ToUnity();
 			CubeBase.rb.angularVelocity = cube.AngularVelocity.ToUnity();
 			CubeBase.ChangeSubstance((Substance)cube.Substance);
-
-			RecalculateChunkPosition();
 
 		}
 

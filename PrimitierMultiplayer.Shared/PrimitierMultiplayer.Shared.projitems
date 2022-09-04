@@ -14,7 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ErrorGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)INetworkModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MathF.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Extentions\NetworkChunkPositionPairEnumerable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Extentions\NetworkChunkPositionPairArrayExtentions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\InitialPlayerData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\NetworkChunk.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Config\NetworkDebugConfig.cs" />

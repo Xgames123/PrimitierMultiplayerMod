@@ -42,7 +42,7 @@ namespace PrimitierMultiplayer.Mod
 		}
 
 
-		public static void UpdateModChunks(IEnumerable<NetworkChunkPositionPair> chunks)
+		public static void UpdateModChunks(NetworkChunkPositionPair[] chunks)
 		{
 			foreach (var chunk in chunks)
 			{
@@ -69,8 +69,8 @@ namespace PrimitierMultiplayer.Mod
 
 			OwnedChunks.Remove(chunkPos);
 
-			//Generate chunk when empty and owned
-			if (chunk.ChunkType == NetworkChunkType.Broken || chunk.Cubes.Count == 0)
+			//Skip when broken
+			if (chunk.ChunkType == NetworkChunkType.Broken)
 			{
 				return;
 			}
@@ -102,9 +102,10 @@ namespace PrimitierMultiplayer.Mod
 				//Remove old network syncs
 				foreach (var netSyncId in GetChunk(chunkPos).NetworkSyncs)
 				{
-					if(!Contains(chunk.Cubes, netSyncId))
+					var cubeSync = CubeSync.GetById(netSyncId);
+					if (!Contains(chunk.Cubes, netSyncId))
 					{
-						CubeSync.GetById(netSyncId).DestroyCube();
+						cubeSync.DestroyCube();
 
 					}
 
@@ -147,7 +148,10 @@ namespace PrimitierMultiplayer.Mod
 			{
 				var sync = CubeSync.GetById(syncId);
 				if(sync != null)
+				{
 					sync.DestroyCube();
+				}
+					
 			}
 
 			OwnedChunks.Remove(chunkPos);

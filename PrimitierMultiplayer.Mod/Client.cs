@@ -121,6 +121,14 @@ namespace PrimitierMultiplayer.Mod
 				chunks[i] = new NetworkChunkPositionPair(netChunk, ownedChunkPos);
 			}
 
+			PMFLog.Message($"sending {chunks.Length} chunks");
+			foreach (var chunk in chunks)
+			{
+				PMFLog.Message($"Pos: X: {chunk.Position.X}, Y: {chunk.Position.Y}");
+				PMFLog.Message($"Owner: {chunk.Chunk.Owner}");
+				PMFLog.Message($"cubeCount: {chunk.Chunk.Cubes.Count}");
+
+			}
 
 			var packet = new PlayerUpdatePacket()
 			{

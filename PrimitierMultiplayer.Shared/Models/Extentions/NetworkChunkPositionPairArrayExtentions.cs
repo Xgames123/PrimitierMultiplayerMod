@@ -4,12 +4,12 @@ using System.Text;
 
 namespace PrimitierMultiplayer.Shared.Models.Extentions
 {
-	public static class NetworkChunkPositionPairEnumerable
+	public static class NetworkChunkPositionPairArrayExtentions
 	{
 
-		public static bool Contains(this IEnumerable<NetworkChunkPositionPair> container, System.Numerics.Vector2 position)
+		public static bool Contains(this NetworkChunkPositionPair[] array, System.Numerics.Vector2 position)
 		{
-			foreach (var item in container)
+			foreach (var item in array)
 			{
 				if (item.Position == position)
 					return true;
