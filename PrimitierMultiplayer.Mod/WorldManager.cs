@@ -58,7 +58,7 @@ namespace PrimitierMultiplayer.Mod
 				wasInCache = false;
 				runtimeChunk = CreateEmptyModChunk(chunkPosPair);
 			}
-			if (wasInCache)
+			if (!wasInCache)
 			{
 				//Sync chunk from server
 				SyncChunkFromServer(chunkPosPair);

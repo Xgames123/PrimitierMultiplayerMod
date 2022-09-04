@@ -111,10 +111,7 @@ namespace PrimitierMultiplayer.Mod.Components
 			if (!IsValid())
 				return default;
 
-			if (IsInWrongChunk)
-			{
-				DestroyCube();
-			}
+			
 
 			var netCube = new NetworkCube()
 			{
@@ -131,7 +128,10 @@ namespace PrimitierMultiplayer.Mod.Components
 			return netCube;
 
 
-
+			if (IsInWrongChunk)
+			{
+				DestroyCube();
+			}
 		}
 
 
@@ -140,8 +140,8 @@ namespace PrimitierMultiplayer.Mod.Components
 			if (!IsValid())
 				return;
 
-			CubeBase.transform.position = cube.Position.ToUnity();
-			CubeBase.transform.rotation = cube.Rotation.ToUnity();
+			CubeBase.rb.position = cube.Position.ToUnity();
+			CubeBase.rb.rotation = cube.Rotation.ToUnity();
 			CubeBase.ChangeScale(cube.Size.ToUnity());
 			CubeBase.rb.velocity = cube.Velosity.ToUnity();
 			CubeBase.rb.angularVelocity = cube.AngularVelocity.ToUnity();

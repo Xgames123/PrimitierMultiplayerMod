@@ -4,7 +4,7 @@
 
   "UpdateDelay": 400,
 
-  "ViewRadius": 0,
+  "ViewRadius": 1,
 
   "Debug": {
     "Debug": true,
