@@ -171,6 +171,7 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 
 		public static void TryOwnChunk(RuntimePlayer player, Vector2 chunkPos, float ownRadius)
 		{
+			
 
 			var chunk = GetChunk(chunkPos);
 
@@ -178,23 +179,14 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 
 			if (chunk.Owner == player.RuntimeId)
 				return;
-			if (chunk.Owner == -1)
-			{
-				UpdateChunkOwner(playerChunk, player.RuntimeId);
-				return;
-			}
-			var oldPlayer = PlayerManager.GetPlayerById(chunk.Owner);
-			if (oldPlayer == null)
-			{
-				UpdateChunkOwner(playerChunk, player.RuntimeId);
-				return;
-			}
-			if (Vector2.Distance(chunkPos, ChunkMath.WorldToChunkPos(oldPlayer.Position)) >= ownRadius)
-			{
-				UpdateChunkOwner(playerChunk, player.RuntimeId);
-				return;
-			}
 
+			var oldPlayer = PlayerManager.GetPlayerById(chunk.Owner);
+			if (chunk.Owner == -1 || oldPlayer == null || Vector2.Distance(chunkPos, ChunkMath.WorldToChunkPos(oldPlayer.Position)) >= ownRadius)
+			{
+				chunk.Owner = player.RuntimeId;
+				ChunkCache[chunkPos] = chunk;
+				return;
+			}
 
 
 		}
@@ -203,6 +195,8 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 
 		public static bool TrySaveChunk(Vector2 position)
 		{
+			//TODO: remove return
+			return true;
 			var chunkName = $"{position.X}_{position.Y}chunk.json";
 			var nSIndex = NeedsSaving.IndexOf(position);
 			if (nSIndex != -1)
@@ -232,16 +226,7 @@ namespace PrimitierMultiplayer.Server.WorldStorage
 			return true;
 		}
 
-		private static void UpdateChunkOwner(Vector2 chunkPosition, int owner)
-		{
-			if (ChunkCache.TryGetValue(chunkPosition, out var chunk))
-			{
-				chunk.Owner = owner;
-				ChunkCache[chunkPosition] = chunk;
-				return;
-			}
-
-		}
+		
 
 		public static NetworkChunk GetChunk(Vector2 position, bool loadIfDoesntExist=true)
 		{

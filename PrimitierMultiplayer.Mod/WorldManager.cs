@@ -21,45 +21,22 @@ namespace PrimitierMultiplayer.Mod
 
 		public static UnityEngine.Vector3 PlayerStartPosition;
 
-		public static Dictionary<System.Numerics.Vector2, RuntimeChunk> Chunks = new Dictionary<System.Numerics.Vector2, RuntimeChunk>();
-		public static List<System.Numerics.Vector2> OwnedChunks = new List<System.Numerics.Vector2>();
+		public static Dictionary<System.Numerics.Vector2, RuntimeChunk> VisibleChunks = new Dictionary<System.Numerics.Vector2, RuntimeChunk>();
 
 
-		public static RuntimeChunk GetChunk(System.Numerics.Vector2 chunkPos)
+		public static RuntimeChunk GetVisibleChunk(System.Numerics.Vector2 chunkPos)
 		{
-			if (Chunks.TryGetValue(chunkPos, out var chunk))
+			if (VisibleChunks.TryGetValue(chunkPos, out var chunk))
 			{
 				return chunk;
 			}
 
 			return null;
 		}
-		public static bool IsOwned(System.Numerics.Vector2 chunkPos)
-		{
-			if (OwnedChunks.Contains(chunkPos))
-				return true;
-			return false;
-		}
 
 
-		public static void UpdateModChunks(NetworkChunkPositionPair[] chunks)
-		{
-			foreach (var chunk in chunks)
-			{
-				UpdateModChunk(chunk);
-			}
 
-			foreach (var chunkPos in Chunks.Keys.ToArray())
-			{
-				if (!chunks.Contains(chunkPos))
-				{
-					DestroyModChunk(chunkPos);
-				}
 
-			}
-
-		}
-		
 
 
 		public static void UpdateModChunk(NetworkChunkPositionPair chunkPosPair)
@@ -67,7 +44,6 @@ namespace PrimitierMultiplayer.Mod
 			var chunk = chunkPosPair.Chunk;
 			var chunkPos = chunkPosPair.Position;
 
-			OwnedChunks.Remove(chunkPos);
 
 			//Skip when broken
 			if (chunk.ChunkType == NetworkChunkType.Broken)
@@ -75,41 +51,30 @@ namespace PrimitierMultiplayer.Mod
 				return;
 			}
 
-			var runtimeChunk = GetChunk(chunkPos);
+			bool wasInCache = true;
+			var runtimeChunk = GetVisibleChunk(chunkPos);
 			if (runtimeChunk == null)
 			{
-				runtimeChunk = CreateModChunk(chunkPosPair);
+				wasInCache = false;
+				runtimeChunk = CreateEmptyModChunk(chunkPosPair);
+			}
+			if (wasInCache)
+			{
+				//Sync chunk from server
+				SyncChunkFromServer(chunkPosPair);
+				return;
 			}
 
 
 			if (chunk.Owner == MultiplayerManager.LocalId)
 			{
 				//Skip chunk because we own it
-				
-				OwnedChunks.Add(chunkPos);
 				return;
 			}
 			else
 			{
 				//Sync chunk from server
-
-				foreach (var cube in chunk.Cubes)
-				{
-					UpdateCube(cube);
-				}
-
-
-				//Remove old network syncs
-				foreach (var netSyncId in GetChunk(chunkPos).NetworkSyncs)
-				{
-					var cubeSync = CubeSync.GetById(netSyncId);
-					if (!Contains(chunk.Cubes, netSyncId))
-					{
-						cubeSync.DestroyCube();
-
-					}
-
-				}
+				SyncChunkFromServer(chunkPosPair);
 
 
 			}
@@ -117,6 +82,34 @@ namespace PrimitierMultiplayer.Mod
 			
 		
 		}
+		private static void SyncChunkFromServer(NetworkChunkPositionPair chunkPosPair)
+		{
+			PMFLog.Message($"Syncing X: {chunkPosPair.Position.X}, Y: {chunkPosPair.Position.Y} from server");
+			PMFLog.Message($"chunk contains {chunkPosPair.Chunk.Cubes.Count} cubes");
+
+			var chunk = chunkPosPair.Chunk;
+			var chunkPos = chunkPosPair.Position;
+
+			foreach (var cube in chunk.Cubes)
+			{
+				UpdateCube(cube);
+			}
+
+
+			//Remove old network syncs
+			foreach (var netSyncId in GetVisibleChunk(chunkPos).NetworkSyncs)
+			{
+				var cubeSync = CubeSync.GetById(netSyncId);
+				if (!Contains(chunk.Cubes, netSyncId))
+				{
+					cubeSync.DestroyCube();
+
+				}
+
+			}
+		}
+
+
 		private static bool Contains(IEnumerable<NetworkCube> cubes, uint id)
 		{
 			foreach (var cube in cubes)
@@ -130,12 +123,12 @@ namespace PrimitierMultiplayer.Mod
 			return false;
 		}
 
-		private static RuntimeChunk CreateModChunk(NetworkChunkPositionPair chunkPair)
+		private static RuntimeChunk CreateEmptyModChunk(NetworkChunkPositionPair chunkPair)
 		{
 			var chunk = chunkPair.Chunk;
 
 			var runtimeChunk = new RuntimeChunk() { Owner = chunk.Owner };
-			Chunks.Add(chunkPair.Position, runtimeChunk);
+			VisibleChunks.Add(chunkPair.Position, runtimeChunk);
 
 			return runtimeChunk;
 		}
@@ -143,7 +136,7 @@ namespace PrimitierMultiplayer.Mod
 
 		public static void DestroyModChunk(System.Numerics.Vector2 chunkPos)
 		{
-			var chunk = GetChunk(chunkPos);
+			var chunk = GetVisibleChunk(chunkPos);
 			foreach (var syncId in chunk.NetworkSyncs)
 			{
 				var sync = CubeSync.GetById(syncId);
@@ -154,13 +147,12 @@ namespace PrimitierMultiplayer.Mod
 					
 			}
 
-			OwnedChunks.Remove(chunkPos);
-			Chunks.Remove(chunkPos);
+			VisibleChunks.Remove(chunkPos);
 		}
 		public static void DestroyAllModChunks()
 		{
 
-			foreach (var chunk in Chunks.Keys.ToArray())
+			foreach (var chunk in VisibleChunks.Keys.ToArray())
 			{
 				DestroyModChunk(chunk);
 			}

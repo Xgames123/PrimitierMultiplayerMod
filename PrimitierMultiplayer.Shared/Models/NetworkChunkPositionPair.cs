@@ -11,6 +11,12 @@ namespace PrimitierMultiplayer.Shared.Models
 		public NetworkChunk Chunk;
 		public Vector2 Position;
 
+		public NetworkChunkPositionPair(KeyValuePair<Vector2, NetworkChunk> keyValuePair)
+		{
+			Chunk = keyValuePair.Value;
+			Position = keyValuePair.Key;
+		}
+
 		public NetworkChunkPositionPair(NetworkChunk chunk, Vector2 position)
 		{
 			Chunk = chunk;

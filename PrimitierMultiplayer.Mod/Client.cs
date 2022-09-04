@@ -109,26 +109,25 @@ namespace PrimitierMultiplayer.Mod
 		private void SendUpdatePackets()
 		{
 
-			NetworkChunkPositionPair[] chunks = new NetworkChunkPositionPair[WorldManager.OwnedChunks.Count];
+			List<NetworkChunkPositionPair> sendChunks = new List<NetworkChunkPositionPair>();
 
-			for (int i = 0; i < WorldManager.OwnedChunks.Count; i++)
+			PMFLog.Message($"sending chunks");
+			foreach (var chunkEntry in WorldManager.VisibleChunks)
 			{
-				var ownedChunkPos = WorldManager.OwnedChunks[i];
-				var ownedChunk = WorldManager.GetChunk(ownedChunkPos);
+				if(chunkEntry.Value.Owner == MultiplayerManager.LocalId)
+				{
+					var runtimeChunk = chunkEntry.Value;
 
-				var netChunk = ownedChunk.UpdateToServer();
+					PMFLog.Message($"Pos: X: {chunkEntry.Key.X}, Y: {chunkEntry.Key.Y}");
+					PMFLog.Message($"Owner: {runtimeChunk.Owner}");
+					PMFLog.Message($"cubeCount: {runtimeChunk.NetworkSyncs.Count}");
 
-				chunks[i] = new NetworkChunkPositionPair(netChunk, ownedChunkPos);
+					var netChunk = runtimeChunk.UpdateToServer();
+					sendChunks.Add(new NetworkChunkPositionPair(netChunk, chunkEntry.Key));
+				}
+
 			}
 
-			PMFLog.Message($"sending {chunks.Length} chunks");
-			foreach (var chunk in chunks)
-			{
-				PMFLog.Message($"Pos: X: {chunk.Position.X}, Y: {chunk.Position.Y}");
-				PMFLog.Message($"Owner: {chunk.Chunk.Owner}");
-				PMFLog.Message($"cubeCount: {chunk.Chunk.Cubes.Count}");
-
-			}
 
 			var packet = new PlayerUpdatePacket()
 			{
@@ -137,7 +136,7 @@ namespace PrimitierMultiplayer.Mod
 				LHandPosition = PMFHelper.LHand.transform.position.ToNumerics(),
 				RHandPosition = PMFHelper.RHand.transform.position.ToNumerics(),
 
-				Chunks = chunks,
+				Chunks = sendChunks.ToArray(),
 			};
 
 

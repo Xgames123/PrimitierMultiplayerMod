@@ -16,7 +16,9 @@ namespace PrimitierMultiplayer.Mod.PacketHandlers
 	{
 		public override void HandelPacket(CubeChunkChangePacket packet, NetPeer peer)
 		{
-			if (!WorldManager.IsOwned(ChunkMath.WorldToChunkPos(packet.Cube.Position)))
+			//TODO: remove this server should be trusted
+			var chunk = WorldManager.GetVisibleChunk(ChunkMath.WorldToChunkPos(packet.Cube.Position));
+			if (chunk.Owner != MultiplayerManager.LocalId)
 			{
 				PMFLog.Warning("Got CubeChunkChangePacket for a chunk not owned by this client (Ignoring packet)");
 				return;

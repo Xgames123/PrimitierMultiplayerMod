@@ -55,7 +55,7 @@ namespace PrimitierMultiplayer.Mod.Components
 		}
 		public void OnDestroy()
 		{
-			var currentChunk = WorldManager.GetChunk(_currentChunk);
+			var currentChunk = WorldManager.GetVisibleChunk(_currentChunk);
 			if(currentChunk != null)
 				currentChunk.NetworkSyncs.Remove(Id);
 
@@ -73,7 +73,7 @@ namespace PrimitierMultiplayer.Mod.Components
 		{
 			
 			var chunkPos = ChunkMath.WorldToChunkPos(transform.position.ToNumerics());
-			var chunk = WorldManager.GetChunk(chunkPos);
+			var chunk = WorldManager.GetVisibleChunk(chunkPos);
 			if (chunk == null)
 				DestroyCube();
 
@@ -85,7 +85,7 @@ namespace PrimitierMultiplayer.Mod.Components
 			IsInWrongChunk = false;
 			if (!chunk.NetworkSyncs.Contains(Id))
 			{
-				var oldChunk = WorldManager.GetChunk(_currentChunk);
+				var oldChunk = WorldManager.GetVisibleChunk(_currentChunk);
 				if (oldChunk != null)
 					oldChunk.NetworkSyncs.Remove(Id);
 

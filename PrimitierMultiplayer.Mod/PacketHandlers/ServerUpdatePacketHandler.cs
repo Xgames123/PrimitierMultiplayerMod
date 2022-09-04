@@ -1,5 +1,6 @@
 ﻿using LiteNetLib;
 using PrimitierMultiplayer.Mod.Components;
+using PrimitierMultiplayer.Shared.Models.Extentions;
 using PrimitierMultiplayer.Shared.PacketHandling;
 using PrimitierMultiplayer.Shared.Packets.s2c;
 using System;
@@ -29,8 +30,21 @@ namespace PrimitierMultiplayer.Mod.PacketHandlers
 			//PMFLog.Message(packet.Chunks.Length);
 			//PMFLog.Message(JSON.Dump(packet.Chunks[0]));
 
+			foreach (var chunkPos in WorldManager.VisibleChunks.Keys.ToArray())
+			{
+				if (!packet.Chunks.Contains(chunkPos))
+				{
+					WorldManager.DestroyModChunk(chunkPos);
+				}
 
-			WorldManager.UpdateModChunks(packet.Chunks);
+			}
+
+			foreach (var chunk in packet.Chunks)
+			{
+				WorldManager.UpdateModChunk(chunk);
+			}
+
+
 
 		}
 	}

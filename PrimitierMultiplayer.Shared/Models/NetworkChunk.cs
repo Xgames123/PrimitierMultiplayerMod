@@ -14,8 +14,8 @@ namespace PrimitierMultiplayer.Shared.Models
 
 	public struct NetworkChunk : INetworkModel
 	{
-		public static NetworkChunk NewEmptyChunk() { return new NetworkChunk() { ChunkType = NetworkChunkType.Normal, Cubes = new List<NetworkCube>() }; }
-		public static NetworkChunk NewBrokenChunk() { return new NetworkChunk() { ChunkType = NetworkChunkType.Broken }; }
+		public static NetworkChunk NewEmptyChunk() { return new NetworkChunk() { ChunkType = NetworkChunkType.Normal, Cubes = new List<NetworkCube>(), Owner=-1 }; }
+		public static NetworkChunk NewBrokenChunk() { return new NetworkChunk() { ChunkType = NetworkChunkType.Broken, Owner =-1 }; }
 
 		public NetworkChunkType ChunkType;
 		
