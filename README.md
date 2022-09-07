@@ -25,7 +25,7 @@ primsconfig.json is the configuration file for the server
 ```json
 {
 	"ListenPort": 9543, //Port to listen on
-	"ListenIp": "localhost", //Ip address to use for the server
+	"ListenIp": "0.0.0.0", //Ip address to use for the server
 
 	"MaxPlayers": 10, //Maximum players that can be in the world
 	"WorldDirectory": "World", //The path to the directory to store world data into
