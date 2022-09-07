@@ -17,7 +17,7 @@ using PrimitierMultiplayer.Shared.Packets;
 using PrimitierMultiplayer.Shared.Models;
 using PrimitierMultiplayer.Shared.PacketHandling;
 using System.Diagnostics;
-
+using System.Net.Sockets;
 
 namespace PrimitierMultiplayer.Mod
 {
@@ -57,6 +57,10 @@ namespace PrimitierMultiplayer.Mod
 			Writer.Reset();
 			Writer.Put(Mod.ModVersion.ToString());
 			NetManager.Connect(address, port, Writer);
+		}
+		protected override void NetworkErrorEvent(IPEndPoint endPoint, SocketError socketError)
+		{
+			PMFLog.Error("Got network error: " + socketError);
 		}
 
 		public void Disconnect()

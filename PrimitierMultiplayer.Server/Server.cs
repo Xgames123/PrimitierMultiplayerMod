@@ -16,6 +16,8 @@ using PrimitierMultiplayer.Server.WorldStorage;
 using PrimitierMultiplayer.Shared.Models;
 using PrimitierMultiplayer.Shared.PacketHandling;
 using System.Reflection;
+using System.Net;
+using System.Net.Sockets;
 
 namespace PrimitierMultiplayer.Server
 {
@@ -33,14 +35,14 @@ namespace PrimitierMultiplayer.Server
 			
 			PacketHandlerContainer.AddPacketHandlers(Assembly.GetExecutingAssembly());
 
-			
+
+		}
+		protected override void NetworkErrorEvent(IPEndPoint endPoint, SocketError socketError)
+		{
+			_log.Error("Got network error: " + socketError);
 		}
 
-
-
-
-
-		protected override void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
+	protected override void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
 		{
 			var player = PlayerManager.GetPlayerById(peer.Id);
 
@@ -147,7 +149,7 @@ namespace PrimitierMultiplayer.Server
 				for (float y = center.Y - chunkRadius; y < center.Y + chunkRadius; y++)
 				{
 					var chunkPos = new Vector2(x, y);
-					if (Vector2.Distance(chunkPos, center) < chunkRadius)
+					if (Vector2.Distance(chunkPos, center) < (chunkRadius*2))
 					{
 
 						var chunk = World.GetChunk(chunkPos);

@@ -1,6 +1,6 @@
 ﻿using LiteNetLib;
 using LiteNetLib.Utils;
-using log4net;
+
 using PrimitierMultiplayer.Shared.PacketHandling;
 using System;
 using System.Collections.Generic;
@@ -19,7 +19,6 @@ namespace PrimitierMultiplayer.Shared
 
 		public bool IsRunning { get { return NetManager.IsRunning; } }
 
-		private ILog _log = LogManager.GetLogger(nameof(Server));
 
 		public Peer()
 		{
@@ -50,10 +49,7 @@ namespace PrimitierMultiplayer.Shared
 			PacketHandlerContainer.ReadAllPackets(reader, peer);
 		}
 
-		protected virtual void NetworkErrorEvent(System.Net.IPEndPoint endPoint, System.Net.Sockets.SocketError socketError)
-		{
-			_log.Error("Got network error: " + socketError);
-		}
+		protected abstract void NetworkErrorEvent(System.Net.IPEndPoint endPoint, System.Net.Sockets.SocketError socketError);
 
 		protected void RejectConnectionRequest(ConnectionRequest request, ErrorCode errorCode)
 		{
