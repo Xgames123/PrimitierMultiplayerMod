@@ -48,6 +48,7 @@ namespace PrimitierMultiplayer.Mod
 		private static void Client_OnDisconnectFromServer(LiteNetLib.NetPeer obj)
 		{
 			Stop();
+			LocalId = -1;
 		}
 
 		public static void EnterGame(int seed, Vector3 playerPosition)
