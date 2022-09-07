@@ -19,74 +19,28 @@ using System.Reflection;
 
 namespace PrimitierMultiplayer.Server
 {
-	public class Server
+	public class Server : Peer
 	{
-		public EventBasedNetListener Listener;
-		public NetManager NetManager;
-		public PacketHandlerContainer PacketHandlerContainer;
-
-		public bool IsStarted { get; private set; } = false;
-
+		
+		
 		private ILog _log = LogManager.GetLogger(nameof(Server));
 
-		private NetPacketProcessor _packetProcessor;
-		private NetDataWriter _writer;
 
-		private Stopwatch UpdateStopwatch = Stopwatch.StartNew();
+		private Stopwatch _updateStopwatch = Stopwatch.StartNew();
 
-		public Server()
+		public Server() : base()
 		{
-			Listener = new EventBasedNetListener();
-			NetManager = new NetManager(Listener)
-			{
-				IPv6Enabled = IPv6Mode.Disabled,
-				AutoRecycle = true
-			};
-
-			Listener.ConnectionRequestEvent += ConnectionRequestEvent;
-			Listener.PeerDisconnectedEvent += PeerDisconnectedEvent;
-			Listener.NetworkErrorEvent += NetworkErrorEvent;
-			Listener.NetworkReceiveEvent += NetworkReceiveEvent;
-
-			_writer = new NetDataWriter();
-			_packetProcessor = new NetPacketProcessor();
-			PacketHandlerContainer = new PacketHandlerContainer(ref NetManager, ref _packetProcessor, ref _writer);
-			PacketProcessorTypeRegister.RegisterNetworkModels(ref _packetProcessor);
+			
 			PacketHandlerContainer.AddPacketHandlers(Assembly.GetExecutingAssembly());
 
-			ConfigLoader.OnConfigReload += OnConfigReload;
-			OnConfigReload(ConfigLoader.Config);
+			
 		}
 
-		private void NetworkReceiveEvent(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
-		{
-			PacketHandlerContainer.ReadAllPackets(reader, peer);
-		}
-
-		private void OnConfigReload(ConfigFile? config)
-		{
-			if (config == null)
-			{
-				_log.Error("Config was null. Ignoring...");
-				return;
-			}
-			Stop();
-
-			NetManager.Start(config.ListenIp, "", config.ListenPort);
-			_log.Info($"Started server on {config.ListenIp}:{NetManager.LocalPort}");
 
 
-		}
-
-		
 
 
-		private void NetworkErrorEvent(System.Net.IPEndPoint endPoint, System.Net.Sockets.SocketError socketError)
-		{
-			_log.Error("Got network error: " + socketError);
-		}
-
-		private void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
+		protected override void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
 		{
 			var player = PlayerManager.GetPlayerById(peer.Id);
 
@@ -103,16 +57,14 @@ namespace PrimitierMultiplayer.Server
 
 
 
-		private void ConnectionRequestEvent(ConnectionRequest request)
+		protected override void ConnectionRequestEvent(ConnectionRequest request)
 		{
 			_log.Info(request.RemoteEndPoint + " has requested a connection");
 
 
 			if (NetManager.ConnectedPeersCount >= ConfigLoader.Config.MaxPlayers)
 			{
-				_writer.Reset();
-				ErrorGenerator.Generate(ref _writer, ref _packetProcessor, Shared.ErrorCode.ServerFull);
-				request.Reject(_writer);
+				RejectConnectionRequest(request, ErrorCode.ServerFull);
 				return;
 			}
 
@@ -120,16 +72,12 @@ namespace PrimitierMultiplayer.Server
 			Version? modVersion = null;
 			if (!Version.TryParse(reader.GetString(), out modVersion))
 			{
-				_writer.Reset();
-				ErrorGenerator.Generate(ref _writer, ref _packetProcessor, Shared.ErrorCode.ProtocolError);
-				request.Reject(_writer);
+				RejectConnectionRequest(request, ErrorCode.ProtocolError);
 				return;
 			}
 			if (!SupportedVersions.CheckModVersion(modVersion))
 			{
-				_writer.Reset();
-				ErrorGenerator.Generate(ref _writer, ref _packetProcessor, Shared.ErrorCode.UnsupportedModVersion);
-				request.Reject(_writer);
+				RejectConnectionRequest(request, ErrorCode.UnsupportedModVersion);
 			}
 
 
@@ -138,36 +86,24 @@ namespace PrimitierMultiplayer.Server
 		}
 
 
-		public void Update()
+		public override void Update()
 		{
-			if (!NetManager.IsRunning)
+			base.Update();
+			if (!IsRunning)
 				return;
-
-			NetManager.PollEvents();
 
 			if (ConfigLoader.Config == null)
 				return;
 
-			if (UpdateStopwatch.ElapsedMilliseconds >= ConfigLoader.Config.UpdateDelay)
+			if (_updateStopwatch.ElapsedMilliseconds >= ConfigLoader.Config.UpdateDelay)
 			{
-				UpdateStopwatch.Restart();
+				_updateStopwatch.Restart();
 
 				SendUpdatePackets();
 			}
 
 		}
-		private void SendPacket<T>(NetPeer peer, T packet, DeliveryMethod deliveryMethod) where T : class, new()
-		{
-			_writer.Reset();
-			_packetProcessor.Write<T>(_writer, packet);
-			peer.Send(_writer, deliveryMethod);
-		}
-		private void SendPacketToAll<T>(T packet, DeliveryMethod deliveryMethod) where T : class, new()
-		{
-			_writer.Reset();
-			_packetProcessor.Write<T>(_writer, packet);
-			NetManager.SendToAll(_writer, deliveryMethod);
-		}
+		
 
 		private void SendUpdatePackets()
 		{
@@ -254,14 +190,21 @@ namespace PrimitierMultiplayer.Server
 			return foundPlayers;
 		}
 
-
-		public void Stop()
+		public void Start(ConfigFile configFile)
 		{
+			Start(configFile.ListenIp, configFile.ListenPort);
+		}
 
+		public void Start(string listenIp, int listenPort)
+		{
+			NetManager.Start(listenIp, "", listenPort);
+			_log.Info($"Started server on {listenIp}:{listenPort}");
+		}
 
+		public override void Stop()
+		{
 			_log.Info("Stopping server");
-			NetManager.Stop(true);
-
+			base.Stop();
 		}
 
 

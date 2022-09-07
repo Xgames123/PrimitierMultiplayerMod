@@ -31,6 +31,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\PlayerJoinedPacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\PlayerLeavePacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\s2c\ServerUpdatePacket.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Peer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SystemNumericsSerializingExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\c2s\JoinRequestPacket.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Packets\ErrorPacket.cs" />

@@ -13,6 +13,8 @@ public static class Program
 {
 	private static ILog c_log = LogManager.GetLogger(nameof(Program));
 
+	public static Server Server;
+
 	public static void Main()
 	{
 		if (!ConfigLoader.Load())
@@ -24,7 +26,7 @@ public static class Program
 		{
 			c_log.Info("Debug mode");
 		}
-
+		
 
 		World.LoadFromDirectory(ConfigLoader.Config.WorldDirectory);
 
@@ -47,41 +49,52 @@ public static class Program
 			return IPCCommandParser.ParseCommand(cmd);
 		};
 
-		bool stoppingServer = false;
-		bool IsServerRunning = true;
+
+		bool loopRunning = true;
 
 		
-		var server = new Server();
-
+		Server = new Server();
+		Server.Start(ConfigLoader.Config);
 
 		Console.CancelKeyPress += (object? sender, ConsoleCancelEventArgs e) =>
 		{
-			stoppingServer = true;
-			server.Stop();
+			Server.Stop();
 
 			e.Cancel = true;
 
-
 		};
-
+		ConfigLoader.OnConfigReload += ConfigLoader_OnConfigReload;
 
 
 		while (true)
 		{
-			server.Update();
+			Server.Update();
 			World.ClearChunkCacheIfMaxSizeExceeded();
-			if (stoppingServer)
+			if (!Server.IsRunning)
 			{
 				break;
 			}
 
 		}
-		IsServerRunning = false;
+		loopRunning = false;
 
 		ipcStringListener?.Dispose();
 
 
 	}
 
+	private static void ConfigLoader_OnConfigReload(ConfigFile? config)
+	{
+		if (config == null)
+		{
+			c_log.Error("Config reload detected but config was null. Ignoring...");
+			return;
+		}
+		c_log.Info("Config reload detected");
+		c_log.Info("Restarting server...");
+		Server.Stop();
+
+		Server.Start(config);
+	}
 }
 

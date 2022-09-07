@@ -77,6 +77,8 @@ namespace PrimitierMultiplayer.Mod
 			ClassInjector.RegisterTypeInIl2CppWithInterfaces<JoinGameButton>(typeof(IButton));
 
 			ModVersion = new System.Version(Info.Version);
+
+			MultiplayerManager.Init();
 		}
 		public override void OnApplicationQuit()
 		{

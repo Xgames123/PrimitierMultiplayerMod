@@ -23,6 +23,14 @@ namespace PrimitierMultiplayer.Mod
 
 		public static bool IsInMultiplayerMode = false;
 
+		public static void Init()
+		{
+			Client = new Client();
+			Client.OnDisconnectFromServer += Client_OnDisconnectFromServer;
+			Client.Start();
+		}
+
+
 		public static void ConnectToServer()
 		{
 
@@ -33,9 +41,13 @@ namespace PrimitierMultiplayer.Mod
 			if (ServerPort == null)
 				ServerPort = connectSettings.CreateEntry<int>("ServerPort", 9543);
 
-
-			Client = new Client();
+			Client.Start();
 			Client.Connect(ServerAddress.Value, ServerPort.Value);
+		}
+
+		private static void Client_OnDisconnectFromServer(LiteNetLib.NetPeer obj)
+		{
+			Stop();
 		}
 
 		public static void EnterGame(int seed, Vector3 playerPosition)
@@ -94,10 +106,9 @@ namespace PrimitierMultiplayer.Mod
 		public static void Stop()
 		{
 			ExitGame();
-			if (Client == null)
-				return;
-
-			Client.Stop();
+			
+			if(Client.IsRunning)
+				Client.Stop();
 			RemotePlayer.DeleteAllPlayers();
 			WorldManager.DestroyAllModChunks();
 		}

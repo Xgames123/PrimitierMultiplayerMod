@@ -21,40 +21,20 @@ using System.Diagnostics;
 
 namespace PrimitierMultiplayer.Mod
 {
-	public class Client
+	public class Client : Peer
 	{
-		public EventBasedNetListener Listener;
-		public NetManager NetManager;
 
 		public bool IsConnected { get { return NetManager.ConnectedPeersCount >= 1; } }
 
-
 		public NetPeer Server { get; private set; } = null;
-		public PacketHandlerContainer PacketHandlerContainer;
 
-		private NetPacketProcessor _packetProcessor;
-		private NetDataWriter _writer;
+		public event Action<NetPeer> OnDisconnectFromServer;
 
 		private Stopwatch _updateStopwatch = Stopwatch.StartNew();
 
-		public Client()
+		public Client() : base()
 		{
-
-
-			_writer = new NetDataWriter();
-			Listener = new EventBasedNetListener();
-			NetManager = new NetManager(Listener)
-			{
-				AutoRecycle = true,
-			};
-			_packetProcessor = new NetPacketProcessor();
-
-			Listener.NetworkReceiveEvent += NetworkReceiveEvent;
-			Listener.NetworkErrorEvent += NetworkErrorEvent;
-			Listener.PeerDisconnectedEvent += DisconnectedEvent;
-			Listener.PeerConnectedEvent += ConnectedEvent;
-
-			
+			PacketHandlerContainer.AddPacketHandlers(Assembly.GetExecutingAssembly());
 		}
 
 		public void Connect(string address, int port)
@@ -63,22 +43,20 @@ namespace PrimitierMultiplayer.Mod
 				Disconnect();
 
 
-			PacketHandlerContainer = new PacketHandlerContainer(ref NetManager, ref _packetProcessor, ref _writer);
-			PacketProcessorTypeRegister.RegisterNetworkModels(ref _packetProcessor);
-
-			PacketHandlerContainer.AddPacketHandlers(Assembly.GetExecutingAssembly());
-
-
 			Mod.Chat.AddSystemMessage("Connecting to the server");
 
-			PMFLog.Message("Starting client");
-			NetManager.Start();
+			if (!NetManager.IsRunning)
+			{
+				PMFLog.Message("Starting client");
+				NetManager.Start();
+			}
+			
 
 			PMFLog.Message($"Connecting to {address}:{port}...");
 
-			_writer.Reset();
-			_writer.Put(Mod.ModVersion.ToString());
-			NetManager.Connect(address, port, _writer);
+			Writer.Reset();
+			Writer.Put(Mod.ModVersion.ToString());
+			NetManager.Connect(address, port, Writer);
 		}
 
 		public void Disconnect()
@@ -87,14 +65,14 @@ namespace PrimitierMultiplayer.Mod
 			PMFLog.Message("Disconnecting from server");
 		}
 
-		public void Update()
+		public override void Update()
 		{
-			if (NetManager == null)
+			base.Update();
+
+			if (!IsRunning)
 				return;
 
-			NetManager.PollEvents();
-
-			if (MultiplayerManager.IsInMultiplayerMode && Server != null)
+			if (MultiplayerManager.IsInMultiplayerMode && IsConnected)
 			{
 				var updateDelay = ConfigManager.ClientConfig.ActiveUpdateDelay;
 				//TODO: use idel update delay when client is idel
@@ -140,53 +118,41 @@ namespace PrimitierMultiplayer.Mod
 			};
 
 
-			SendPacket(packet, DeliveryMethod.Unreliable);
+			SendPacket(Server, packet, DeliveryMethod.Unreliable);
 
 		}
 
-		public void Stop()
+		public void Start()
 		{
-			NetManager.Stop();
-
+			NetManager.Start();
+			PMFLog.Message($"Started client");
 		}
 
-		public void SendPacket<T>(T packet, DeliveryMethod deliveryMethod) where T : class, new()
+		public override void Stop()
 		{
-			if (Server == null)
-				throw new Exception("you tried to send a packet while not being connected to the server");
-
-			_writer.Reset();
-			_packetProcessor.Write<T>(_writer, packet);
-			Server.Send(_writer, deliveryMethod);
+			Disconnect();
+			base.Stop();
 		}
 
 
-		private void ConnectedEvent(NetPeer peer)
+		protected override void PeerConnectedEvent(NetPeer peer)
 		{
 			Server = peer;
 			PMFLog.Message("Connected to the server");
 
-			SendPacket(new JoinRequestPacket() { Username = PlayerInfo.Username, StaticPlayerId = PlayerInfo.StaticId }, DeliveryMethod.ReliableOrdered);
+			SendPacket(Server, new JoinRequestPacket() { Username = PlayerInfo.Username, StaticPlayerId = PlayerInfo.StaticId }, DeliveryMethod.ReliableOrdered);
 		}
 
-		private void DisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
+		protected override void PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
 		{
-			MultiplayerManager.Stop();
+			OnDisconnectFromServer?.Invoke(Server);
+			
 			Server = null;
-			ErrorGenerator.ReadError(ref disconnectInfo.AdditionalData, ref _packetProcessor);
+			ReadErrorFromDisconnectInfo(disconnectInfo);
+			
 
 			Mod.Chat.AddSystemMessage($"Disconnected from the server Reason:{disconnectInfo.Reason}");
 			
-		}
-
-		private void NetworkErrorEvent(IPEndPoint endPoint, System.Net.Sockets.SocketError socketError)
-		{
-			PMFLog.Error("Got network error: "+socketError);
-		}
-
-		private void NetworkReceiveEvent(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
-		{
-			PacketHandlerContainer.ReadAllPackets(reader, peer);
 		}
 
 
