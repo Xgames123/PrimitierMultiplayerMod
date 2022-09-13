@@ -3,14 +3,14 @@
 
 [I recommend radmin vpn](https://www.radmin-vpn.com/)
 
-## installation without docker
+## installation without docker 
 1) Download PrimitierServer from the release you want to install
 2) install .Net 5 runtime (When you run the application it will give you a download link)
 3) unpack the zip file
 4) edit `primsconfig.json` see [Configure the server](#configure-the-server)
 5) run the main executable (You probably need to chmod it first when on linux)
 
-## installation with docker
+## installation with docker (deprecated)
 1) install git and docker
 2) ```git clone https://github.com/Xgames123/PrimitierMultiplayerMod.git --recursive```
 3) edit `primsconfig.json` see [Configure the server](#configure-the-server)
