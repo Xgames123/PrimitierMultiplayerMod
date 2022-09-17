@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimitierMultiplayer.Server
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PrimitierMultiplayer.Shared", "PrimitierMultiplayer.Shared\PrimitierMultiplayer.Shared.shproj", "{4D1FE002-BDF1-444B-80C8-F9A1063AC330}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimitierMultiplayer.DebugClient", "PrimitierMultiplayer.DebugClient\PrimitierMultiplayer.DebugClient.csproj", "{120689D8-F4AC-404A-9B9F-4AFDEE796E66}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{C80CBE2B-D772-4C01-A473-0F25F175DBBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C80CBE2B-D772-4C01-A473-0F25F175DBBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C80CBE2B-D772-4C01-A473-0F25F175DBBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{120689D8-F4AC-404A-9B9F-4AFDEE796E66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{120689D8-F4AC-404A-9B9F-4AFDEE796E66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{120689D8-F4AC-404A-9B9F-4AFDEE796E66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{120689D8-F4AC-404A-9B9F-4AFDEE796E66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
