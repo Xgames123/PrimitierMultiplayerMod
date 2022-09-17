@@ -1,5 +1,6 @@
 ﻿using MelonLoader;
 using PrimitierModdingFramework;
+using PrimitierMultiplayer.ClientLib;
 using PrimitierMultiplayer.Mod.Components;
 using System;
 using System.Collections.Generic;
@@ -13,48 +14,40 @@ using UnityEngine;
 
 namespace PrimitierMultiplayer.Mod
 {
-	public static class MultiplayerManager
+	public class MultiplayerManager : MultiplayerManagerBase
 	{
-		public static Client Client;
+
 		public static MelonPreferences_Entry<string> ServerAddress = null;
 		public static MelonPreferences_Entry<int> ServerPort = null;
 
-		public static int LocalId = -1;
 
-		public static bool IsInMultiplayerMode = false;
+		public MultiplayerManager(IChat chat) : base(chat)
+		{
+
+			
+		}
 
 		public static void Init()
 		{
-			Client = new Client();
-			Client.OnDisconnectFromServer += Client_OnDisconnectFromServer;
-			Client.Start();
+			var chat = PrimitierMultiplayer.Mod.Components.Chat.Setup();
+
+			Instance = new MultiplayerManager(chat);
 		}
 
 
-		public static void ConnectToServer()
+		public override void ConnectToServer()
 		{
-
 			var connectSettings = MelonPreferences.CreateCategory("ConnectSettings");
 
-			if(ServerAddress == null)
+			if (ServerAddress == null)
 				ServerAddress = connectSettings.CreateEntry("ServerIp", "localhost");
 			if (ServerPort == null)
 				ServerPort = connectSettings.CreateEntry<int>("ServerPort", 9543);
-
-			Client.Start();
-			Client.Connect(ServerAddress.Value, ServerPort.Value);
+			base.ConnectToServer(ServerAddress.Value, ServerPort.Value);
 		}
 
-		private static void Client_OnDisconnectFromServer(LiteNetLib.NetPeer obj)
+		protected override void CreateWorld(int seed, System.Numerics.Vector3 playerPosition)
 		{
-			Stop();
-			LocalId = -1;
-		}
-
-		public static void EnterGame(int seed, Vector3 playerPosition)
-		{
-			IsInMultiplayerMode = true;
-
 			var loadingSequence = GameObject.FindObjectOfType<LoadingSequence>();
 
 			var destroyObject = new UnhollowerBaseLib.Il2CppReferenceArray<GameObject>(0);
@@ -71,12 +64,12 @@ namespace PrimitierMultiplayer.Mod
 			PMFHelper.CameraRig.position = Vector3.zero;
 			Camera.main.transform.position = Vector3.zero;
 			TerrainMeshGenerator.areaPosOffset = Vector2Int.zero;
-			
+
 
 			WorldManager.WorldSeed = seed;
-			WorldManager.PlayerStartPosition = playerPosition;
+			WorldManager.PlayerStartPosition = playerPosition.ToUnity();
 
-			
+
 			var infoTextGo = GameObject.Find("InfoText");
 			TextMeshPro infoText = null;
 			if (infoTextGo != null)
@@ -90,28 +83,10 @@ namespace PrimitierMultiplayer.Mod
 			JoinGameButton.Destroy();
 		}
 
-		public static void ExitGame()
-		{
-			Mod.Chat.Clear();
-			IsInMultiplayerMode = false;
-		}
 
-
-		public static void UpdateClient()
+		protected override void DestroyWorld()
 		{
-			if (Client == null)
-				return;
-			Client.Update();
-		}
-
-		public static void Stop()
-		{
-			ExitGame();
-			
-			if(Client.IsRunning)
-				Client.Stop();
 			RemotePlayer.DeleteAllPlayers();
-			WorldManager.DestroyAllModChunks();
 		}
 	}
 }

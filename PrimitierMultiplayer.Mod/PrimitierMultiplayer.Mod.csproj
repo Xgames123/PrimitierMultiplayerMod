@@ -31,6 +31,7 @@
 	<PropertyGroup>
 		<MelonloaderDll>D:\Program Files (x86)\Steam\steamapps\common\Primitier\MelonLoader\MelonLoader.dll</MelonloaderDll>
 	</PropertyGroup>
+	<Import Project="..\PrimitierMultiplayer.ClientLib\PrimitierMultiplayer.ClientLib.projitems" Label="Shared" />
 
 	<Import Project="../Internal.Shared.targets" />
 </Project>

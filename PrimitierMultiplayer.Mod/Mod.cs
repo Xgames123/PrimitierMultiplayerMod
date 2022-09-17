@@ -17,17 +17,15 @@ namespace PrimitierMultiplayer.Mod
 
 	public class Mod : PrimitierMod
     {
-		public static Chat Chat;
 		public static System.Version ModVersion;
 		
 		public override void OnSceneWasLoaded(int buildIndex, string sceneName)
 		{
 			base.OnSceneWasLoaded(buildIndex, sceneName);
 
+			MultiplayerManager.Init();
+
 			PlayerInfo.Load();
-
-
-			Chat = Chat.Setup();
 
 			JoinGameButton.Create();
 
@@ -50,7 +48,7 @@ namespace PrimitierMultiplayer.Mod
 			//HierarchyXmlDumper.DumpSceneToFile();
 
 			if (FlyCam.Current != null)
-				MultiplayerManager.ConnectToServer();
+				MultiplayerManager.Instance.ConnectToServer();
 
 			PMFLog.Message("You can press F2 to disconnect from the server");
 			PMFLog.Message("You can press F3 to reconnect to the server");
@@ -78,7 +76,7 @@ namespace PrimitierMultiplayer.Mod
 
 			ModVersion = new System.Version(Info.Version);
 
-			MultiplayerManager.Init();
+			
 		}
 		public override void OnApplicationQuit()
 		{
@@ -97,7 +95,7 @@ namespace PrimitierMultiplayer.Mod
 		{
 			base.OnFixedUpdate();
 
-			MultiplayerManager.UpdateClient();
+			MultiplayerManager.Instance.UpdateClient();
 			MainThreadRunner.RunQueuedTasks();
 			
 			if (Input.GetKeyUp(KeyCode.F2))
@@ -108,7 +106,7 @@ namespace PrimitierMultiplayer.Mod
 			if (Input.GetKeyUp(KeyCode.F3))
 			{
 				MultiplayerManager.Stop();
-				MultiplayerManager.ConnectToServer();
+				MultiplayerManager.Instance.ConnectToServer();
 			}
 			if (Input.GetKeyUp(KeyCode.F4))
 			{
@@ -137,7 +135,7 @@ namespace PrimitierMultiplayer.Mod
 				foreach (var chunkPos in WorldManager.VisibleChunks.Keys)
 				{
 					var chunk = WorldManager.GetVisibleChunk(chunkPos);
-					PMFLog.Message($"		X: {chunkPos.X}, Y: {chunkPos.Y} Owned: {chunk.Owner == MultiplayerManager.LocalId}");
+					PMFLog.Message($"		X: {chunkPos.X}, Y: {chunkPos.Y} Owned: {chunk.Owner == MultiplayerManager.Instance.LocalId}");
 					
 					foreach (var netSync in chunk.NetworkSyncs)
 					{

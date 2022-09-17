@@ -66,7 +66,7 @@ namespace PrimitierMultiplayer.Mod
 			}
 
 
-			if (chunk.Owner == MultiplayerManager.LocalId)
+			if (chunk.Owner == MultiplayerManager.Instance.LocalId)
 			{
 				//Skip chunk because we own it
 				return;

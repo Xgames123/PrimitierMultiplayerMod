@@ -9,5 +9,9 @@
     <Import_RootNamespace>PrimitierMultiplayer.ClientLib</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ChatColor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IChat.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Client.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MultiplayerManagerBase.cs" />
   </ItemGroup>
 </Project>

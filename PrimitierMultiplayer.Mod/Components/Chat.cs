@@ -8,19 +8,13 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using PrimitierMultiplayer.ClientLib;
 
 namespace PrimitierMultiplayer.Mod.Components
 {
-	public enum ChatColor
-	{
-		NormalText,
-		SystemMessage,
-		ServerMessage,
-
-	}
 
 
-	public class Chat : MonoBehaviour
+	public class Chat : MonoBehaviour, IChat
 	{
 		public Chat(IntPtr ptr) : base(ptr) { }
 
@@ -78,6 +72,39 @@ namespace PrimitierMultiplayer.Mod.Components
 			UpdateText();
 		}
 
+		public void AddMessage(string sender, string message, ChatColor color)
+		{
+
+			var fullMessage = $"[{sender}] {message}";
+
+			string line;
+			switch (color)
+			{
+				case ChatColor.NormalText:
+					goto default;
+
+				case ChatColor.ServerMessage:
+					PMFLog.Message($"CHAT " + fullMessage, ConsoleColor.Yellow);
+					line = $"<color=#DDFF00>{fullMessage}</color>";
+					break;
+				case ChatColor.SystemMessage:
+					PMFLog.Message($"CHAT " + fullMessage, ConsoleColor.Cyan);
+					line = $"<color=#00BBFF>{fullMessage}</color>";
+					break;
+
+				default:
+					PMFLog.Message($"CHAT " + fullMessage);
+					line = fullMessage;
+					break;
+
+			}
+			Lines.Add(line);
+			Text.text += line + "\n";
+			UpdateText();
+
+
+		}
+
 		public void AddServerMessage(string message)
 		{
 			AddMessage("SERVER", message, ChatColor.ServerMessage);
@@ -87,43 +114,6 @@ namespace PrimitierMultiplayer.Mod.Components
 			AddMessage("SYSTEM", message, ChatColor.SystemMessage);
 		}
 
-
-		public void AddMessage(string sender, string message, ChatColor color = ChatColor.NormalText)
-		{
-			var fullMessage = $"[{sender}] {message}";
-
-			switch (color)
-			{
-				case ChatColor.NormalText:
-					goto default;
-
-				case ChatColor.ServerMessage:
-					PMFLog.Message($"CHAT " + fullMessage, ConsoleColor.Yellow);
-					AddLine($"<color=#DDFF00>{fullMessage}</color>");
-					break;
-				case ChatColor.SystemMessage:
-					PMFLog.Message($"CHAT " + fullMessage, ConsoleColor.Cyan);
-					AddLine($"<color=#00BBFF>{fullMessage}</color>");
-					break;
-
-				default:
-					PMFLog.Message($"CHAT " + fullMessage);
-					AddLine(fullMessage);
-					break;
-
-			}
-
-			UpdateText();
-
-
-		}
-
-		private void AddLine(string line)
-		{
-			Lines.Add(line);
-			Text.text += line + "\n";
-			UpdateText();
-		}
 
 		private void UpdateText()
 		{
@@ -144,7 +134,6 @@ namespace PrimitierMultiplayer.Mod.Components
 
 		}
 
-
-
+		
 	}
 }
