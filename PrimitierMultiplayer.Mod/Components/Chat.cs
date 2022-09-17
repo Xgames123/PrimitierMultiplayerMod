@@ -9,7 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace PrimitierMultiplayer.Mod
+namespace PrimitierMultiplayer.Mod.Components
 {
 	public enum ChatColor
 	{
@@ -22,18 +22,18 @@ namespace PrimitierMultiplayer.Mod
 
 	public class Chat : MonoBehaviour
 	{
-		public Chat(System.IntPtr ptr) : base(ptr) { }
+		public Chat(IntPtr ptr) : base(ptr) { }
 
 		public TextMeshPro Text;
 
 		private List<string> Lines = new List<string>();
 
-		
+
 
 		public static Chat Setup()
 		{
 
-			GameObject chatGo = new GameObject("Chat");
+			var chatGo = new GameObject("Chat");
 			chatGo.transform.parent = PMFHelper.MenuWindowL;
 			chatGo.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 			chatGo.transform.localRotation = Quaternion.identity;
@@ -44,7 +44,7 @@ namespace PrimitierMultiplayer.Mod
 			var chatComp = chatGo.AddComponent<Chat>();
 
 
-			GameObject backgroundGo = new GameObject("Background");
+			var backgroundGo = new GameObject("Background");
 			backgroundGo.transform.parent = chatGo.transform;
 			backgroundGo.transform.localRotation = Quaternion.identity;
 			backgroundGo.transform.localPosition = Vector3.zero;
@@ -54,7 +54,7 @@ namespace PrimitierMultiplayer.Mod
 
 
 
-			GameObject textGo = new GameObject("Text");
+			var textGo = new GameObject("Text");
 			textGo.transform.parent = chatGo.transform;
 			textGo.transform.localPosition = Vector3.zero;
 			textGo.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
@@ -88,7 +88,7 @@ namespace PrimitierMultiplayer.Mod
 		}
 
 
-		public void AddMessage(string sender, string message, ChatColor color=ChatColor.NormalText)
+		public void AddMessage(string sender, string message, ChatColor color = ChatColor.NormalText)
 		{
 			var fullMessage = $"[{sender}] {message}";
 
@@ -96,7 +96,7 @@ namespace PrimitierMultiplayer.Mod
 			{
 				case ChatColor.NormalText:
 					goto default;
-				
+
 				case ChatColor.ServerMessage:
 					PMFLog.Message($"CHAT " + fullMessage, ConsoleColor.Yellow);
 					AddLine($"<color=#DDFF00>{fullMessage}</color>");
@@ -121,7 +121,7 @@ namespace PrimitierMultiplayer.Mod
 		private void AddLine(string line)
 		{
 			Lines.Add(line);
-			Text.text+=line+"\n";
+			Text.text += line + "\n";
 			UpdateText();
 		}
 
