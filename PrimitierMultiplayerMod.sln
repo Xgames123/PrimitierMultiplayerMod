@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimitierMultiplayer.Server
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PrimitierMultiplayer.Shared", "PrimitierMultiplayer.Shared\PrimitierMultiplayer.Shared.shproj", "{4D1FE002-BDF1-444B-80C8-F9A1063AC330}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PrimitierMultiplayer.ClientLib", "PrimitierMultiplayer.ClientLib\PrimitierMultiplayer.ClientLib.shproj", "{4553A04C-D86F-4470-8E4D-823BEF8CCB26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,7 @@ Global
 		SolutionGuid = {A07F0F56-EBB7-4F41-98D9-A6DB5431A21E}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		PrimitierMultiplayer.ClientLib\PrimitierMultiplayer.ClientLib.projitems*{4553a04c-d86f-4470-8e4d-823bef8ccb26}*SharedItemsImports = 13
 		PrimitierMultiplayer.Shared\PrimitierMultiplayer.Shared.projitems*{4d1fe002-bdf1-444b-80c8-f9a1063ac330}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
